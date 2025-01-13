@@ -4,11 +4,14 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-class Snake {
+class Snake{
 public:
     Snake();
     void move(sf::Keyboard::Key key);
     void draw(sf::RenderWindow &window);
+    sf::Vector2f getHeadPosition();
+    void collideWallY();
+    void collideWallX();
 
 
 private:

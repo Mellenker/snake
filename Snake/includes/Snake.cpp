@@ -2,31 +2,33 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+using namespace sf;
+
 Snake::Snake() {
-    sf::RectangleShape segment(sf::Vector2f(30.f, 30.f));
-    segment.setFillColor(sf::Color::Green);
+    RectangleShape segment(Vector2f(30.f, 30.f));
+    segment.setFillColor(Color::Magenta);
     segment.setPosition(100.f, 100.f);
     body.push_back(segment);
-    direction = sf::Vector2f(20.f, 0.f);
+    direction = Vector2f(20.f, 0.f);
 }
 
-void Snake::move(sf::Keyboard::Key key) {
+void Snake::move(Keyboard::Key key) {
 	switch (key) {
-		case sf::Keyboard::Key::W:
-			direction = sf::Vector2f(0, -0.1f);
+		case Keyboard::Key::W:
+			direction = Vector2f(0, -0.1f);
 			break;
-		case sf::Keyboard::Key::A:
-			direction = sf::Vector2f(-0.1f, 0);
+		case Keyboard::Key::A:
+			direction = Vector2f(-0.1f, 0);
 			break;
-		case sf::Keyboard::Key::S:
-			direction = sf::Vector2f(0, 0.1f);
+		case Keyboard::Key::S:
+			direction = Vector2f(0, 0.1f);
 			break;
-		case sf::Keyboard::Key::D:
-			direction = sf::Vector2f(0.1f, 0);
+		case Keyboard::Key::D:
+			direction = Vector2f(0.1f, 0);
 			break;
 	}
-	
-	sf::RectangleShape segment = body.front();
+
+	RectangleShape segment = body.front();
 	
 	segment.setPosition(segment.getPosition() + direction);
 
@@ -34,8 +36,20 @@ void Snake::move(sf::Keyboard::Key key) {
 	body.pop_back();
 }
 
-void Snake::draw(sf::RenderWindow &window) {
+void Snake::draw(RenderWindow &window) {
     for (auto &segment : body) {
         window.draw(segment);
     }
+}
+
+Vector2f Snake::getHeadPosition() {
+	Vector2f position = body.front().getPosition();
+	return position;
+}
+void Snake::collideWallY() {
+	body.front().setPosition(720, body.front().getPosition().y);
+	std::cout << (body.front().getPosition().y);
+}
+void Snake::collideWallX() {
+	body.front().setPosition(body.front().getPosition().y, 720);
 }
