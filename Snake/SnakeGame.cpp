@@ -15,80 +15,94 @@ Color tileColor1 = Color(0, 132, 9);
 Color tileColor2 = Color(0, 118, 9);
 
 // Window settings
-const int winSizeX = 25;
-const int winSizeY = 25;
+const int winSizeInTilesX = 25;
+const int winSizeInTilesY = 25;
 
 int main() {
-    RenderWindow window(VideoMode(winSizeX * tileSize, winSizeY * tileSize), "SnakeGame");
-    Snake snake;
+	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
 
+	RenderTexture texture;
+	texture.create(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize);
 
-    RenderTexture texture;
-    texture.create(winSizeX * tileSize, winSizeY * tileSize);
+	Tile tiles[winSizeInTilesX][winSizeInTilesY];
 
-    Tile tiles[winSizeX][winSizeY];
-
-    // Populate background with tiles
-    int xPos = 0;
-    int yPos = 0;
+	// Populate background with tiles
+	int xPos = 0;
+	int yPos = 0;
 	bool colorFlag = true; // Flag to alternate colors
-    for (int yIt = 0; yIt < winSizeY; yIt++) {
-        for (int xIt = 0; xIt < winSizeX; xIt++) {
-            Tile tile(tileSize, xPos, yPos);
-            if (colorFlag)
+	for (int yIt = 0; yIt < winSizeInTilesY; yIt++) {
+		for (int xIt = 0; xIt < winSizeInTilesX; xIt++) {
+			Tile tile(tileSize, xPos, yPos);
+
+			if (colorFlag)
 				tile.setColor(tileColor1);
 			else
-                tile.setColor(tileColor2);
+				tile.setColor(tileColor2);
 
 			tiles[xIt][yIt] = tile;
-            xPos += tileSize;
+			xPos += tileSize;
 			tile.draw(texture);
-            colorFlag = !colorFlag;
-        }
-        xPos = 0; // Reset x position after each row
-        yPos += tileSize;
-    }
+			colorFlag = !colorFlag;
+		}
+		xPos = 0; // Reset x position after each row
+		yPos += tileSize;
+	}
 
-    Sprite background(texture.getTexture());
+	Sprite background(texture.getTexture());
 
-    // Game loop (Runs onece each frame)
-    while (window.isOpen()) {
-        Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed)
-                window.close();
+	Snake snake(10, 10, tileSize);
 
-            // Handle one-time actions (Pause maybe?)
-            if (event.type == Event::KeyPressed) {
-                switch (event.key.code) {
-                    case Keyboard::Key::Escape:
-                        cout << "PAUSE" << endl;
-                        break;
-                }
-            }
-        }
+	// Game loop (Runs onece each frame)
+	while (window.isOpen()) {
+		Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed)
+				window.close();
 
-        // Player movement
-        if (Keyboard::isKeyPressed(Keyboard::Key::W)) {
-			snake.move(Keyboard::Key::W);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A)) {
-            snake.move(Keyboard::Key::A);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::S)) {
-            snake.move(Keyboard::Key::S);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::D)) {
-            snake.move(Keyboard::Key::D);
-        }
+			// Handle keyboard input
+			if (event.type == Event::KeyPressed) {
 
-        window.clear();
+				if (event.key.code == Keyboard::Key::Escape) {
+					// Pause logic
+				}
+				else {
+					int x = snake.getHeadTileCoords()['x'];
+					int y = snake.getHeadTileCoords()['y'];
+					switch (event.key.code) {
+					case Keyboard::Key::W:
+						y--;
+						break;
+					case Keyboard::Key::A:
+						x--;
+						break;
+					case Keyboard::Key::S:
+						y++;
+						break;
+					case Keyboard::Key::D:
+						x++;
+						break;
+					default:
+						break;
+					}
+					
+					// Restrict snake to window
+					if ((x >= 0 && x < winSizeInTilesX) && (y >= 0 && y < winSizeInTilesY)) {
+						snake.move(tiles[x][y].getPosition());
+						snake.setHeadTileCoords(x, y);
+					}
+
+				}
+
+			}
+		}
+
+		window.clear();
 		window.draw(background);
-        snake.draw(window);
-        //window.draw(apple);
+		snake.draw(window);
+		//window.draw(apple);
 
-        window.display();
-    }
+		window.display();
+	}
 
-    return 0;
+	return 0;
 }

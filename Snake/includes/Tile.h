@@ -9,6 +9,7 @@ public:
 	Tile(float size, float xPos, float yPos);
 	void setColor(sf::Color color);
 	void draw(sf::RenderTexture& texture);
+	sf::Vector2f getPosition();
 
 private:
 	sf::RectangleShape tile;

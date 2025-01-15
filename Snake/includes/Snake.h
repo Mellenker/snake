@@ -4,19 +4,22 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-class Snake{
+class Snake {
 public:
-    Snake();
-    void move(sf::Keyboard::Key key);
-    void draw(sf::RenderWindow &window);
-    sf::Vector2f getHeadPosition();
-    void collideWallY();
-    void collideWallX();
+	Snake(int xStart, int yStart, float tileSize);
+	void move(sf::Vector2f newPosition);
+	void draw(sf::RenderWindow& window);
+	std::map<char, int> getHeadTileCoords();
+	void setHeadTileCoords(int x, int y);
 
 
 private:
-    std::vector<sf::RectangleShape> body;
-    sf::Vector2f direction;
+	std::vector<sf::RectangleShape> body;
+	sf::Vector2f movement;
+	std::map<char, int> segmentTileCoords;
+	int xTile;
+	int yTile;
+	float tileSize;
 };
 
 #endif

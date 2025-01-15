@@ -1,40 +1,28 @@
 #include "Snake.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
+#include <includes/Tile.h>
 using namespace sf;
 
-Snake::Snake() {
-    RectangleShape segment(Vector2f(30.f, 30.f));
+Snake::Snake(int xStart, int yStart, float tileSize) {
+
+	xTile = xStart;
+	yTile = yStart;
+	this->tileSize = tileSize;
+
+	RectangleShape segment(Vector2f(tileSize, tileSize));
     segment.setFillColor(Color::Magenta);
-    segment.setPosition(100.f, 100.f);
+    segment.setPosition(xStart * tileSize, yStart * tileSize);
     body.push_back(segment);
-    direction = Vector2f(20.f, 0.f);
 }
 
-void Snake::move(Keyboard::Key key) {
-	switch (key) {
-		case Keyboard::Key::W:
-			direction = Vector2f(0, -0.1f);
-			break;
-		case Keyboard::Key::A:
-			direction = Vector2f(-0.1f, 0);
-			break;
-		case Keyboard::Key::S:
-			direction = Vector2f(0, 0.1f);
-			break;
-		case Keyboard::Key::D:
-			direction = Vector2f(0.1f, 0);
-			break;
-	}
-
+void Snake::move(Vector2f newPosition) {
 	RectangleShape segment = body.front();
-	
-	segment.setPosition(segment.getPosition() + direction);
-
+	segment.setPosition(newPosition);
 	body.insert(body.begin(), segment);
 	body.pop_back();
 }
+
 
 void Snake::draw(RenderWindow &window) {
     for (auto &segment : body) {
@@ -42,14 +30,16 @@ void Snake::draw(RenderWindow &window) {
     }
 }
 
-Vector2f Snake::getHeadPosition() {
-	Vector2f position = body.front().getPosition();
-	return position;
+std::map<char, int> Snake::getHeadTileCoords() {
+	std::map<char, int> coords = {
+		{'x', xTile},
+		{'y', yTile}
+	};
+	return coords;
 }
-void Snake::collideWallY() {
-	body.front().setPosition(720, body.front().getPosition().y);
-	std::cout << (body.front().getPosition().y);
+
+void Snake::setHeadTileCoords(int x, int y) {
+	xTile = x;
+	yTile = y;
 }
-void Snake::collideWallX() {
-	body.front().setPosition(body.front().getPosition().y, 720);
-}
+

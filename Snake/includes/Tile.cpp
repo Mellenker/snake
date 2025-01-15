@@ -22,3 +22,7 @@ void Tile::setColor(Color color) {
 void Tile::draw(RenderTexture& texture) {
 	texture.draw(tile);
 }
+
+Vector2f Tile::getPosition() {
+	return tile.getPosition();
+}
