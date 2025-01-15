@@ -4,22 +4,32 @@
 #include <includes/Tile.h>
 using namespace sf;
 
-Snake::Snake(int xStart, int yStart, float tileSize) {
+Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tailColor) {
 
 	xTile = xStart;
 	yTile = yStart;
 	this->tileSize = tileSize;
+	this->headColor = headColor;
+	this->tailColor = tailColor;
 
-	RectangleShape segment(Vector2f(tileSize, tileSize));
-    segment.setFillColor(Color::Magenta);
-    segment.setPosition(xStart * tileSize, yStart * tileSize);
-    body.push_back(segment);
+	RectangleShape head(Vector2f(tileSize, tileSize));
+	RectangleShape tail(Vector2f(tileSize, tileSize));
+    
+	head.setFillColor(headColor);
+	tail.setFillColor(tailColor);
+
+    head.setPosition(xStart * tileSize, yStart * tileSize);
+	tail.setPosition((xStart-1) * tileSize, yStart * tileSize);
+    
+	body.push_back(head);
+	body.push_back(tail);
 }
 
 void Snake::move(Vector2f newPosition) {
 	RectangleShape segment = body.front();
 	segment.setPosition(newPosition);
 	body.insert(body.begin(), segment);
+	body[1].setFillColor(tailColor);
 	body.pop_back();
 }
 
