@@ -1,6 +1,6 @@
 # Snake game in C++
 
-##Functional requirements
+## Functional requirements
 * The snake starts out as 1 square
 * Player can move the snake across the screen using WASD keys
 * The apple spawns in a random location on the screen
