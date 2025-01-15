@@ -4,10 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
-#include <random>
 
 #include "includes/Snake.h"
 #include "includes/Tile.h"
+#include "includes/Apple.h"
 
 using namespace sf;
 
@@ -16,7 +16,9 @@ int tileSize = 30;
 Color tileColor1 = Color(0, 132, 9);
 Color tileColor2 = Color(0, 118, 9);
 
-// Snake color settings
+// Snake settings
+int snakeStartX = 2;
+int snakeStartY = 2;
 Color snakeColorHead = Color(141, 0, 255);
 Color snakeColorTail = Color(143, 0, 204);
 
@@ -35,6 +37,7 @@ void movementTimer() {
 		canMove = true;
 	}
 }
+
 
 int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
@@ -68,7 +71,10 @@ int main() {
 
 	Sprite background(texture.getTexture());
 
-	Snake snake(10, 10, tileSize, snakeColorHead, snakeColorTail);
+	Snake snake(snakeStartX, snakeStartY, tileSize, snakeColorHead, snakeColorTail);
+
+	Apple apple(tileSize);
+	apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 
 	enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
 	enum Direction direction = STILL;
@@ -81,8 +87,19 @@ int main() {
 	while (window.isOpen()) {
 
 		// Current snake position
-		int x = snake.getHeadTileCoords()['x'];
-		int y = snake.getHeadTileCoords()['y'];
+		int xSnake = snake.getHeadTileCoords()['x'];
+		int ySnake = snake.getHeadTileCoords()['y'];
+
+		// Current apple location
+		int xApple = apple.getAppleCoords()['x'];
+		int yApple = apple.getAppleCoords()['y'];
+
+		// Check if apple has been reached
+		if (xSnake == xApple && ySnake == yApple) {
+			// Add score here
+			std::cout << "ASD" << std::endl;
+			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+		}
 
 		Event event;
 
@@ -123,24 +140,24 @@ int main() {
 			if (canMove) {
 				switch (direction) {
 				case UP:
-					y--;
+					ySnake--;
 					break;
 				case LEFT:
-					x--;
+					xSnake--;
 					break;
 				case DOWN:
-					y++;
+					ySnake++;
 					break;
 				case RIGHT:
-					x++;
+					xSnake++;
 					break;
 				default:
 					break;
 				}
 
-				if ((x >= 0 && x < winSizeInTilesX) && (y >= 0 && y < winSizeInTilesY) && direction != STILL) {
-					snake.move(tiles[x][y].getPosition());
-					snake.setHeadTileCoords(x, y);
+				if ((xSnake >= 0 && xSnake < winSizeInTilesX) && (ySnake >= 0 && ySnake < winSizeInTilesY) && direction != STILL) {
+					snake.move(tiles[xSnake][ySnake].getPosition());
+					snake.setHeadTileCoords(xSnake, ySnake);
 				}
 				else {
 					// Game over here
@@ -150,9 +167,11 @@ int main() {
 		}
 
 		window.clear();
+
+		// Draw game objects
 		window.draw(background);
 		snake.draw(window);
-		//window.draw(apple);
+		apple.draw(window);
 
 		window.display();
 	}

@@ -8,19 +8,18 @@ Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tail
 
 	xTile = xStart;
 	yTile = yStart;
-	this->tileSize = tileSize;
 	this->headColor = headColor;
 	this->tailColor = tailColor;
 
 	RectangleShape head(Vector2f(tileSize, tileSize));
 	RectangleShape tail(Vector2f(tileSize, tileSize));
-    
+
 	head.setFillColor(headColor);
 	tail.setFillColor(tailColor);
 
-    head.setPosition(xStart * tileSize, yStart * tileSize);
-	tail.setPosition((xStart-1) * tileSize, yStart * tileSize);
-    
+	head.setPosition(xStart * tileSize, yStart * tileSize);
+	tail.setPosition((xStart - 1) * tileSize, yStart * tileSize);
+
 	body.push_back(head);
 	body.push_back(tail);
 }
@@ -34,10 +33,10 @@ void Snake::move(Vector2f newPosition) {
 }
 
 
-void Snake::draw(RenderWindow &window) {
-    for (auto &segment : body) {
-        window.draw(segment);
-    }
+void Snake::draw(RenderWindow& window) {
+	for (auto& segment : body) {
+		window.draw(segment);
+	}
 }
 
 std::map<char, int> Snake::getHeadTileCoords() {

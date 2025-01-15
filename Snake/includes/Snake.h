@@ -19,8 +19,7 @@ private:
 	std::map<char, int> segmentTileCoords;
 	int xTile;
 	int yTile;
-	float tileSize;
-	sf::Color headColor; 
+	sf::Color headColor;
 	sf::Color tailColor;
 };
 
