@@ -8,10 +8,13 @@ using namespace sf;
 RectangleShape apple;
 
 Apple::Apple(float tileSize) {
+
+	this->xTile = 0;
+	this->yTile = 0;
+
 	apple.setSize(Vector2f(tileSize, tileSize));
 	apple.setFillColor(Color::Red);
-	xTile = 0;
-	yTile = 0;
+
 }
 
 void Apple::placeAppleRandomly(int tileSize, int xMax, int yMax) {

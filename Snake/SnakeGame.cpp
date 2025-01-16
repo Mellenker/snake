@@ -94,10 +94,10 @@ int main() {
 		int xApple = apple.getAppleCoords()['x'];
 		int yApple = apple.getAppleCoords()['y'];
 
-		// Check if apple has been reached
+		// Check if snake reached apple
 		if (xSnake == xApple && ySnake == yApple) {
 			// Add score here
-			std::cout << "ASD" << std::endl;
+			snake.addSegment(tileSize, Vector2f(xSnake * tileSize, ySnake * tileSize));
 			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 		}
 

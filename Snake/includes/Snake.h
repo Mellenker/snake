@@ -11,14 +11,14 @@ public:
 	void draw(sf::RenderWindow& window);
 	std::map<char, int> getHeadTileCoords();
 	void setHeadTileCoords(int x, int y);
+	void addSegment(int tileSize, sf::Vector2f position);
 
 
 private:
 	std::vector<sf::RectangleShape> body;
-	sf::Vector2f movement;
-	std::map<char, int> segmentTileCoords;
-	int xTile;
-	int yTile;
+	int tileSize;
+	int headTileX;
+	int headTileY;
 	sf::Color headColor;
 	sf::Color tailColor;
 };

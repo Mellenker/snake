@@ -6,8 +6,9 @@ using namespace sf;
 
 Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tailColor) {
 
-	xTile = xStart;
-	yTile = yStart;
+	this->tileSize = tileSize;
+	this->headTileX = xStart;
+	this->headTileY = yStart;
 	this->headColor = headColor;
 	this->tailColor = tailColor;
 
@@ -25,10 +26,7 @@ Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tail
 }
 
 void Snake::move(Vector2f newPosition) {
-	RectangleShape segment = body.front();
-	segment.setPosition(newPosition);
-	body.insert(body.begin(), segment);
-	body[1].setFillColor(tailColor);
+	addSegment(tileSize, newPosition);
 	body.pop_back();
 }
 
@@ -41,14 +39,21 @@ void Snake::draw(RenderWindow& window) {
 
 std::map<char, int> Snake::getHeadTileCoords() {
 	std::map<char, int> coords = {
-		{'x', xTile},
-		{'y', yTile}
+		{'x', headTileX},
+		{'y', headTileY}
 	};
 	return coords;
 }
 
 void Snake::setHeadTileCoords(int x, int y) {
-	xTile = x;
-	yTile = y;
+	headTileX = x;
+	headTileY = y;
+}
+
+void Snake::addSegment(int tileSize, Vector2f position) {
+	RectangleShape segment = body.front(); // Copy front segment
+	segment.setPosition(position);
+	body.insert(body.begin(), segment);
+	body[1].setFillColor(tailColor);
 }
 
