@@ -26,7 +26,11 @@ Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tail
 }
 
 void Snake::move(Vector2f newPosition) {
-	addSegment(tileSize, newPosition);
+	RectangleShape segment = body.front(); // Copy front segment
+	segment.setPosition(newPosition);
+	body.insert(body.begin(), segment);
+	body[1].setFillColor(tailColor);
+	tailEnd = body.back().getPosition();
 	body.pop_back();
 }
 
@@ -50,10 +54,48 @@ void Snake::setHeadTileCoords(int x, int y) {
 	headTileY = y;
 }
 
-void Snake::addSegment(int tileSize, Vector2f position) {
-	RectangleShape segment = body.front(); // Copy front segment
-	segment.setPosition(position);
-	body.insert(body.begin(), segment);
-	body[1].setFillColor(tailColor);
+//void Snake::addSegment(int tileSize, Vector2f position) {
+//	RectangleShape segment = body.front(); // Copy front segment
+//	segment.setPosition(position);
+//	body.insert(body.begin(), segment);
+//	body[1].setFillColor(tailColor);
+//}
+
+void Snake::addSegment() {
+	RectangleShape segment = body.back(); // Copy front segment
+	segment.setPosition(tailEnd);
+	segment.setFillColor(tailColor);
+	body.insert(body.end(), segment);
+}
+
+bool Snake::segmentsWillCollide(int headPosX, int headPosY) {
+	for (int i = 1; i < body.size(); i++) {
+		Vector2f segPos = body[i].getPosition();
+		if (headPosX == segPos.x && headPosY == segPos.y) {
+			std::cout << "headPosX: " << headPosX << std::endl;
+			std::cout << "segPosX: " << segPos.x << std::endl;
+			std::cout << "headPosY: " << headPosY << std::endl;
+			std::cout << "segPosY: " << segPos.y << std::endl;
+			return true;
+		}
+		else {
+			std::cout << "headPosX: " << headPosX << std::endl;
+			std::cout << "segPosX: " << segPos.x << std::endl;
+			std::cout << "headPosY: " << headPosY << std::endl;
+			std::cout << "segPosY: " << segPos.y << std::endl;
+		}
+
+	}
+	
+	return false;
+
+}
+
+
+
+
+
+Vector2f Snake::getTailEnd() {
+	return tailEnd;
 }
 

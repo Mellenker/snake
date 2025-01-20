@@ -1,5 +1,6 @@
 #include "Tile.h"
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>'
+#include <iostream>
 
 using namespace sf;
 
@@ -7,22 +8,32 @@ RectangleShape tile;
 
 // Default constructor
 Tile::Tile() {
-	tile.setSize(Vector2f(30, 30));
-	tile.setPosition(Vector2f(0, 0));
+	shape.setSize(Vector2f(30, 30));
+	shape.setPosition(Vector2f(0, 0));
+	occupied = false;
 }
 
 Tile::Tile(float size, float xPos, float yPos) {
-	tile.setSize(Vector2f(size, size));
-	tile.setPosition(Vector2f(xPos, yPos));
+	shape.setSize(Vector2f(size, size));
+	shape.setPosition(Vector2f(xPos, yPos));
+	occupied = false;
 }
 
 void Tile::setColor(Color color) {
-	tile.setFillColor(color);
+	shape.setFillColor(color);
 }
 void Tile::draw(RenderTexture& texture) {
-	texture.draw(tile);
+	texture.draw(shape);
 }
 
 Vector2f Tile::getPosition() {
-	return tile.getPosition();
+	return shape.getPosition();
+}
+
+bool Tile::isOccupied() {
+	return occupied;
+}
+
+void Tile::setOccupied(bool val) {
+	occupied = val;
 }

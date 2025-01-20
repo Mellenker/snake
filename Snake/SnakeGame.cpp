@@ -17,14 +17,14 @@ Color tileColor1 = Color(0, 132, 9);
 Color tileColor2 = Color(0, 118, 9);
 
 // Snake settings
-int snakeStartX = 2;
-int snakeStartY = 2;
-Color snakeColorHead = Color(141, 0, 255);
-Color snakeColorTail = Color(143, 0, 204);
+int snakeStartX = 4;
+int snakeStartY = 4;
+Color colorSnakeHead = Color(103, 0, 255);
+Color colorSnakeTail = Color(143, 0, 204);
 
 // Window settings
-const int winSizeInTilesX = 25;
-const int winSizeInTilesY = 25;
+const int winSizeInTilesX = 15;
+const int winSizeInTilesY = 15;
 
 // Movement control
 bool canMove = false;
@@ -37,7 +37,6 @@ void movementTimer() {
 		canMove = true;
 	}
 }
-
 
 int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
@@ -69,9 +68,12 @@ int main() {
 		yPos += tileSize;
 	}
 
+	if (!tiles[9][9].isOccupied())
+		std::cout << "SHIIIT" << std::endl;
+
 	Sprite background(texture.getTexture());
 
-	Snake snake(snakeStartX, snakeStartY, tileSize, snakeColorHead, snakeColorTail);
+	Snake snake(snakeStartX, snakeStartY, tileSize, colorSnakeHead, colorSnakeTail);
 
 	Apple apple(tileSize);
 	apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
@@ -87,23 +89,24 @@ int main() {
 	while (window.isOpen()) {
 
 		// Current snake position
-		int xSnake = snake.getHeadTileCoords()['x'];
-		int ySnake = snake.getHeadTileCoords()['y'];
+		int xSnakeHead = snake.getHeadTileCoords()['x'];
+		int ySnakeHead = snake.getHeadTileCoords()['y'];
 
 		// Current apple location
 		int xApple = apple.getAppleCoords()['x'];
 		int yApple = apple.getAppleCoords()['y'];
 
 		// Check if snake reached apple
-		if (xSnake == xApple && ySnake == yApple) {
+		if (xSnakeHead == xApple && ySnakeHead == yApple) {
 			// Add score here
-			snake.addSegment(tileSize, Vector2f(xSnake * tileSize, ySnake * tileSize));
+			snake.addSegment();
 			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 		}
 
 		Event event;
 
 		// Handle events
+		bool firstLoopThisFrame = true;
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed)
 				window.close();
@@ -113,25 +116,30 @@ int main() {
 				if (event.key.code == Keyboard::Key::Escape) {
 					// Pause logic
 				}
-				else {
+				else if (firstLoopThisFrame){
 					switch (event.key.code) {
 					case Keyboard::Key::W:
-						direction = UP;
+						if (direction != DOWN)
+							direction = UP;
 						break;
 					case Keyboard::Key::A:
-						direction = LEFT;
+						if (direction != RIGHT)
+							direction = LEFT;
 						break;
 					case Keyboard::Key::S:
-						direction = DOWN;
+						if (direction != UP)
+							direction = DOWN;
 						break;
 					case Keyboard::Key::D:
-						direction = RIGHT;
+						if (direction != LEFT)
+							direction = RIGHT;
 						break;
 					default:
 						break;
 					}
 				}
 			}
+			firstLoopThisFrame = false;
 		}
 
 		// Movement
@@ -140,29 +148,49 @@ int main() {
 			if (canMove) {
 				switch (direction) {
 				case UP:
-					ySnake--;
+						ySnakeHead--;
 					break;
 				case LEFT:
-					xSnake--;
+						xSnakeHead--;
 					break;
 				case DOWN:
-					ySnake++;
+						ySnakeHead++;
 					break;
 				case RIGHT:
-					xSnake++;
+						xSnakeHead++;
 					break;
 				default:
 					break;
 				}
-
-				if ((xSnake >= 0 && xSnake < winSizeInTilesX) && (ySnake >= 0 && ySnake < winSizeInTilesY) && direction != STILL) {
-					snake.move(tiles[xSnake][ySnake].getPosition());
-					snake.setHeadTileCoords(xSnake, ySnake);
-				}
-				else {
+				
+				
+				// Collision checks
+				if (!((xSnakeHead >= 0 && xSnakeHead < winSizeInTilesX) && (ySnakeHead >= 0 && ySnakeHead < winSizeInTilesY) && direction != STILL)) {
 					// Game over here
 				}
-				canMove = false;
+				else if (tiles[xSnakeHead][ySnakeHead].isOccupied()) {
+					// Game over here
+					std::cout << xSnakeHead << std::endl;
+					std::cout << ySnakeHead << std::endl;
+					std::cout << direction << std::endl;
+					std::this_thread::sleep_for(std::chrono::milliseconds(120000));
+	
+				}
+				else {
+					// Move the snake
+					snake.move(tiles[xSnakeHead][ySnakeHead].getPosition());
+					snake.setHeadTileCoords(xSnakeHead, ySnakeHead);
+
+					// Set tile occupation
+					tiles[xSnakeHead][ySnakeHead].setOccupied(true);
+
+					int xTailEnd = snake.getTailEnd().x / tileSize;
+					int yTailEnd = snake.getTailEnd().y / tileSize;
+					
+					tiles[xTailEnd][yTailEnd].setOccupied(false);
+
+					canMove = false;
+				}
 			}
 		}
 

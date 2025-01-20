@@ -11,8 +11,9 @@ public:
 	void draw(sf::RenderWindow& window);
 	std::map<char, int> getHeadTileCoords();
 	void setHeadTileCoords(int x, int y);
-	void addSegment(int tileSize, sf::Vector2f position);
-
+	void addSegment();
+	bool segmentsWillCollide(int xSnake, int ySnake);
+	sf::Vector2f getTailEnd();
 
 private:
 	std::vector<sf::RectangleShape> body;
@@ -21,6 +22,7 @@ private:
 	int headTileY;
 	sf::Color headColor;
 	sf::Color tailColor;
+	sf::Vector2f tailEnd;
 };
 
 #endif

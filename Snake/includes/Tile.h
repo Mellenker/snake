@@ -10,9 +10,12 @@ public:
 	void setColor(sf::Color color);
 	void draw(sf::RenderTexture& texture);
 	sf::Vector2f getPosition();
+	bool isOccupied();
+	void setOccupied(bool val);
 
 private:
-	sf::RectangleShape tile;
+	sf::RectangleShape shape;
+	bool occupied;
 };
 
 #endif
