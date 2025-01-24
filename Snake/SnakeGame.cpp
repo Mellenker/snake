@@ -23,20 +23,8 @@ Color colorSnakeHead = Color(103, 0, 255);
 Color colorSnakeTail = Color(143, 0, 204);
 
 // Window settings
-const int winSizeInTilesX = 15;
-const int winSizeInTilesY = 15;
-
-// Movement control
-bool canMove = false;
-std::mutex moveMutex;
-
-void movementTimer() {
-	while (true) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(200)); // Adjust the interval as needed
-		std::lock_guard<std::mutex> lock(moveMutex);
-		canMove = true;
-	}
-}
+const int winSizeInTilesX = 29;
+const int winSizeInTilesY = 29;
 
 int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
@@ -81,9 +69,7 @@ int main() {
 	enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
 	enum Direction direction = STILL;
 
-	// Start the movement timer thread
-	std::thread timerThread(movementTimer);
-	timerThread.detach();
+	window.setFramerateLimit(10);
 
 	// Game loop (Runs once each frame)
 	while (window.isOpen()) {
@@ -95,13 +81,6 @@ int main() {
 		// Current apple location
 		int xApple = apple.getAppleCoords()['x'];
 		int yApple = apple.getAppleCoords()['y'];
-
-		// Check if snake reached apple
-		if (xSnakeHead == xApple && ySnakeHead == yApple) {
-			// Add score here
-			snake.addSegment();
-			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
-		}
 
 		Event event;
 
@@ -116,83 +95,95 @@ int main() {
 				if (event.key.code == Keyboard::Key::Escape) {
 					// Pause logic
 				}
-				else if (firstLoopThisFrame){
+				if (firstLoopThisFrame){
 					switch (event.key.code) {
 					case Keyboard::Key::W:
 						if (direction != DOWN)
 							direction = UP;
+						std::cout << "W" << std::endl;
+						std::cout << firstLoopThisFrame << std::endl;
 						break;
 					case Keyboard::Key::A:
 						if (direction != RIGHT)
 							direction = LEFT;
+						std::cout << "A" << std::endl;
+						std::cout << firstLoopThisFrame << std::endl;
 						break;
 					case Keyboard::Key::S:
 						if (direction != UP)
 							direction = DOWN;
+						std::cout << "S" << std::endl;
+						std::cout << firstLoopThisFrame << std::endl;
 						break;
 					case Keyboard::Key::D:
 						if (direction != LEFT)
 							direction = RIGHT;
+						std::cout << "D" << std::endl;
+						std::cout << firstLoopThisFrame << std::endl;
 						break;
 					default:
 						break;
 					}
+					std::cout << "YO" << std::endl;
+					firstLoopThisFrame = false;
+					std::cout << "MAMA" << std::endl;
 				}
 			}
-			firstLoopThisFrame = false;
 		}
 
 		// Movement
-		{
-			std::lock_guard<std::mutex> lock(moveMutex);
-			if (canMove) {
-				switch (direction) {
-				case UP:
-						ySnakeHead--;
-					break;
-				case LEFT:
-						xSnakeHead--;
-					break;
-				case DOWN:
-						ySnakeHead++;
-					break;
-				case RIGHT:
-						xSnakeHead++;
-					break;
-				default:
-					break;
-				}
-				
-				
-				// Collision checks
-				if (!((xSnakeHead >= 0 && xSnakeHead < winSizeInTilesX) && (ySnakeHead >= 0 && ySnakeHead < winSizeInTilesY) && direction != STILL)) {
-					// Game over here
-				}
-				else if (tiles[xSnakeHead][ySnakeHead].isOccupied()) {
-					// Game over here
-					std::cout << xSnakeHead << std::endl;
-					std::cout << ySnakeHead << std::endl;
-					std::cout << direction << std::endl;
-					std::this_thread::sleep_for(std::chrono::milliseconds(120000));
-	
-				}
-				else {
-					// Move the snake
-					snake.move(tiles[xSnakeHead][ySnakeHead].getPosition());
-					snake.setHeadTileCoords(xSnakeHead, ySnakeHead);
-
-					// Set tile occupation
-					tiles[xSnakeHead][ySnakeHead].setOccupied(true);
-
-					int xTailEnd = snake.getTailEnd().x / tileSize;
-					int yTailEnd = snake.getTailEnd().y / tileSize;
-					
-					tiles[xTailEnd][yTailEnd].setOccupied(false);
-
-					canMove = false;
-				}
-			}
+		switch (direction) {
+		case UP:
+				ySnakeHead--;
+			break;
+		case LEFT:
+				xSnakeHead--;
+			break;
+		case DOWN:
+				ySnakeHead++;
+			break;
+		case RIGHT:
+				xSnakeHead++;
+			break;
+		default:
+			break;
 		}
+				
+				
+		// Collision checks
+
+		if (xSnakeHead == xApple && ySnakeHead == yApple) {
+			// Add score here
+			snake.addSegment();
+			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+		}
+
+		if (!((xSnakeHead >= 0 && xSnakeHead < winSizeInTilesX) && (ySnakeHead >= 0 && ySnakeHead < winSizeInTilesY) && direction != STILL)) {
+			// Game over here
+		}
+		else if (tiles[xSnakeHead][ySnakeHead].isOccupied()) {
+			// Game over here
+			std::cout << xSnakeHead << std::endl;
+			std::cout << ySnakeHead << std::endl;
+			std::cout << direction << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(120000));
+	
+		}
+		else {
+			// Move the snake
+			snake.move(tiles[xSnakeHead][ySnakeHead].getPosition());
+			snake.setHeadTileCoords(xSnakeHead, ySnakeHead);
+
+			// Set tile occupation
+			tiles[xSnakeHead][ySnakeHead].setOccupied(true);
+
+			int xTailEnd = snake.getTailEnd().x / tileSize;
+			int yTailEnd = snake.getTailEnd().y / tileSize;
+					
+			tiles[xTailEnd][yTailEnd].setOccupied(false);
+
+		}
+
 
 		window.clear();
 
