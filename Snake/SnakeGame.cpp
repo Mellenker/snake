@@ -8,10 +8,16 @@
 #include "includes/Snake.h"
 #include "includes/Tile.h"
 #include "includes/Apple.h"
+#include "includes/Menu.h"
 
 using namespace sf;
 
+// Window settings
+const int winSizeInTilesX = 29;
+const int winSizeInTilesY = 29;
+
 // Tile settings
+Tile tiles[winSizeInTilesX][winSizeInTilesY];
 int tileSize = 30;
 Color tileColor1 = Color(0, 132, 9);
 Color tileColor2 = Color(0, 118, 9);
@@ -22,19 +28,17 @@ int snakeStartY = 4;
 Color colorSnakeHead = Color(103, 0, 255);
 Color colorSnakeTail = Color(143, 0, 204);
 
-// Window settings
-const int winSizeInTilesX = 29;
-const int winSizeInTilesY = 29;
+// Game states
+enum GameState { PLAY, PAUSE, GAMEOVER };
+enum GameState gameState;
 
-int main() {
-	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
+// Snake directions
+enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
+enum Direction direction;
 
-	RenderTexture texture;
+void spawnTiles(RenderTexture& texture) {
 	texture.create(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize);
-
-	Tile tiles[winSizeInTilesX][winSizeInTilesY];
-
-	// Populate background with tiles
+	
 	int xPos = 0;
 	int yPos = 0;
 	bool colorFlag = true; // Flag to alternate colors
@@ -55,19 +59,51 @@ int main() {
 		xPos = 0; // Reset x position after each row
 		yPos += tileSize;
 	}
+}
 
-	if (!tiles[9][9].isOccupied())
-		std::cout << "SHIIIT" << std::endl;
+// Handle keyboard input
+void handleKeyboardInput(Keyboard::Key keyPressed) {
+	switch (keyPressed) {
+	case Keyboard::Key::Escape:
+		gameState = PAUSE;
+		break;
+	case Keyboard::Key::W:
+		if (direction != DOWN)
+			direction = UP;
+		break;
+	case Keyboard::Key::A:
+		if (direction != RIGHT)
+			direction = LEFT;
+		break;
+	case Keyboard::Key::S:
+		if (direction != UP)
+			direction = DOWN;
+		break;
+	case Keyboard::Key::D:
+		if (direction != LEFT)
+			direction = RIGHT;
+		break;
+	default:
+		break;
+	}
+	return;
+}
 
+int main() {
+	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
+
+	// Create background with tiles
+	RenderTexture texture;
+	spawnTiles(texture);
 	Sprite background(texture.getTexture());
 
+	// Initiate game objects
 	Snake snake(snakeStartX, snakeStartY, tileSize, colorSnakeHead, colorSnakeTail);
-
 	Apple apple(tileSize);
 	apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 
-	enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
-	enum Direction direction = STILL;
+	gameState = PLAY;
+	direction = STILL;
 
 	window.setFramerateLimit(10);
 
@@ -91,83 +127,47 @@ int main() {
 				window.close();
 
 			// Keyboard input
-			if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::Key::Escape) {
-					// Pause logic
-				}
-				if (firstLoopThisFrame){
-					switch (event.key.code) {
-					case Keyboard::Key::W:
-						if (direction != DOWN)
-							direction = UP;
-						std::cout << "W" << std::endl;
-						std::cout << firstLoopThisFrame << std::endl;
-						break;
-					case Keyboard::Key::A:
-						if (direction != RIGHT)
-							direction = LEFT;
-						std::cout << "A" << std::endl;
-						std::cout << firstLoopThisFrame << std::endl;
-						break;
-					case Keyboard::Key::S:
-						if (direction != UP)
-							direction = DOWN;
-						std::cout << "S" << std::endl;
-						std::cout << firstLoopThisFrame << std::endl;
-						break;
-					case Keyboard::Key::D:
-						if (direction != LEFT)
-							direction = RIGHT;
-						std::cout << "D" << std::endl;
-						std::cout << firstLoopThisFrame << std::endl;
-						break;
-					default:
-						break;
-					}
-					std::cout << "YO" << std::endl;
-					firstLoopThisFrame = false;
-					std::cout << "MAMA" << std::endl;
-				}
+			if (event.type == Event::KeyPressed && firstLoopThisFrame) {
+				handleKeyboardInput(event.key.code);
+				firstLoopThisFrame = false;
 			}
 		}
 
 		// Movement
 		switch (direction) {
 		case UP:
-				ySnakeHead--;
+			ySnakeHead--;
 			break;
 		case LEFT:
-				xSnakeHead--;
+			xSnakeHead--;
 			break;
 		case DOWN:
-				ySnakeHead++;
+			ySnakeHead++;
 			break;
 		case RIGHT:
-				xSnakeHead++;
+			xSnakeHead++;
 			break;
 		default:
 			break;
 		}
-				
-				
-		// Collision checks
 
+
+		// Collision checks
 		if (xSnakeHead == xApple && ySnakeHead == yApple) {
 			// Add score here
 			snake.addSegment();
 			apple.placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 		}
 
-		if (!((xSnakeHead >= 0 && xSnakeHead < winSizeInTilesX) && (ySnakeHead >= 0 && ySnakeHead < winSizeInTilesY) && direction != STILL)) {
-			// Game over here
+		if ((xSnakeHead < 0 || xSnakeHead >= winSizeInTilesX) || (ySnakeHead < 0 || ySnakeHead >= winSizeInTilesY)) {
+			gameState = GAMEOVER;
+			std::cout << "STAY ON SCREEN" << std::endl;
 		}
-		else if (tiles[xSnakeHead][ySnakeHead].isOccupied()) {
-			// Game over here
-			std::cout << xSnakeHead << std::endl;
-			std::cout << ySnakeHead << std::endl;
-			std::cout << direction << std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds(120000));
-	
+		else if (tiles[xSnakeHead][ySnakeHead].isOccupied() && (direction != STILL)) {
+			gameState = GAMEOVER;
+			std::cout << "DO NOT COLLIDE WITH TAIL" << std::endl;
+			//std::this_thread::sleep_for(std::chrono::milliseconds(120000));
+
 		}
 		else {
 			// Move the snake
@@ -179,13 +179,23 @@ int main() {
 
 			int xTailEnd = snake.getTailEnd().x / tileSize;
 			int yTailEnd = snake.getTailEnd().y / tileSize;
-					
+
 			tiles[xTailEnd][yTailEnd].setOccupied(false);
 
 		}
 
-
 		window.clear();
+
+		// Handle game state
+		switch (gameState) {
+		case PAUSE:
+
+			break;
+		case GAMEOVER:
+			Menu gameOverMenu(window);
+			std::cout << "GAMEOVER" << std::endl;
+			break;
+		}
 
 		// Draw game objects
 		window.draw(background);
@@ -197,3 +207,4 @@ int main() {
 
 	return 0;
 }
+

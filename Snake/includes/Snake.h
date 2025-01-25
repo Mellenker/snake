@@ -12,7 +12,6 @@ public:
 	std::map<char, int> getHeadTileCoords();
 	void setHeadTileCoords(int x, int y);
 	void addSegment();
-	bool segmentsWillCollide(int xSnake, int ySnake);
 	sf::Vector2f getTailEnd();
 
 private:
