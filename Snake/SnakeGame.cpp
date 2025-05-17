@@ -189,7 +189,8 @@ int main() {
 		// Handle game state
 		switch (gameState) {
 		case PAUSE:
-
+			std::cout << "PAUSE" << std::endl;
+			gameState = PLAY;
 			break;
 		case GAMEOVER:
 			Menu gameOverMenu(window);
