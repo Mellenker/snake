@@ -22,6 +22,7 @@ Tile::Tile(float size, float xPos, float yPos) {
 void Tile::setColor(Color color) {
 	shape.setFillColor(color);
 }
+
 void Tile::draw(RenderTexture& texture) {
 	texture.draw(shape);
 }

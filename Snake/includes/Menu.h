@@ -6,8 +6,9 @@
 class Menu {
 public:
 	Menu(sf::RenderWindow& window);
+	void draw(sf::RenderWindow& window);
 private:
-
+	sf::RectangleShape menuPanel;
 };
 
 #endif

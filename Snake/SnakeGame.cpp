@@ -92,6 +92,9 @@ void handleKeyboardInput(Keyboard::Key keyPressed) {
 int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
 
+	// Prepare menus
+	Menu gameOverMenu = Menu(window);
+	
 	// Create background with tiles
 	RenderTexture texture;
 	spawnTiles(texture);
@@ -107,21 +110,21 @@ int main() {
 
 	window.setFramerateLimit(10);
 
-	// Game loop (Runs once each frame)
+	// Game loop (Executes once each frame)
 	while (window.isOpen()) {
 
 		// Current snake position
 		int xSnakeHead = snake.getHeadTileCoords()['x'];
 		int ySnakeHead = snake.getHeadTileCoords()['y'];
 
-		// Current apple location
+		// Current apple position
 		int xApple = apple.getAppleCoords()['x'];
 		int yApple = apple.getAppleCoords()['y'];
 
 		Event event;
 
 		// Handle events
-		bool firstLoopThisFrame = true;
+		bool firstLoopThisFrame = true; // Can this be removed?
 		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed)
 				window.close();
@@ -186,6 +189,11 @@ int main() {
 
 		window.clear();
 
+		// Draw game objects
+		window.draw(background);
+		snake.draw(window);
+		apple.draw(window);
+
 		// Handle game state
 		switch (gameState) {
 		case PAUSE:
@@ -193,15 +201,11 @@ int main() {
 			gameState = PLAY;
 			break;
 		case GAMEOVER:
-			Menu gameOverMenu(window);
 			std::cout << "GAMEOVER" << std::endl;
+			gameOverMenu.draw(window);
+			// Handle stopping of game
 			break;
 		}
-
-		// Draw game objects
-		window.draw(background);
-		snake.draw(window);
-		apple.draw(window);
 
 		window.display();
 	}

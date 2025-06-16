@@ -4,14 +4,14 @@
 #include <random>
 
 using namespace sf;
-// Deletethiscomment
+
 RectangleShape apple;
 
 Apple::Apple(float tileSize) {
 
 	this->xTile = 0;
 	this->yTile = 0;
-
+	
 	apple.setSize(Vector2f(tileSize, tileSize));
 	apple.setFillColor(Color::Red);
 
