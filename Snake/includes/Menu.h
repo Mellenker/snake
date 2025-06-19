@@ -1,5 +1,4 @@
-#ifndef MENU_h
-#define MENU_h
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -20,6 +19,3 @@ private:
 	std::vector<sf::Text> items;
 	int curItemIdx;
 };
-
-
-#endif

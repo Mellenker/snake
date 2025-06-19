@@ -1,5 +1,4 @@
-#ifndef TILE_H
-#define TILE_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -17,5 +16,3 @@ private:
 	sf::RectangleShape shape;
 	bool occupied;
 };
-
-#endif

@@ -10,10 +10,15 @@
 #include "includes/Apple.h"
 #include "includes/Menu.h"
 
+#include "includes/Snake.h"
+#include "includes/Tile.h"
+#include "includes/Apple.h"
+#include "includes/Menu.h"
+
 using namespace sf;
 
 // Framerate limit
-const int fpsLimit = 3;
+const int fpsLimit = 10;
 
 // Window settings
 const int winSizeInTilesX = 29;
@@ -221,9 +226,9 @@ int main() {
 	while (window.isOpen() && gameState == GAMEOVER) {
 
 		Event event;
-		
+
 		// Handle events
-		while (window.pollEvent(event)) {
+		while (window.waitEvent(event)) {
 			if (event.type == Event::Closed)
 				window.close();
 			if (event.type == Event::KeyPressed) {
@@ -241,12 +246,24 @@ int main() {
 					break;
 				}
 			}
-		}
+			/*
+			// Clear irrelevant events from the queue
+			while (window.pollEvent(event)) {
+				if (event.type != Event::Closed && event.type != Event::KeyPressed) {
+					continue; // Ignore irrelevant events
+				}
+			}
+			*/
 
+		std::cout << "FRAME" << std::endl;
 		// Draw changes
 		window.clear();
 		gameOverMenu.draw(window);
 		window.display();
+
+		}
+
+
 	}
 
 	return 0;
