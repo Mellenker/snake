@@ -9,6 +9,7 @@
 #include "includes/Tile.h"
 #include "includes/Apple.h"
 #include "includes/GameOverMenu.h"
+#include "includes/PauseMenu.h"
 
 using namespace sf;
 
@@ -32,7 +33,7 @@ Color colorSnakeHead = Color(103, 0, 255);
 Color colorSnakeTail = Color(143, 0, 204);
 
 // Game states
-enum GameState { PLAY, PAUSE, GAMEOVER };
+enum GameState { PLAY, PAUSED, GAMEOVER };
 enum GameState gameState;
 
 // Snake directions
@@ -69,7 +70,7 @@ void spawnTiles(RenderTexture& texture) {
 void handleKeyboardInput(Keyboard::Key keyPressed) {
 	switch (keyPressed) {
 	case Keyboard::Key::Escape:
-		gameState = PAUSE;
+		gameState = PAUSED;
 		break;
 	case Keyboard::Key::W:
 		if (direction != DOWN)
@@ -101,6 +102,12 @@ int main() {
 	gameOverMenu.setTitle("Game Over");
 	gameOverMenu.addItem("Restart");
 	gameOverMenu.addItem("Exit");
+
+	PauseMenu pauseMenu(window.getSize().x, window.getSize().y);
+	pauseMenu.setTitle("Paused");
+	pauseMenu.addItem("Unpause");
+	pauseMenu.addItem("Restart");
+	pauseMenu.addItem("Exit");
 	
 	// Create background with tiles
 	RenderTexture texture;
@@ -203,21 +210,69 @@ int main() {
 
 		// Handle game state
 		switch (gameState) {
-		case PAUSE:
+		case PAUSED:
 			std::cout << "PAUSE" << std::endl;
-			gameState = PLAY;
+			pauseMenu.draw(window);
 			break;
 		case GAMEOVER:
 			std::cout << "GAMEOVER" << std::endl;
 			window.clear();
 			gameOverMenu.draw(window);
-			// Handle stopping of game
 			break;
 		}
 
 		window.display();
 	}
-	// GAMEOVER LOOP (REMOVE BUSY WAITING!)
+
+	// PAUSED LOOP
+	while (window.isOpen() && gameState == PAUSED) {
+
+		Event event;
+
+		// Handle events
+		while (window.waitEvent(event)) {
+			if (event.type == Event::Closed)
+				window.close();
+			if (event.type == Event::KeyPressed) {
+				switch (event.key.code) {
+				case Keyboard::Key::W:
+					pauseMenu.moveUp();
+					break;
+				case Keyboard::Key::S:
+					pauseMenu.moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					// Perform button event
+					pauseMenu.performAction();
+					break;
+				case Keyboard::Key::Escape:
+					// Unpause logic
+					break;
+				default:
+					break;
+				}
+			}
+
+			std::cout << "FRAME" << std::endl;
+
+			// Clear window
+			window.clear();
+
+			// Draw background game
+			window.draw(background);
+			snake.draw(window);
+			apple.draw(window);
+
+			// Draw changes
+			pauseMenu.draw(window);
+			window.display();
+
+		}
+
+
+	}
+
+	// GAMEOVER LOOP
 	while (window.isOpen() && gameState == GAMEOVER) {
 
 		Event event;
@@ -252,8 +307,11 @@ int main() {
 			*/
 
 		std::cout << "FRAME" << std::endl;
-		// Draw changes
+		
+		// Clear window
 		window.clear();
+
+		// Draw changes
 		gameOverMenu.draw(window);
 		window.display();
 
