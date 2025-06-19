@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="includes\Apple.cpp" />
+    <ClCompile Include="includes\GameOverMenu.cpp" />
     <ClCompile Include="includes\Menu.cpp" />
     <ClCompile Include="includes\Snake.cpp" />
     <ClCompile Include="includes\Tile.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Apple.h" />
+    <ClInclude Include="includes\GameOverMenu.h" />
     <ClInclude Include="includes\Menu.h" />
     <ClInclude Include="includes\Snake.h" />
     <ClInclude Include="includes\Tile.h" />

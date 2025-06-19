@@ -10,7 +10,7 @@ Menu::Menu(int windowSizeX, int windowSizeY) {
 	this->windowSizeX = windowSizeX;
 	this->windowSizeY = windowSizeY;
 
-	curItemIdx = 0;
+	highlightedIdx = 0;
 
 	// Initialize font
 	font.loadFromFile("resources\\arial.ttf");
@@ -52,27 +52,22 @@ void Menu::addItem(std::string string) {
 }
 
 void Menu::moveUp() {
-	std::cout << "Move Up" << std::endl;
-	if (curItemIdx - 1 >= 0) {
-		updateHighlighted(curItemIdx - 1, curItemIdx);
+	if (highlightedIdx - 1 >= 0) {
+		updateHighlighted(highlightedIdx - 1, highlightedIdx);
 	}
 }
 
 void Menu::moveDown() {
-	std::cout << "Move Down" << std::endl;
-	if (curItemIdx + 1 >= 0) {
-		updateHighlighted(curItemIdx + 1, curItemIdx);
+	if (highlightedIdx + 1 >= 0) {
+		updateHighlighted(highlightedIdx + 1, highlightedIdx);
 	}
 }
 
 void Menu::updateHighlighted(int newIdx, int oldIdx) {
-	std::cout << items.size() << std::endl;
 	if (oldIdx >= 0 && newIdx < items.size()) {
-		std::cout << newIdx << std::endl;
-		std::cout << oldIdx << std::endl;
 		items[oldIdx].setOutlineThickness(0);	// De-highlight the previous item
 		items[newIdx].setOutlineThickness(3);	// Highlight the next item
-		curItemIdx = newIdx;
+		highlightedIdx = newIdx;
 	}
 }
 

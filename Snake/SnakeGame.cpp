@@ -8,12 +8,7 @@
 #include "includes/Snake.h"
 #include "includes/Tile.h"
 #include "includes/Apple.h"
-#include "includes/Menu.h"
-
-#include "includes/Snake.h"
-#include "includes/Tile.h"
-#include "includes/Apple.h"
-#include "includes/Menu.h"
+#include "includes/GameOverMenu.h"
 
 using namespace sf;
 
@@ -102,7 +97,7 @@ int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
 
 	// Prepare menus
-	Menu gameOverMenu(window.getSize().x, window.getSize().y);
+	GameOverMenu gameOverMenu(window.getSize().x, window.getSize().y);
 	gameOverMenu.setTitle("Game Over");
 	gameOverMenu.addItem("Restart");
 	gameOverMenu.addItem("Exit");
@@ -241,6 +236,7 @@ int main() {
 					break;
 				case Keyboard::Key::Enter:
 					// Perform button event
+					gameOverMenu.performAction();
 					break;
 				default:
 					break;
