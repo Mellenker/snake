@@ -209,8 +209,8 @@ int main() {
 			break;
 		case GAMEOVER:
 			std::cout << "GAMEOVER" << std::endl;
-			gameOverMenu.updateTexture();
-			gameOverMenu.drawToWindow(window);
+			window.clear();
+			gameOverMenu.draw(window);
 			// Handle stopping of game
 			break;
 		}
@@ -219,7 +219,7 @@ int main() {
 	}
 	// GAMEOVER LOOP (REMOVE BUSY WAITING!)
 	while (window.isOpen() && gameState == GAMEOVER) {
-		
+
 		Event event;
 		
 		// Handle events
@@ -241,13 +241,11 @@ int main() {
 					break;
 				}
 			}
-
 		}
 
 		// Draw changes
 		window.clear();
-		gameOverMenu.updateTexture();
-		gameOverMenu.drawToWindow(window);
+		gameOverMenu.draw(window);
 		window.display();
 	}
 

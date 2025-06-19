@@ -8,8 +8,7 @@ public:
 	Menu(int windowSizeX, int windowSizeY);
 	void setTitle(std::string title);
 	void addItem(std::string string);
-	void updateTexture();
-	void drawToWindow(sf::RenderWindow& window);
+	void draw(sf::RenderWindow& window);
 	void moveUp();
 	void moveDown();
 	void updateHighlighted(int newIdx, int oldIdx);
@@ -20,8 +19,6 @@ private:
 	sf::Text titleText;
 	std::vector<sf::Text> items;
 	int curItemIdx;
-	sf::RenderTexture texture; 	// Texture for menu panel
-	sf::Sprite menuPanel;
 };
 
 

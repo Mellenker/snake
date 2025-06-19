@@ -10,15 +10,6 @@ Menu::Menu(int windowSizeX, int windowSizeY) {
 	this->windowSizeX = windowSizeX;
 	this->windowSizeY = windowSizeY;
 
-	// Create menu panel
-	texture.create(windowSizeX / 3, windowSizeY / 2);
-	
-	menuPanel.setTexture(texture.getTexture());
-
-	FloatRect menuRect = menuPanel.getLocalBounds();
-	menuPanel.setOrigin(menuRect.left + menuRect.width / 2.0f, menuRect.top + menuRect.height / 2.0f);
-	menuPanel.setPosition(windowSizeX / 2.0f, windowSizeY / 2.0f);	// Set the position to the center of the window
-
 	curItemIdx = 0;
 
 	// Initialize font
@@ -81,6 +72,7 @@ void Menu::updateHighlighted(int newIdx, int oldIdx) {
 		std::cout << oldIdx << std::endl;
 		items[oldIdx].setOutlineThickness(0);	// De-highlight the previous item
 		items[newIdx].setOutlineThickness(3);	// Highlight the next item
+		curItemIdx = newIdx;
 	}
 }
 
@@ -90,21 +82,11 @@ Text Menu::centerOrigin(sf::Text text) {
 	return text;
 }
 
-// Clear and then draw changes to texture
-void Menu::updateTexture() {
-
-	texture.clear();
-
+void Menu::draw(RenderWindow& window) {
 	if (!items.empty()) {
-		texture.draw(titleText);
+		window.draw(titleText);
 		for (Text text : items) {
-			texture.draw(text);
+			window.draw(text);
 		}
 	}
-	menuPanel.setTexture(texture.getTexture());
-	std::cout << "TEXTURE UPDATED" << std::endl;
-}
-
-void Menu::drawToWindow(RenderWindow& window) {
-	window.draw(menuPanel);
 }
