@@ -12,6 +12,9 @@
 
 using namespace sf;
 
+// Framerate limit
+const int fpsLimit = 3;
+
 // Window settings
 const int winSizeInTilesX = 29;
 const int winSizeInTilesY = 29;
@@ -36,6 +39,7 @@ enum GameState gameState;
 enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
 enum Direction direction;
 
+// Populate map with tiles
 void spawnTiles(RenderTexture& texture) {
 	texture.create(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize);
 	
@@ -93,7 +97,10 @@ int main() {
 	RenderWindow window(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
 
 	// Prepare menus
-	Menu gameOverMenu = Menu(window);
+	Menu gameOverMenu(window.getSize().x, window.getSize().y);
+	gameOverMenu.setTitle("Game Over");
+	gameOverMenu.addItem("Restart");
+	gameOverMenu.addItem("Exit");
 	
 	// Create background with tiles
 	RenderTexture texture;
@@ -108,10 +115,10 @@ int main() {
 	gameState = PLAY;
 	direction = STILL;
 
-	window.setFramerateLimit(10);
+	window.setFramerateLimit(fpsLimit);
 
-	// Game loop (Executes once each frame)
-	while (window.isOpen()) {
+	// GAME LOOP
+	while (window.isOpen() && gameState == PLAY) {
 
 		// Current snake position
 		int xSnakeHead = snake.getHeadTileCoords()['x'];
@@ -202,11 +209,45 @@ int main() {
 			break;
 		case GAMEOVER:
 			std::cout << "GAMEOVER" << std::endl;
-			gameOverMenu.draw(window);
+			gameOverMenu.updateTexture();
+			gameOverMenu.drawToWindow(window);
 			// Handle stopping of game
 			break;
 		}
 
+		window.display();
+	}
+	// GAMEOVER LOOP (REMOVE BUSY WAITING!)
+	while (window.isOpen() && gameState == GAMEOVER) {
+		
+		Event event;
+		
+		// Handle events
+		while (window.pollEvent(event)) {
+			if (event.type == Event::Closed)
+				window.close();
+			if (event.type == Event::KeyPressed) {
+				switch (event.key.code) {
+				case Keyboard::Key::W:
+					gameOverMenu.moveUp();
+					break;
+				case Keyboard::Key::S:
+					gameOverMenu.moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					// Perform button event
+					break;
+				default:
+					break;
+				}
+			}
+
+		}
+
+		// Draw changes
+		window.clear();
+		gameOverMenu.updateTexture();
+		gameOverMenu.drawToWindow(window);
 		window.display();
 	}
 

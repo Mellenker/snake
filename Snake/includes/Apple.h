@@ -1,5 +1,4 @@
-#ifndef APPLE_H
-#define APPLE_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -15,4 +14,4 @@ private:
 	int yTile;
 };
 
-#endif
+
