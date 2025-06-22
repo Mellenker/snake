@@ -226,11 +226,11 @@ int main() {
 
 	// PAUSED LOOP
 	while (window.isOpen() && gameState == PAUSED) {
-
+		std::cout << "KUK";
 		Event event;
 
 		// Handle events
-		while (window.waitEvent(event)) {
+		while (window.waitEvent(event) && gameState == PAUSED) {
 			if (event.type == Event::Closed)
 				window.close();
 			if (event.type == Event::KeyPressed) {
@@ -247,10 +247,14 @@ int main() {
 					break;
 				case Keyboard::Key::Escape:
 					// Unpause logic
+					gameState = PLAY;
+					std::cout << "SPELA!!" << std::endl;
 					break;
 				default:
 					break;
 				}
+
+
 			}
 
 			std::cout << "FRAME" << std::endl;
@@ -278,7 +282,7 @@ int main() {
 		Event event;
 
 		// Handle events
-		while (window.waitEvent(event)) {
+		while (window.waitEvent(event) && gameState == GAMEOVER) {
 			if (event.type == Event::Closed)
 				window.close();
 			if (event.type == Event::KeyPressed) {

@@ -8,11 +8,11 @@ void PauseMenu::performAction() {
 	switch (highlightedIdx) {
 	case 0:
 		std::cout << "Unpause" << std::endl;
-		// Restart logic here
+		// Unpause logic here
 		break;
 	case 1:
 		std::cout << "Restart" << std::endl;
-		// Exit logic here
+		// Restart logic here
 		break;
 	case 2:
 		std::cout << "Exit" << std::endl;
