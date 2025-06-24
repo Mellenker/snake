@@ -49,6 +49,49 @@ std::unique_ptr<Sprite> background;
 std::unique_ptr<Snake> snake;
 std::unique_ptr<Apple> apple;
 
+// Function declarations
+void spawnTiles(RenderTexture& texture);
+void handleKeyboardInput(Keyboard::Key keyPressed);
+void showPauseMenu();
+void showGameOverMenu();
+void enterGame();
+
+// Main function
+int main() {
+
+	window = std::make_unique<RenderWindow>(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
+
+	// Prepare menus
+	gameOverMenu = std::make_unique<GameOverMenu>(window->getSize().x, window->getSize().y);
+	gameOverMenu->setTitle("Game Over");
+	gameOverMenu->addItem("Restart");
+	gameOverMenu->addItem("Exit");
+
+	pauseMenu = std::make_unique<PauseMenu>(window->getSize().x, window->getSize().y);
+	pauseMenu->setTitle("Paused");
+	pauseMenu->addItem("Unpause");
+	pauseMenu->addItem("Restart");
+	pauseMenu->addItem("Exit");
+
+	// Create background with tiles
+	RenderTexture texture;
+	spawnTiles(texture);
+	background = std::make_unique<Sprite>(texture.getTexture());
+
+	// Initiate game objects
+	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
+	apple = std::make_unique<Apple>(tileSize);
+	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+
+	gameState = PLAY;
+	currDir = STILL;
+
+	window->setFramerateLimit(fpsLimit);
+
+	enterGame();
+
+	return 0;
+}
 
 // Populate map with tiles
 void spawnTiles(RenderTexture& texture) {
@@ -102,110 +145,6 @@ void handleKeyboardInput(Keyboard::Key keyPressed) {
 		break;
 	}
 	return;
-}
-
-void showPauseMenu() {
-
-	pauseMenu->draw(*window);
-
-	// PAUSED LOOP
-	while (window->isOpen() && gameState == PAUSED) {
-		Event event;
-
-		// Handle events
-		while (window->waitEvent(event) && gameState == PAUSED) {
-			if (event.type == Event::Closed)
-				window->close();
-			if (event.type == Event::KeyPressed) {
-				switch (event.key.code) {
-				case Keyboard::Key::W:
-					pauseMenu->moveUp();
-					break;
-				case Keyboard::Key::S:
-					pauseMenu->moveDown();
-					break;
-				case Keyboard::Key::Enter:
-					// Perform button event
-					pauseMenu->performAction();
-					break;
-				case Keyboard::Key::Escape:
-					// Unpause logic
-					gameState = PLAY;
-					std::cout << "SPELA!!" << std::endl;
-					break;
-				default:
-					break;
-				}
-			}
-
-			std::cout << "FRAME" << std::endl;
-
-			// Clear window
-			window->clear();
-
-			// Draw background game
-			window->draw(*background);
-			snake->draw(*window);
-			apple->draw(*window);
-
-			// Draw changes
-			pauseMenu->draw(*window);
-			window->display();
-
-		}
-	}
-}
-
-void showGameOverMenu() {
-
-	window->clear();
-	gameOverMenu->draw(*window);
-
-	// GAMEOVER LOOP
-	while (window->isOpen() && gameState == GAMEOVER) {
-
-		Event event;
-
-		// Handle events
-		while (window->waitEvent(event) && gameState == GAMEOVER) {
-			if (event.type == Event::Closed)
-				window->close();
-			if (event.type == Event::KeyPressed) {
-				switch (event.key.code) {
-				case Keyboard::Key::W:
-					gameOverMenu->moveUp();
-					break;
-				case Keyboard::Key::S:
-					gameOverMenu->moveDown();
-					break;
-				case Keyboard::Key::Enter:
-					// Perform button event
-					gameOverMenu->performAction();
-					break;
-				default:
-					break;
-				}
-			}
-			/*
-			// Clear irrelevant events from the queue
-			while (window.pollEvent(event)) {
-				if (event.type != Event::Closed && event.type != Event::KeyPressed) {
-					continue; // Ignore irrelevant events
-				}
-			}
-			*/
-
-			std::cout << "FRAME" << std::endl;
-
-			// Clear window
-			window->clear();
-
-			// Draw changes
-			gameOverMenu->draw(*window);
-			window->display();
-
-		}
-	}
 }
 
 void enterGame() {
@@ -310,39 +249,107 @@ void enterGame() {
 	}
 }
 
-int main() {
+void showPauseMenu() {
 
-	window = std::make_unique<RenderWindow>(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
+	pauseMenu->draw(*window);
 
-	// Prepare menus
-	gameOverMenu = std::make_unique<GameOverMenu>(window->getSize().x, window->getSize().y);
-	gameOverMenu->setTitle("Game Over");
-	gameOverMenu->addItem("Restart");
-	gameOverMenu->addItem("Exit");
+	// PAUSED LOOP
+	while (window->isOpen() && gameState == PAUSED) {
+		Event event;
 
-	pauseMenu = std::make_unique<PauseMenu>(window->getSize().x, window->getSize().y);
-	pauseMenu->setTitle("Paused");
-	pauseMenu->addItem("Unpause");
-	pauseMenu->addItem("Restart");
-	pauseMenu->addItem("Exit");
+		// Handle events
+		while (window->waitEvent(event) && gameState == PAUSED) {
+			if (event.type == Event::Closed)
+				window->close();
+			if (event.type == Event::KeyPressed) {
+				switch (event.key.code) {
+				case Keyboard::Key::W:
+					pauseMenu->moveUp();
+					break;
+				case Keyboard::Key::S:
+					pauseMenu->moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					// Perform button event
+					pauseMenu->performAction();
+					break;
+				case Keyboard::Key::Escape:
+					// Unpause logic
+					gameState = PLAY;
+					std::cout << "SPELA!!" << std::endl;
+					break;
+				default:
+					break;
+				}
+			}
 
-	// Create background with tiles
-	RenderTexture texture;
-	spawnTiles(texture);
-	background = std::make_unique<Sprite>(texture.getTexture());
+			std::cout << "FRAME" << std::endl;
 
-	// Initiate game objects
-	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
-	apple = std::make_unique<Apple>(tileSize);
-	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+			// Clear window
+			window->clear();
 
-	gameState = PLAY;
-	currDir = STILL;
+			// Draw background game
+			window->draw(*background);
+			snake->draw(*window);
+			apple->draw(*window);
 
-	window->setFramerateLimit(fpsLimit);
+			// Draw changes
+			pauseMenu->draw(*window);
+			window->display();
 
-	enterGame();
+		}
+	}
+}
 
-	return 0;
+void showGameOverMenu() {
+
+	window->clear();
+	gameOverMenu->draw(*window);
+
+	// GAMEOVER LOOP
+	while (window->isOpen() && gameState == GAMEOVER) {
+
+		Event event;
+
+		// Handle events
+		while (window->waitEvent(event) && gameState == GAMEOVER) {
+			if (event.type == Event::Closed)
+				window->close();
+			if (event.type == Event::KeyPressed) {
+				switch (event.key.code) {
+				case Keyboard::Key::W:
+					gameOverMenu->moveUp();
+					break;
+				case Keyboard::Key::S:
+					gameOverMenu->moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					// Perform button event
+					gameOverMenu->performAction();
+					break;
+				default:
+					break;
+				}
+			}
+			/*
+			// Clear irrelevant events from the queue
+			while (window.pollEvent(event)) {
+				if (event.type != Event::Closed && event.type != Event::KeyPressed) {
+					continue; // Ignore irrelevant events
+				}
+			}
+			*/
+
+			std::cout << "FRAME" << std::endl;
+
+			// Clear window
+			window->clear();
+
+			// Draw changes
+			gameOverMenu->draw(*window);
+			window->display();
+
+		}
+	}
 }
 
