@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 using namespace sf;
 
@@ -32,7 +33,7 @@ void Menu::addItem(std::string string) {
 	Text itemText = Text(string, font, 30);
 	// Center the origin of the text
 	itemText = centerOrigin(itemText);
-	
+
 	itemText.setOutlineColor(sf::Color::Blue);
 
 	// Set the position in relation to previous items
@@ -47,7 +48,7 @@ void Menu::addItem(std::string string) {
 		float prevItemY = items.back().getPosition().y;
 		itemText.setPosition(prevItemX, prevItemY + 75);
 	}
-	
+
 	items.push_back(itemText);
 }
 
