@@ -15,7 +15,7 @@
 using namespace sf;
 
 // Framerate limit
-const int fpsLimit = 10;
+const int fpsLimit = 10; 
 
 // Window settings
 const int winSizeInTilesX = 29;
@@ -332,7 +332,7 @@ int main() {
 	background = std::make_unique<Sprite>(texture.getTexture());
 
 	// Initiate game objects
-	snake = std::make_unique<Snake>(snakeStartX, snakeStartY, tileSize, colorSnakeHead, colorSnakeTail);
+	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
 	apple = std::make_unique<Apple>(tileSize);
 	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
 

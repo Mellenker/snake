@@ -7,10 +7,10 @@ using namespace sf;
 RectangleShape tile;
 
 // Default constructor
-Tile::Tile() {
-	shape.setSize(Vector2f(30, 30));
+Tile::Tile()
+	: shape(Vector2f(30, 30)), occupied(false)
+{
 	shape.setPosition(Vector2f(0, 0));
-	occupied = false;
 }
 
 Tile::Tile(float size, float xPos, float yPos) {

@@ -4,14 +4,11 @@
 #include <includes/Tile.h>
 using namespace sf;
 
-Snake::Snake(int xStart, int yStart, float tileSize, Color headColor, Color tailColor) {
+Snake::Snake(float tileSize, int xStart, int yStart, Color headColor, Color tailColor)
+	: tileSize(tileSize), headTileX(xStart), headTileY(yStart), headColor(headColor), tailColor(tailColor)
+{
 
-	this->tileSize = tileSize;
-	this->headTileX = xStart;
-	this->headTileY = yStart;
-	this->headColor = headColor;
-	this->tailColor = tailColor;
-
+	// Create snake head and tail 
 	RectangleShape head(Vector2f(tileSize, tileSize));
 	RectangleShape tail(Vector2f(tileSize, tileSize));
 

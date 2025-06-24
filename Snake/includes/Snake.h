@@ -5,7 +5,7 @@
 
 class Snake {
 public:
-	Snake(int xStart, int yStart, float tileSize, sf::Color colorHead, sf::Color colorTail);
+	Snake(float tileSize, int headTileX, int headTileY, sf::Color colorHead, sf::Color colorTail);
 	void move(sf::Vector2f newPosition);
 	void draw(sf::RenderWindow& window);
 	std::map<char, int> getHeadTileCoords();
