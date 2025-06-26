@@ -3,7 +3,7 @@
 
 class GameOverMenu : public Menu {
 public:
-	using Menu::Menu; // Inherit constructor from Menu
+	GameOverMenu(int windowSizeX, int windowSizeY);
 	void performAction() override;
 private:
 

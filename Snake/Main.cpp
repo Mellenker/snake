@@ -15,7 +15,7 @@
 using namespace sf;
 
 // Framerate limit
-const int fpsLimit = 10; 
+const int fpsLimit = 10;
 
 // Window settings
 const int winSizeInTilesX = 29;
@@ -53,38 +53,29 @@ std::unique_ptr<Apple> apple;
 void spawnTiles(RenderTexture& texture);
 void handleKeyboardInput(Keyboard::Key keyPressed);
 void showPauseMenu();
+void doPauseMenuAction(int chosenItemIdx);
 void showGameOverMenu();
+void doGameOverMenuAction(int chosenItemIdx);
 void enterGame();
+void initGame();
+void resetGame();
 
 // Main function
 int main() {
 
 	window = std::make_unique<RenderWindow>(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
 
-	// Prepare menus
+	// Prepare menus (Make unique constructors for menu types!)
 	gameOverMenu = std::make_unique<GameOverMenu>(window->getSize().x, window->getSize().y);
-	gameOverMenu->setTitle("Game Over");
-	gameOverMenu->addItem("Restart");
-	gameOverMenu->addItem("Exit");
-
 	pauseMenu = std::make_unique<PauseMenu>(window->getSize().x, window->getSize().y);
-	pauseMenu->setTitle("Paused");
-	pauseMenu->addItem("Unpause");
-	pauseMenu->addItem("Restart");
-	pauseMenu->addItem("Exit");
 
 	// Create background with tiles
 	RenderTexture texture;
 	spawnTiles(texture);
 	background = std::make_unique<Sprite>(texture.getTexture());
 
-	// Initiate game objects
-	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
-	apple = std::make_unique<Apple>(tileSize);
-	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
-
-	gameState = PLAY;
-	currDir = STILL;
+	// Set initial game state
+	initGame();
 
 	window->setFramerateLimit(fpsLimit);
 
@@ -270,13 +261,12 @@ void showPauseMenu() {
 					pauseMenu->moveDown();
 					break;
 				case Keyboard::Key::Enter:
-					// Perform button event
-					pauseMenu->performAction();
+					// Choose item
+					doPauseMenuAction(pauseMenu->getHighlightedIdx());
 					break;
 				case Keyboard::Key::Escape:
 					// Unpause logic
 					gameState = PLAY;
-					std::cout << "SPELA!!" << std::endl;
 					break;
 				default:
 					break;
@@ -298,6 +288,23 @@ void showPauseMenu() {
 			window->display();
 
 		}
+	}
+}
+
+void doPauseMenuAction(int chosenItemIdx) {
+	switch (chosenItemIdx) {
+	case 0:
+		gameState = PLAY;
+		break;
+	case 1:
+		resetGame();
+		initGame();
+		break;
+	case 2:
+		window->close();
+		break;
+	default:
+		break;
 	}
 }
 
@@ -325,7 +332,7 @@ void showGameOverMenu() {
 					break;
 				case Keyboard::Key::Enter:
 					// Perform button event
-					gameOverMenu->performAction();
+					doGameOverMenuAction(gameOverMenu->getHighlightedIdx());
 					break;
 				default:
 					break;
@@ -352,4 +359,41 @@ void showGameOverMenu() {
 		}
 	}
 }
+
+void doGameOverMenuAction(int chosenItemIdx) {
+	switch (chosenItemIdx) {
+	case 0:
+		resetGame();
+		initGame();
+		break;
+	case 1:
+		window->close();
+		break;
+	default:
+		break;
+	}
+}
+
+void resetGame() {
+	snake.reset();
+	apple.reset();
+
+	// Reset tile occupation
+	for (auto& row : tiles) {
+		for (auto& elem : row) {
+			elem.setOccupied(false);
+		}
+	}
+}
+
+void initGame() {
+	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
+	apple = std::make_unique<Apple>(tileSize);
+	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+
+	gameState = PLAY;
+	currDir = STILL;
+}
+
+
 

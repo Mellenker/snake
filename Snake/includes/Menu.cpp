@@ -10,7 +10,6 @@ Font font;
 Menu::Menu(int windowSizeX, int windowSizeY) 
 	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(0)
 {
-
 	// Initialize font
 	font.loadFromFile("resources\\arial.ttf");
 }
@@ -22,7 +21,7 @@ void Menu::setTitle(std::string title) {
 	titleText.setStyle(sf::Text::Bold);
 
 	// Center the origin of the text
-	titleText = centerOrigin(titleText);
+	centerOrigin(titleText);
 	// Set the position to the upper center of the window
 	titleText.setPosition(windowSizeX / 2.0f, windowSizeY / 2.5f);
 }
@@ -30,7 +29,7 @@ void Menu::setTitle(std::string title) {
 void Menu::addItem(std::string string) {
 	Text itemText = Text(string, font, 30);
 	// Center the origin of the text
-	itemText = centerOrigin(itemText);
+	centerOrigin(itemText);
 
 	itemText.setOutlineColor(sf::Color::Blue);
 
@@ -70,10 +69,13 @@ void Menu::updateHighlighted(int newIdx, int oldIdx) {
 	}
 }
 
-Text Menu::centerOrigin(sf::Text text) {
+int Menu::getHighlightedIdx() {
+	return highlightedIdx;
+}
+
+void Menu::centerOrigin(sf::Text& text) {
 	FloatRect textRect = text.getLocalBounds();
 	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	return text;
 }
 
 void Menu::draw(RenderWindow& window) {

@@ -3,7 +3,7 @@
 
 class PauseMenu : public Menu {
 public:
-	using Menu::Menu; // Inherit constructor from Menu
+	PauseMenu(int windowSizeX, int windowSizeY);
 	void performAction() override;
 private:
 

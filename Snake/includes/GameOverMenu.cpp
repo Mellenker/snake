@@ -4,6 +4,14 @@
 
 using namespace sf;
 
+GameOverMenu::GameOverMenu(int windowSizeX, int windowSizeY)
+	: Menu(windowSizeX, windowSizeY)
+{
+	setTitle("Game Over");
+	addItem("Restart");
+	addItem("Exit");
+}
+
 void GameOverMenu::performAction() {
 	switch (highlightedIdx) {
 	case 0:

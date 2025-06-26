@@ -12,7 +12,8 @@ public:
 	void moveDown();
 	void updateHighlighted(int newIdx, int oldIdx);
 	virtual void performAction() = 0; // Mark as pure virtual to enforce implementation in derived classes  
-	sf::Text centerOrigin(sf::Text text);
+	void centerOrigin(sf::Text& text);
+	int getHighlightedIdx();
 protected:
 	int windowSizeX;
 	int windowSizeY;
