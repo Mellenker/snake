@@ -15,7 +15,8 @@
 using namespace sf;
 
 // Framerate limit
-const int fpsLimit = 10;
+const int inGameFPSLimit = 10;
+const int menuFPSLimit = 30;
 
 // Window settings
 const int winSizeInTilesX = 29;
@@ -77,8 +78,6 @@ int main() {
 	// Set initial game state
 	initGame();
 
-	window->setFramerateLimit(fpsLimit);
-
 	enterGame();
 
 	return 0;
@@ -110,7 +109,7 @@ void spawnTiles(RenderTexture& texture) {
 	}
 }
 
-// Handle keyboard input
+// Handle ingame keyboard input
 void handleKeyboardInput(Keyboard::Key keyPressed) {
 	switch (keyPressed) {
 	case Keyboard::Key::Escape:
@@ -118,19 +117,23 @@ void handleKeyboardInput(Keyboard::Key keyPressed) {
 		break;
 	case Keyboard::Key::W:
 		if (currDir != DOWN)
-			currDir = UP;
+			std::cout << "UP" << std::endl;
+		currDir = UP;
 		break;
 	case Keyboard::Key::A:
 		if (currDir != RIGHT)
-			currDir = LEFT;
+			std::cout << "LEFT" << std::endl;
+		currDir = LEFT;
 		break;
 	case Keyboard::Key::S:
 		if (currDir != UP)
-			currDir = DOWN;
+			std::cout << "DOWN" << std::endl;
+		currDir = DOWN;
 		break;
 	case Keyboard::Key::D:
 		if (currDir != LEFT)
-			currDir = RIGHT;
+			std::cout << "RIGHT" << std::endl;
+		currDir = RIGHT;
 		break;
 	default:
 		break;
@@ -160,7 +163,8 @@ void enterGame() {
 				window->close();
 
 			// Keyboard input
-			if (event.type == Event::KeyPressed && firstLoopThisFrame) {
+			if (event.type == Event::KeyPressed) {
+				std::cout << "Key pressed" << std::endl;
 				handleKeyboardInput(event.key.code);
 				firstLoopThisFrame = false;
 			}
@@ -241,7 +245,8 @@ void enterGame() {
 }
 
 void showPauseMenu() {
-
+	
+	window->setFramerateLimit(menuFPSLimit);
 	pauseMenu->draw(*window);
 
 	// PAUSED LOOP
@@ -266,6 +271,7 @@ void showPauseMenu() {
 					break;
 				case Keyboard::Key::Escape:
 					// Unpause logic
+					window->setFramerateLimit(inGameFPSLimit);
 					gameState = PLAY;
 					break;
 				default:
@@ -294,6 +300,7 @@ void showPauseMenu() {
 void doPauseMenuAction(int chosenItemIdx) {
 	switch (chosenItemIdx) {
 	case 0:
+		window->setFramerateLimit(inGameFPSLimit);
 		gameState = PLAY;
 		break;
 	case 1:
@@ -311,6 +318,7 @@ void doPauseMenuAction(int chosenItemIdx) {
 void showGameOverMenu() {
 
 	window->clear();
+	window->setFramerateLimit(menuFPSLimit);
 	gameOverMenu->draw(*window);
 
 	// GAMEOVER LOOP
@@ -338,6 +346,7 @@ void showGameOverMenu() {
 					break;
 				}
 			}
+
 			/*
 			// Clear irrelevant events from the queue
 			while (window.pollEvent(event)) {
@@ -390,6 +399,8 @@ void initGame() {
 	snake = std::make_unique<Snake>(tileSize, snakeStartX, snakeStartY, colorSnakeHead, colorSnakeTail);
 	apple = std::make_unique<Apple>(tileSize);
 	apple->placeAppleRandomly(tileSize, winSizeInTilesX - 1, winSizeInTilesY - 1);
+
+	window->setFramerateLimit(inGameFPSLimit);
 
 	gameState = PLAY;
 	currDir = STILL;
