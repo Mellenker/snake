@@ -14,7 +14,7 @@
 
 using namespace sf;
 
-// Framerate limit
+// Framerate limit (may not be needed)
 const int inGameFPSLimit = 10;
 const int menuFPSLimit = 30;
 
@@ -168,7 +168,10 @@ void enterGame() {
 				handleKeyboardInput(event.key.code);
 				firstLoopThisFrame = false;
 			}
+
 		}
+
+
 
 		// Movement
 		switch (currDir) {
@@ -245,20 +248,40 @@ void enterGame() {
 }
 
 void showPauseMenu() {
-	
+
 	window->setFramerateLimit(menuFPSLimit);
 	pauseMenu->draw(*window);
 
-	// PAUSED LOOP
+	// PAUSE MENU LOOP
 	while (window->isOpen() && gameState == PAUSED) {
 		Event event;
+		Event lastKeyPressedEvent;
 
-		// Handle events
-		while (window->waitEvent(event) && gameState == PAUSED) {
-			if (event.type == Event::Closed)
+		// Block until at least one event is available
+		if (window->waitEvent(event)) {
+			lastKeyPressedEvent = event;
+			
+			if (event.type == Event::Closed) {
 				window->close();
+			}
 			if (event.type == Event::KeyPressed) {
-				switch (event.key.code) {
+				lastKeyPressedEvent = event;
+			}
+			
+			// Drain the rest of the queue, keeping only the last KeyPressed event
+			while (window->pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					window->close();
+					break;
+				}
+				if (event.type == Event::KeyPressed) {
+					lastKeyPressedEvent = event;
+				}
+			}
+ 
+			// Process only the latest event
+			if (lastKeyPressedEvent.type == Event::KeyPressed) {
+				switch (lastKeyPressedEvent.key.code) {
 				case Keyboard::Key::W:
 					pauseMenu->moveUp();
 					break;
@@ -266,11 +289,9 @@ void showPauseMenu() {
 					pauseMenu->moveDown();
 					break;
 				case Keyboard::Key::Enter:
-					// Choose item
 					doPauseMenuAction(pauseMenu->getHighlightedIdx());
 					break;
 				case Keyboard::Key::Escape:
-					// Unpause logic
 					window->setFramerateLimit(inGameFPSLimit);
 					gameState = PLAY;
 					break;
@@ -297,6 +318,77 @@ void showPauseMenu() {
 	}
 }
 
+void showGameOverMenu() {
+
+	window->setFramerateLimit(menuFPSLimit);
+	pauseMenu->draw(*window);
+
+	// PAUSE MENU LOOP
+	while (window->isOpen() && gameState == GAMEOVER) {
+		Event event;
+		Event lastKeyPressedEvent;
+
+		// Block until at least one event is available
+		if (window->waitEvent(event)) {
+			lastKeyPressedEvent = event;
+
+			if (event.type == Event::Closed) {
+				window->close();
+			}
+			if (event.type == Event::KeyPressed) {
+				lastKeyPressedEvent = event;
+			}
+
+			// Drain the rest of the queue, keeping only the last KeyPressed event
+			while (window->pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					window->close();
+					break;
+				}
+				if (event.type == Event::KeyPressed) {
+					lastKeyPressedEvent = event;
+				}
+			}
+
+			// Process only the latest event
+			if (lastKeyPressedEvent.type == Event::KeyPressed) {
+				switch (lastKeyPressedEvent.key.code) {
+				case Keyboard::Key::W:
+					gameOverMenu->moveUp();
+					break;
+				case Keyboard::Key::S:
+					gameOverMenu->moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					doGameOverMenuAction(gameOverMenu->getHighlightedIdx());
+					break;
+				case Keyboard::Key::Escape:
+					window->setFramerateLimit(inGameFPSLimit);
+					gameState = PLAY;
+					break;
+				default:
+					break;
+				}
+			}
+
+			std::cout << "FRAME" << std::endl;
+
+			// Clear window
+			window->clear();
+
+			// Draw background game
+			window->draw(*background);
+			snake->draw(*window);
+			apple->draw(*window);
+
+			// Draw changes
+			gameOverMenu->draw(*window);
+			window->display();
+
+		}
+	}
+}
+
 void doPauseMenuAction(int chosenItemIdx) {
 	switch (chosenItemIdx) {
 	case 0:
@@ -312,60 +404,6 @@ void doPauseMenuAction(int chosenItemIdx) {
 		break;
 	default:
 		break;
-	}
-}
-
-void showGameOverMenu() {
-
-	window->clear();
-	window->setFramerateLimit(menuFPSLimit);
-	gameOverMenu->draw(*window);
-
-	// GAMEOVER LOOP
-	while (window->isOpen() && gameState == GAMEOVER) {
-
-		Event event;
-
-		// Handle events
-		while (window->waitEvent(event) && gameState == GAMEOVER) {
-			if (event.type == Event::Closed)
-				window->close();
-			if (event.type == Event::KeyPressed) {
-				switch (event.key.code) {
-				case Keyboard::Key::W:
-					gameOverMenu->moveUp();
-					break;
-				case Keyboard::Key::S:
-					gameOverMenu->moveDown();
-					break;
-				case Keyboard::Key::Enter:
-					// Perform button event
-					doGameOverMenuAction(gameOverMenu->getHighlightedIdx());
-					break;
-				default:
-					break;
-				}
-			}
-
-			/*
-			// Clear irrelevant events from the queue
-			while (window.pollEvent(event)) {
-				if (event.type != Event::Closed && event.type != Event::KeyPressed) {
-					continue; // Ignore irrelevant events
-				}
-			}
-			*/
-
-			std::cout << "FRAME" << std::endl;
-
-			// Clear window
-			window->clear();
-
-			// Draw changes
-			gameOverMenu->draw(*window);
-			window->display();
-
-		}
 	}
 }
 
