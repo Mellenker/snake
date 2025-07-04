@@ -171,8 +171,6 @@ void enterGame() {
 
 		}
 
-
-
 		// Movement
 		switch (currDir) {
 		case UP:
@@ -251,6 +249,7 @@ void showPauseMenu() {
 
 	window->setFramerateLimit(menuFPSLimit);
 	pauseMenu->draw(*window);
+	window->display();
 
 	// PAUSE MENU LOOP
 	while (window->isOpen() && gameState == PAUSED) {
@@ -321,7 +320,8 @@ void showPauseMenu() {
 void showGameOverMenu() {
 
 	window->setFramerateLimit(menuFPSLimit);
-	pauseMenu->draw(*window);
+	gameOverMenu->draw(*window);
+	window->display();
 
 	// PAUSE MENU LOOP
 	while (window->isOpen() && gameState == GAMEOVER) {
