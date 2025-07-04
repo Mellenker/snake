@@ -9,8 +9,7 @@
 #include "includes/Snake.h"
 #include "includes/Tile.h"
 #include "includes/Apple.h"
-#include "includes/GameOverMenu.h"
-#include "includes/PauseMenu.h"
+#include "includes/Menu.h"
 
 using namespace sf;
 
@@ -44,8 +43,7 @@ enum Direction currDir;
 
 // Smart pointers
 std::unique_ptr<RenderWindow> window;
-std::unique_ptr<GameOverMenu> gameOverMenu;
-std::unique_ptr<PauseMenu> pauseMenu;
+std::unique_ptr<Menu> pauseMenu, gameOverMenu;
 std::unique_ptr<Sprite> background;
 std::unique_ptr<Snake> snake;
 std::unique_ptr<Apple> apple;
@@ -65,10 +63,19 @@ void resetGame();
 int main() {
 
 	window = std::make_unique<RenderWindow>(VideoMode(winSizeInTilesX * tileSize, winSizeInTilesY * tileSize), "SnakeGame");
+	window->setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
 
-	// Prepare menus (Make unique constructors for menu types!)
-	gameOverMenu = std::make_unique<GameOverMenu>(window->getSize().x, window->getSize().y);
-	pauseMenu = std::make_unique<PauseMenu>(window->getSize().x, window->getSize().y);
+	// Prepare menus 
+	pauseMenu = std::make_unique<Menu>(window->getSize().x, window->getSize().y);
+	pauseMenu->setTitle("Paused");
+	pauseMenu->addItem("Unpause");
+	pauseMenu->addItem("Restart");
+	pauseMenu->addItem("Exit");
+
+	gameOverMenu = std::make_unique<Menu>(window->getSize().x, window->getSize().y);
+	gameOverMenu->setTitle("Game Over");
+	gameOverMenu->addItem("Restart");
+	gameOverMenu->addItem("Exit");
 
 	// Create background with tiles
 	RenderTexture texture;

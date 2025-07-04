@@ -131,18 +131,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="includes\Apple.cpp" />
-    <ClCompile Include="includes\GameOverMenu.cpp" />
     <ClCompile Include="includes\Menu.cpp" />
-    <ClCompile Include="includes\PauseMenu.cpp" />
     <ClCompile Include="includes\Snake.cpp" />
     <ClCompile Include="includes\Tile.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Apple.h" />
-    <ClInclude Include="includes\GameOverMenu.h" />
     <ClInclude Include="includes\Menu.h" />
-    <ClInclude Include="includes\PauseMenu.h" />
     <ClInclude Include="includes\Snake.h" />
     <ClInclude Include="includes\Tile.h" />
   </ItemGroup>

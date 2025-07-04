@@ -1,7 +1,7 @@
 #pragma once  
 
-#include <SFML/Graphics.hpp>  
-// Abstract Class  
+#include <SFML/Graphics.hpp>
+
 class Menu {
 public:
 	Menu(int windowSizeX, int windowSizeY);
@@ -11,7 +11,6 @@ public:
 	void moveUp();
 	void moveDown();
 	void updateHighlighted(int newIdx, int oldIdx);
-	virtual void performAction() = 0; // Mark as pure virtual to enforce implementation in derived classes  
 	void centerOrigin(sf::Text& text);
 	int getHighlightedIdx();
 protected:
