@@ -57,7 +57,7 @@ void showPauseMenu();
 void doPauseMenuAction(int chosenItemIdx);
 void showGameOverMenu();
 void doGameOverMenuAction(int chosenItemIdx);
-void enterGame();
+void playGame();
 void initGame();
 void resetGame();
 
@@ -78,7 +78,7 @@ int main() {
 	// Set initial game state
 	initGame();
 
-	enterGame();
+	playGame();
 
 	return 0;
 }
@@ -116,24 +116,28 @@ void handleKeyboardInput(Keyboard::Key keyPressed) {
 		gameState = PAUSED;
 		break;
 	case Keyboard::Key::W:
-		if (currDir != DOWN)
+		if (currDir != DOWN) {
 			std::cout << "UP" << std::endl;
-		currDir = UP;
+			currDir = UP;
+		}
 		break;
 	case Keyboard::Key::A:
-		if (currDir != RIGHT)
-			std::cout << "LEFT" << std::endl;
-		currDir = LEFT;
+		if (currDir != RIGHT) {
+			std::cout << "UP" << std::endl;
+			currDir = LEFT;
+		}
 		break;
 	case Keyboard::Key::S:
-		if (currDir != UP)
+		if (currDir != UP) {
 			std::cout << "DOWN" << std::endl;
-		currDir = DOWN;
+			currDir = DOWN;
+		}
 		break;
 	case Keyboard::Key::D:
-		if (currDir != LEFT)
+		if (currDir != LEFT) {
 			std::cout << "RIGHT" << std::endl;
-		currDir = RIGHT;
+			currDir = RIGHT;
+		}
 		break;
 	default:
 		break;
@@ -141,7 +145,7 @@ void handleKeyboardInput(Keyboard::Key keyPressed) {
 	return;
 }
 
-void enterGame() {
+void playGame() {
 
 	// GAME LOOP
 	while (window->isOpen() && gameState == PLAY) {
@@ -149,24 +153,39 @@ void enterGame() {
 		// Current snake position
 		int xSnakeHead = snake->getHeadTileCoords()['x'];
 		int ySnakeHead = snake->getHeadTileCoords()['y'];
-
+		std::cout << "BEFORE: " << xSnakeHead << ", " << ySnakeHead << std::endl;
 		// Current apple position
 		int xApple = apple->getAppleCoords()['x'];
 		int yApple = apple->getAppleCoords()['y'];
 
 		Event event;
+		Event lastKeyPressedEvent;
 
 		// Handle events
-		bool firstLoopThisFrame = true; // Can this be removed?
-		while (window->pollEvent(event)) {
-			if (event.type == Event::Closed)
+		if (window->pollEvent(event)) {
+			lastKeyPressedEvent = event;
+			if (event.type == Event::Closed) {
 				window->close();
-
-			// Keyboard input
+			}
 			if (event.type == Event::KeyPressed) {
+				lastKeyPressedEvent = event;
+			}
+
+			// Drain the rest of the queue, keeping only the last KeyPressed event
+			while (window->pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					window->close();
+					break;
+				}
+				if (event.type == Event::KeyPressed) {
+					lastKeyPressedEvent = event;
+				}
+			}
+			
+			// Process only latest keyboard input
+			if (lastKeyPressedEvent.type == Event::KeyPressed) {
 				std::cout << "Key pressed" << std::endl;
-				handleKeyboardInput(event.key.code);
-				firstLoopThisFrame = false;
+				handleKeyboardInput(lastKeyPressedEvent.key.code);
 			}
 
 		}
@@ -204,6 +223,8 @@ void enterGame() {
 		else if (tiles[xSnakeHead][ySnakeHead].isOccupied() && (currDir != STILL)) {
 			gameState = GAMEOVER;
 			std::cout << "DO NOT COLLIDE WITH TAIL" << std::endl;
+
+            std::cout << "AFTER: " << xSnakeHead << ", " << ySnakeHead << std::endl;
 			//std::this_thread::sleep_for(std::chrono::milliseconds(120000));
 
 		}
@@ -299,7 +320,7 @@ void showPauseMenu() {
 				}
 			}
 
-			std::cout << "FRAME" << std::endl;
+			//std::cout << "FRAME" << std::endl;
 
 			// Clear window
 			window->clear();
@@ -371,7 +392,7 @@ void showGameOverMenu() {
 				}
 			}
 
-			std::cout << "FRAME" << std::endl;
+			//std::cout << "FRAME" << std::endl;
 
 			// Clear window
 			window->clear();
