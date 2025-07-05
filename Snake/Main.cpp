@@ -23,22 +23,22 @@ const int winSizeInTilesY = 29;
 
 // Tile settings
 Tile tiles[winSizeInTilesX][winSizeInTilesY];
-int tileSize = 30;
-Color tileColor1 = Color(0, 132, 9);
-Color tileColor2 = Color(0, 118, 9);
+const int tileSize = 30;
+const Color tileColor1 = Color(0, 132, 9);
+const Color tileColor2 = Color(0, 118, 9);
 
 // Snake settings
-int snakeStartX = 4;
-int snakeStartY = 4;
-Color colorSnakeHead = Color(103, 0, 255);
-Color colorSnakeTail = Color(143, 0, 204);
+const int snakeStartX = 4;
+const int snakeStartY = 4;
+const Color colorSnakeHead = Color(103, 0, 255);
+const Color colorSnakeTail = Color(143, 0, 204);
 
 // Game states
-enum GameState { PLAY, PAUSED, GAMEOVER };
+const enum GameState { PLAY, PAUSED, GAMEOVER };
 enum GameState gameState;
 
 // Snake directions
-enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
+const enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
 enum Direction currDir;
 
 // Smart pointers

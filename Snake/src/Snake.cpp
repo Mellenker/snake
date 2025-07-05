@@ -1,4 +1,4 @@
-#include "Snake.h"
+#include "includes/Snake.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <includes/Tile.h>
