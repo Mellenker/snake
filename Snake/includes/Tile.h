@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-class Tile {
+class Tile : public sf::Drawable {
 public:
 	Tile();
 	Tile(float size, float xPos, float yPos);
@@ -15,4 +15,5 @@ public:
 private:
 	sf::RectangleShape shape;
 	bool occupied;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

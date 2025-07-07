@@ -83,7 +83,7 @@ void Game::spawnTiles(RenderTexture& texture) {
 
 			tiles[xIt][yIt] = tile;
 			xPos += tileSize;
-			tile.draw(texture);
+			texture.draw(tile);
 			colorFlag = !colorFlag;
 		}
 		xPos = 0; // Reset x position after each row

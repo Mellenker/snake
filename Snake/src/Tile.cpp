@@ -23,10 +23,6 @@ void Tile::setColor(Color color) {
 	shape.setFillColor(color);
 }
 
-void Tile::draw(RenderTexture& texture) {
-	texture.draw(shape);
-}
-
 Vector2f Tile::getPosition() {
 	return shape.getPosition();
 }
@@ -38,3 +34,8 @@ bool Tile::isOccupied() {
 void Tile::setOccupied(bool val) {
 	occupied = val;
 }
+
+// Override
+void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(shape, states);
+};
