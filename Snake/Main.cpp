@@ -11,7 +11,4 @@ int main() {
 	Application app;
 	app.runGameLoop();
 
-
-
-
 }

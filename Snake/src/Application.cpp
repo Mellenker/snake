@@ -14,8 +14,11 @@ What should be handled:
 
 
 Application::Application()
-	: window(VideoMode(800, 600), "Snake"), inGameFPSLimit(10), menuFPSLimit(39), winSizeInTilesX(29), winSizeInTilesY(29)
+	: window(VideoMode(1000, 1000), "Snake"), inGameFPSLimit(10), menuFPSLimit(39), winSizeInTilesX(29), winSizeInTilesY(29)
 {
+	window.setFramerateLimit(inGameFPSLimit);
+	window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
+
 	std::cout << "APPLICATION CREATED\n";
 }
 
@@ -55,6 +58,13 @@ void Application::runGameLoop() {
 
 
 		}
+
+		window.clear();
+
+		// Draw game objects
+		game.draw(window);
+
+		window.display();
 
 	}
 }

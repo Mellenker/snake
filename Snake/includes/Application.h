@@ -11,7 +11,6 @@ private:
 	Game game;
 
 	sf::RenderWindow window;
-	sf::RenderTexture background;
 
 	const int inGameFPSLimit;
 	const int menuFPSLimit;

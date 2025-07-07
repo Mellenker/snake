@@ -31,12 +31,13 @@ void Snake::move(Vector2f newPosition) {
 	body.pop_back();
 }
 
-
+/*
 void Snake::draw(RenderWindow& window) {
 	for (auto& segment : body) {
 		window.draw(segment);
 	}
 }
+*/
 
 std::map<char, int> Snake::getHeadTileCoords() {
 	std::map<char, int> coords = {
@@ -61,4 +62,11 @@ void Snake::addSegment() {
 Vector2f Snake::getTailEnd() {
 	return tailEnd;
 }
+
+// Override
+void Snake::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	for (auto& segment : body) {
+		target.draw(segment, states);
+	}
+};
 

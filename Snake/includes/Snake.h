@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-class Snake {
+class Snake : public sf::Drawable {
 public:
 	Snake(float tileSize, int headTileX, int headTileY, sf::Color colorHead, sf::Color colorTail);
 	void move(sf::Vector2f newPosition);
@@ -21,5 +21,6 @@ private:
 	sf::Color headColor;
 	sf::Color tailColor;
 	sf::Vector2f tailEnd;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

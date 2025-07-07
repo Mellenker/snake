@@ -6,9 +6,9 @@
 using namespace sf;
 
 Apple::Apple(float tileSize)
-	: xTile(0), yTile(0), apple(Vector2f(tileSize, tileSize))
+	: xTile(0), yTile(0), shape(Vector2f(tileSize, tileSize))
 {
-	apple.setFillColor(Color::Red);
+	shape.setFillColor(Color::Red);
 }
 
 void Apple::placeAppleRandomly(int tileSize, int xMax, int yMax) {
@@ -25,7 +25,7 @@ void Apple::placeAppleRandomly(int tileSize, int xMax, int yMax) {
 	//std::cout << "X: " << randomizedX << std::endl;
 	//std::cout << "Y: " << randomizedY << std::endl;
 
-	apple.setPosition(randomizedX, randomizedY);
+	shape.setPosition(randomizedX, randomizedY);
 	xTile = randomizedXTile;
 	yTile = randomizedYTile;
 }
@@ -38,6 +38,7 @@ std::map<char, int> Apple::getAppleCoords() {
 	return coords;
 }
 
-void Apple::draw(RenderWindow& window) {
-	window.draw(apple);
-}
+// Override
+void Apple::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(shape, states);
+};
