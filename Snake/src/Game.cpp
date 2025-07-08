@@ -10,7 +10,10 @@ What should be handled:
 */
 
 Game::Game()
-	: snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204)), apple(tileSize), tileColor1(Color(0, 132, 9)), tileColor2(Color(0, 118, 9))
+	: snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204)), 
+	apple(tileSize), 
+	tileColor1(Color(0, 132, 9)), 
+	tileColor2(Color(0, 118, 9))
 {
 
 	initGame();
@@ -39,8 +42,6 @@ void Game::handleKeyboardInput(Keyboard::Key keyPressed) {
 	}
 }
 
-
-
 // Populate map with tiles
 void Game::spawnTiles(RenderTexture& texture) {
 
@@ -68,6 +69,14 @@ void Game::spawnTiles(RenderTexture& texture) {
 		xPos = 0; // Reset x position after each row
 		yPos += tileSize;
 	}
+}
+
+std::map<char, int> Game::getMapSizeInTiles() const {
+	std::map<char, int> mapSize = {
+		{'x', mapSizeInTilesX},
+		{'y', mapSizeInTilesY}
+	};
+	return mapSize;
 }
 
 void Game::initGame() {
@@ -99,6 +108,10 @@ void Game::moveSnake() {
 	}
 
 	checkCollision(snakeCoords['x'], snakeCoords['y']);
+}
+
+int Game::getTileSize() const {
+	return tileSize;
 }
 
 void Game::checkCollision(int nextHeadX, int nextHeadY) {

@@ -5,7 +5,11 @@
 using namespace sf;
 
 Snake::Snake(float tileSize, int xStart, int yStart, Color headColor, Color tailColor)
-	: tileSize(tileSize), headTileX(xStart), headTileY(yStart), headColor(headColor), tailColor(tailColor)
+	: tileSize(tileSize), 
+	headTileX(xStart), 
+	headTileY(yStart), 
+	headColor(headColor), 
+	tailColor(tailColor)
 {
 
 	// Create snake head and tail 

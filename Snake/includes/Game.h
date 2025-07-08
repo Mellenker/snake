@@ -9,14 +9,16 @@
 class Game {
 public:
 	Game();
+	std::map<char, int> getMapSizeInTiles() const;
 	void drawGameObjects(sf::RenderWindow& window);
 	void handleKeyboardInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
 	void initGame();
 	void moveSnake();
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
-private:
+	int getTileSize() const;
 	enum GameState { PLAY, PAUSED, GAMEOVER };
+private:
 	enum GameState gameState;
 
 	// Game background
