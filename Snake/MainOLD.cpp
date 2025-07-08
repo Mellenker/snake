@@ -195,7 +195,7 @@ void playGame() {
 				handleKeyboardInput(lastKeyPressedEvent.key.code);
 			}
 
-		}
+		} 
 
 		// Movement
 		switch (currDir) {

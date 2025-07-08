@@ -56,13 +56,14 @@ void Application::runGameLoop() {
 				game.handleKeyboardInput(lastKeyPressedEvent.key.code);
 			}
 
-
 		}
+
+		game.moveSnake();
 
 		window.clear();
 
 		// Draw game objects
-		game.draw(window);
+		game.drawGameObjects(window);
 
 		window.display();
 

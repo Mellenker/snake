@@ -10,14 +10,17 @@ What should be handled:
 */
 
 Game::Game()
-	: snake(tileSize, 1, 1, Color::Blue, Color::White), apple(tileSize), tileColor1(Color(0, 132, 9)), tileColor2(Color(0, 118, 9))
+	: snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204)), apple(tileSize), tileColor1(Color(0, 132, 9)), tileColor2(Color(0, 118, 9))
 {
+
+	initGame();
+
 	// Setup background
 	spawnTiles(texture);
 	background = Sprite(texture.getTexture());
 }
 
-void Game::draw(RenderWindow& window) {
+void Game::drawGameObjects(RenderWindow& window) {
 	window.draw(background);
 	window.draw(apple);
 	window.draw(snake);
@@ -27,40 +30,16 @@ void Game::draw(RenderWindow& window) {
 
 // Handle ingame keyboard input
 void Game::handleKeyboardInput(Keyboard::Key keyPressed) {
-	switch (keyPressed) {
-	case Keyboard::Key::Escape:
-		std::cout << "ESCAPE" << std::endl;
+	if (keyPressed == Keyboard::Key::Escape) {
 		gameState = PAUSED;
-		break;
-	case Keyboard::Key::W:
-		if (currDir != DOWN) {
-			std::cout << "UP" << std::endl;
-			currDir = UP;
-		}
-		break;
-	case Keyboard::Key::A:
-		if (currDir != RIGHT) {
-			std::cout << "UP" << std::endl;
-			currDir = LEFT;
-		}
-		break;
-	case Keyboard::Key::S:
-		if (currDir != UP) {
-			std::cout << "DOWN" << std::endl;
-			currDir = DOWN;
-		}
-		break;
-	case Keyboard::Key::D:
-		if (currDir != LEFT) {
-			std::cout << "RIGHT" << std::endl;
-			currDir = RIGHT;
-		}
-		break;
-	default:
-		break;
+		std::cout << "PAUSE\n";
 	}
-	return;
+	else if (gameState == PLAY) {
+		snake.handleInput(keyPressed);
+	}
 }
+
+
 
 // Populate map with tiles
 void Game::spawnTiles(RenderTexture& texture) {
@@ -90,6 +69,84 @@ void Game::spawnTiles(RenderTexture& texture) {
 		yPos += tileSize;
 	}
 }
+
+void Game::initGame() {
+	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+
+	gameState = PLAY;
+	snake.setDir(Snake::Direction::STILL); // Set initial direction to STILL
+}
+
+void Game::moveSnake() {
+
+	std::map<char, int> snakeCoords = snake.getHeadTileCoords();
+
+	switch (snake.getCurrDir()) {
+	case Snake::UP:
+		snakeCoords['y']--;
+		break;
+	case Snake::LEFT:
+		snakeCoords['x']--;
+		break;
+	case Snake::DOWN:
+		snakeCoords['y']++;
+		break;
+	case Snake::RIGHT:
+		snakeCoords['x']++;
+		break;
+	default:
+		break;
+	}
+
+	checkCollision(snakeCoords['x'], snakeCoords['y']);
+}
+
+void Game::checkCollision(int nextHeadX, int nextHeadY) {
+	std::cout << "Check Colllision \n";
+
+	std::map<char, int> appleCoords = apple.getAppleCoords();
+
+	// Apple
+	if (nextHeadX == appleCoords['x']
+		&& nextHeadY == appleCoords['y']) {
+		// Add score here
+		snake.addSegment();
+		apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+	}
+
+	// Wall and tail (Game Over checks)
+	if (nextHeadX < 0
+		|| nextHeadX >= mapSizeInTilesX
+		|| nextHeadY < 0
+		|| nextHeadY >= mapSizeInTilesY)
+	{
+			gameState = GAMEOVER;
+			std::cout << "STAY ON SCREEN" << std::endl;
+	}
+	else if (tiles[nextHeadX][nextHeadY].isOccupied()
+		&& (snake.getCurrDir() != Snake::STILL))
+	{
+		gameState = GAMEOVER;
+		std::cout << "DO NOT COLLIDE WITH TAIL" << std::endl;
+
+		std::cout << "AFTER: " << nextHeadX << ", " << nextHeadY << std::endl;
+	}
+	// If no collision, move the snake
+	else {
+		snake.move(tiles[nextHeadX][nextHeadY].getPosition());
+		snake.setHeadTileCoords(nextHeadX, nextHeadY);
+
+		tiles[nextHeadX][nextHeadY].setOccupied(true);
+
+		int xTailEnd = snake.getTailEnd().x / tileSize;
+		int yTailEnd = snake.getTailEnd().y / tileSize;
+
+		tiles[xTailEnd][yTailEnd].setOccupied(false);
+
+	}
+}
+
+
 
 
 

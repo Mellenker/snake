@@ -63,6 +63,47 @@ Vector2f Snake::getTailEnd() {
 	return tailEnd;
 }
 
+void Snake::handleInput(Keyboard::Key keyPressed) {
+	// Handle ingame keyboard input
+	switch (keyPressed) {
+	case Keyboard::Key::W:
+		if (currDir != DOWN) {
+			std::cout << "UP" << std::endl;
+			currDir = UP;
+		}
+		break;
+	case Keyboard::Key::A:
+		if (currDir != RIGHT) {
+			std::cout << "UP" << std::endl;
+			currDir = LEFT;
+		}
+		break;
+	case Keyboard::Key::S:
+		if (currDir != UP) {
+			std::cout << "DOWN" << std::endl;
+			currDir = DOWN;
+		}
+		break;
+	case Keyboard::Key::D:
+		if (currDir != LEFT) {
+			std::cout << "RIGHT" << std::endl;
+			currDir = RIGHT;
+		}
+		break;
+	default:
+		break;
+	}
+	return;
+}
+
+void Snake::setDir(Direction newDir) {
+	currDir = newDir;
+}
+
+enum Snake::Direction Snake::getCurrDir() {
+	return currDir;
+}
+
 // Override
 void Snake::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	for (auto& segment : body) {

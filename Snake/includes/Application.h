@@ -16,6 +16,5 @@ private:
 	const int menuFPSLimit;
 	const int winSizeInTilesX;
 	const int winSizeInTilesY;
-	
 
 };

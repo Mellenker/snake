@@ -9,14 +9,15 @@
 class Game {
 public:
 	Game();
-	void draw(sf::RenderWindow& window);
+	void drawGameObjects(sf::RenderWindow& window);
 	void handleKeyboardInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
+	void initGame();
+	void moveSnake();
+	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 private:
 	enum GameState { PLAY, PAUSED, GAMEOVER };
 	enum GameState gameState;
-	enum Direction { UP, LEFT, RIGHT, DOWN, STILL };
-	enum Direction currDir;
 
 	// Game background
 	sf::RenderTexture texture;
