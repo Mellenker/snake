@@ -6,8 +6,6 @@ using namespace sf;
 
 int main() {
 
-	std::cout << "HEJMA\n";
-
 	Application app;
 	app.runGameLoop();
 

@@ -5,6 +5,7 @@
 #include "includes/Snake.h"
 #include "includes/Apple.h"
 #include "includes/Tile.h"'
+#include "includes/Menu.h"
 
 class Game {
 public:
@@ -13,13 +14,20 @@ public:
 	void drawGameObjects(sf::RenderWindow& window);
 	void handleKeyboardInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
-	void initGame();
+	void handleGameState(sf::RenderWindow& window);
+	void showPauseMenu(sf::RenderWindow& window);
+	void showGameOverMenu(sf::RenderWindow& window);
+	void doPauseMenuAction(sf::RenderWindow& window, int chosenItemIdx);
+	void doGameOverMenuAction(sf::RenderWindow& window, int chosenItemIdx);
+	void resetGame();
 	void moveSnake();
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 	int getTileSize() const;
-	enum GameState { PLAY, PAUSED, GAMEOVER };
+	enum GameState { PLAY, PAUSED, GAMEOVER }; // Game states
 private:
 	enum GameState gameState;
+	Menu pauseMenu;
+	Menu gameOverMenu;
 
 	// Game background
 	sf::RenderTexture texture;

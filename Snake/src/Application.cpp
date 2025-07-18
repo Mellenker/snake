@@ -69,13 +69,10 @@ void Application::runGameLoop() {
 
 		window.clear();
 
-		// Draw game objects
 		game.drawGameObjects(window);
+		game.handleGameState(window);
 
 		window.display();
 
 	}
 }
-
-
-
