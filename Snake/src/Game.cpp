@@ -11,12 +11,12 @@ What should be handled:
 
 Game::Game()
 	: snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204)), // Fix magic numbers!
-	apple(tileSize), 
-	tileColor1(Color(0, 132, 9)), 
+	apple(tileSize),
+	tileColor1(Color(0, 132, 9)),
 	tileColor2(Color(0, 118, 9)),
 
-	pauseMenu(mapSizeInTilesX * tileSize, mapSizeInTilesY * tileSize),
-	gameOverMenu(mapSizeInTilesX * tileSize, mapSizeInTilesY * tileSize)
+	pauseMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize),
+	gameOverMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize)
 {
 
 	// Prepare menus 
@@ -142,8 +142,8 @@ void Game::checkCollision(int nextHeadX, int nextHeadY) {
 		|| nextHeadY < 0
 		|| nextHeadY >= mapSizeInTilesY)
 	{
-			gameState = GAMEOVER;
-			std::cout << "STAY ON SCREEN" << std::endl;
+		gameState = GAMEOVER;
+		std::cout << "STAY ON SCREEN" << std::endl;
 	}
 	else if (tiles[nextHeadX][nextHeadY].isOccupied()
 		&& (snake.getCurrDir() != Snake::STILL))
@@ -184,7 +184,7 @@ void Game::handleGameState(RenderWindow& window) {
 
 void Game::showPauseMenu(RenderWindow& window) {
 	// Implement pause menu logic here
-	
+
 	// window.setFramerateLimit(menuFPSLimit);
 	pauseMenu.draw(window);
 	window.display();
@@ -226,7 +226,7 @@ void Game::showPauseMenu(RenderWindow& window) {
 					pauseMenu.moveDown();
 					break;
 				case Keyboard::Key::Enter:
-					//doPauseMenuAction(pauseMenu.getHighlightedIdx());
+					doPauseMenuAction(window, pauseMenu.getHighlightedIdx());
 					std::cout << "Selected menu item: " << pauseMenu.getHighlightedIdx() << std::endl;
 					break;
 				case Keyboard::Key::Escape:
@@ -300,10 +300,9 @@ void Game::showGameOverMenu(RenderWindow& window) {
 					gameOverMenu.moveDown();
 					break;
 				case Keyboard::Key::Enter:
-					//doGameOverMenuAction(gameOverMenu.getHighlightedIdx());
+					doGameOverMenuAction(window, gameOverMenu.getHighlightedIdx());
 					break;
 				case Keyboard::Key::Escape:
-					//window.setFramerateLimit(inGameFPSLimit);
 					gameState = PLAY;
 					break;
 				default:
@@ -332,11 +331,10 @@ void Game::showGameOverMenu(RenderWindow& window) {
 void Game::doPauseMenuAction(RenderWindow& window, int chosenItemIdx) {
 	switch (chosenItemIdx) {
 	case 0:
-		//window.setFramerateLimit(inGameFPSLimit);
 		gameState = PLAY;
 		break;
 	case 1:
-		resetGame();
+		restartGame();
 		break;
 	case 2:
 		window.close();
@@ -349,7 +347,7 @@ void Game::doPauseMenuAction(RenderWindow& window, int chosenItemIdx) {
 void Game::doGameOverMenuAction(RenderWindow& window, int chosenItemIdx) {
 	switch (chosenItemIdx) {
 	case 0:
-		resetGame();
+		restartGame();
 		break;
 	case 1:
 		window.close();
@@ -359,14 +357,19 @@ void Game::doGameOverMenuAction(RenderWindow& window, int chosenItemIdx) {
 	}
 }
 
-void Game::resetGame() {
+void Game::restartGame() {
 	// Reset snake and apple
 	snake = Snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204));
 	apple = Apple(tileSize);
+	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+
 	// Reset tile occupation
 	for (auto& row : tiles) {
 		for (auto& elem : row) {
 			elem.setOccupied(false);
 		}
 	}
+
+	snake.setDir(Snake::Direction::STILL);
+	gameState = PLAY;
 }

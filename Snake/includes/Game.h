@@ -19,7 +19,7 @@ public:
 	void showGameOverMenu(sf::RenderWindow& window);
 	void doPauseMenuAction(sf::RenderWindow& window, int chosenItemIdx);
 	void doGameOverMenuAction(sf::RenderWindow& window, int chosenItemIdx);
-	void resetGame();
+	void restartGame();
 	void moveSnake();
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 	int getTileSize() const;
