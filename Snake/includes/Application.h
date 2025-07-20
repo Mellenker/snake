@@ -12,9 +12,7 @@ private:
 
 	sf::RenderWindow window;
 
-	const int inGameFPSLimit;
-	const int menuFPSLimit;
-	const int winSizeInTilesX;
-	const int winSizeInTilesY;
-
+	static constexpr int maxFPS = 10;
+	static constexpr int winSizeInTilesX = 29;
+	static constexpr int winSizeInTilesY = 29;
 };

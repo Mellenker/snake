@@ -6,7 +6,7 @@
 using namespace sf;
 
 Apple::Apple(float tileSize)
-	: xTile(0), yTile(0), shape(Vector2f(tileSize, tileSize))
+	: xTile(xTileInit), yTile(yTileInit), shape(Vector2f(tileSize, tileSize))
 {
 	shape.setFillColor(Color::Red);
 }

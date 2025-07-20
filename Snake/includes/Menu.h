@@ -19,4 +19,5 @@ protected:
 	sf::Text titleText;
 	std::vector<sf::Text> items;
 	int highlightedIdx;
+	static constexpr int highlightedIdxInit = 0;
 };

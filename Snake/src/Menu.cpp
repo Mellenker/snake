@@ -7,10 +7,10 @@ using namespace sf;
 
 Font font;
 
-Menu::Menu(int windowSizeX, int windowSizeY) 
-	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(0)
+Menu::Menu(int windowSizeX, int windowSizeY)
+	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(highlightedIdxInit)
 {
-	// Initialize font
+	// Load font
 	font.loadFromFile("resources\\arial.ttf");
 }
 

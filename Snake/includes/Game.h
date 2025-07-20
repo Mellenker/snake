@@ -1,11 +1,11 @@
-#pragma once
+#pragma once  
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>  
 
-#include "includes/Snake.h"
-#include "includes/Apple.h"
-#include "includes/Tile.h"'
-#include "includes/Menu.h"
+#include "includes/Snake.h"  
+#include "includes/Apple.h"  
+#include "includes/Tile.h"  
+#include "includes/Menu.h"  
 
 class Game {
 public:
@@ -23,25 +23,28 @@ public:
 	void moveSnake();
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 	int getTileSize() const;
-	enum GameState { PLAY, PAUSED, GAMEOVER }; // Game states
+	enum GameState { PLAY, PAUSED, GAMEOVER }; // Game states  
 private:
+	static constexpr int tileSize = 30;
+	static constexpr int mapSizeInTilesX = 29;
+	static constexpr int mapSizeInTilesY = 29;
+	static constexpr int initPosX = 1;
+	static constexpr int initPosY = 1;
+	const sf::Color colorTile1;
+	const sf::Color colorTile2;
+
 	enum GameState gameState;
 	Menu pauseMenu;
 	Menu gameOverMenu;
 
-	// Game background
+	// Game background  
 	sf::RenderTexture texture;
 	sf::Sprite background;
 
-	// Game objects
+	// Game objects  
 	Apple apple;
 	Snake snake;
 
-	// Tile settings
-	static constexpr int tileSize = 30;
-	static constexpr int mapSizeInTilesX = 29;  // compile-time constant
-	static constexpr int mapSizeInTilesY = 29;  // compile-time constant
+	// Tiles  
 	Tile tiles[mapSizeInTilesX][mapSizeInTilesY];
-	const sf::Color tileColor1;
-	const sf::Color tileColor2;
 };

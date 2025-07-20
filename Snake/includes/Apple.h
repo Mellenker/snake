@@ -10,6 +10,8 @@ public:
 	void draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape shape;
+	static constexpr int xTileInit = 0;
+	static constexpr int yTileInit = 0;
 	int xTile;
 	int yTile;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

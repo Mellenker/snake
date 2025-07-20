@@ -4,29 +4,17 @@
 
 using namespace sf;
 
-/*
-What should be handled:
-- Wíndow
-- Game loop
-- Main menu
-- App states: Main menu, Playing
-*/
+Application::Application() {
 
-
-Application::Application()
-	: inGameFPSLimit(10), menuFPSLimit(39), winSizeInTilesX(29), winSizeInTilesY(29)
-{
 	// Set window size based on tile size and map size
 	std::map<char, int> gameMapSize = game.getMapSizeInTiles();
 	int tileSize = game.getTileSize();
 	window.create(VideoMode(gameMapSize['x'] * tileSize, gameMapSize['y'] * tileSize), "Snake Game");
 
-	std::cout << "Creatied application with map size: " << gameMapSize['x'] * tileSize << " x " << gameMapSize['y'] * tileSize << std::endl;
 	window.setTitle("Snake");
-	window.setFramerateLimit(inGameFPSLimit);
+	window.setFramerateLimit(maxFPS);
 	window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
 
-	std::cout << "APPLICATION CREATED\n";
 }
 
 void Application::runGameLoop() {

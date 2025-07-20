@@ -2,25 +2,27 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <includes/Tile.h>
+
 using namespace sf;
 
-Snake::Snake(float tileSize, int xStart, int yStart, Color headColor, Color tailColor)
-	: tileSize(tileSize), 
-	headTileX(xStart), 
-	headTileY(yStart), 
-	headColor(headColor), 
-	tailColor(tailColor)
+Snake::Snake(float tileSize, int startPosX, int startPosY)
+	: tileSize(tileSize),
+	headTileX(startPosX),
+	headTileY(startPosY),
+	colorHead(Color(103, 0, 255)),
+	colorTail(Color(143, 0, 204)),
+	currDir(STILL)
 {
 
 	// Create snake head and tail 
 	RectangleShape head(Vector2f(tileSize, tileSize));
 	RectangleShape tail(Vector2f(tileSize, tileSize));
 
-	head.setFillColor(headColor);
-	tail.setFillColor(tailColor);
+	head.setFillColor(colorHead);
+	tail.setFillColor(colorTail);
 
-	head.setPosition(xStart * tileSize, yStart * tileSize);
-	tail.setPosition((xStart - 1) * tileSize, yStart * tileSize);
+	head.setPosition(startPosX * tileSize, startPosY * tileSize);
+	tail.setPosition((startPosX - 1) * tileSize, startPosY * tileSize);
 
 	body.push_back(head);
 	body.push_back(tail);
@@ -30,7 +32,7 @@ void Snake::move(Vector2f newPosition) {
 	RectangleShape segment = body.front(); // Copy front segment
 	segment.setPosition(newPosition);
 	body.insert(body.begin(), segment);
-	body[1].setFillColor(tailColor);
+	body[1].setFillColor(colorTail);
 	tailEnd = body.back().getPosition();
 	body.pop_back();
 }
@@ -59,7 +61,7 @@ void Snake::setHeadTileCoords(int x, int y) {
 void Snake::addSegment() {
 	RectangleShape segment = body.back(); // Copy front segment
 	segment.setPosition(tailEnd);
-	segment.setFillColor(tailColor);
+	segment.setFillColor(colorTail);
 	body.insert(body.end(), segment);
 }
 
@@ -114,4 +116,3 @@ void Snake::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 		target.draw(segment, states);
 	}
 };
-

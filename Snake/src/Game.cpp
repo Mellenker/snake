@@ -3,20 +3,13 @@
 
 using namespace sf;
 
-/*
-What should be handled:
-- Game states: PLAY, PAUSED, GAMEOVER
-- PAUSE MENU, GAMEOVER MENU
-*/
-
 Game::Game()
-	: snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204)), // Fix magic numbers!
+	: snake(tileSize, initPosX, initPosY),
 	apple(tileSize),
-	tileColor1(Color(0, 132, 9)),
-	tileColor2(Color(0, 118, 9)),
-
 	pauseMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize),
-	gameOverMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize)
+	gameOverMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize),
+	colorTile1(Color(0, 132, 9)),
+	colorTile2(Color(0, 118, 9))
 {
 
 	// Prepare menus 
@@ -32,7 +25,6 @@ Game::Game()
 	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 
 	gameState = PLAY;
-	snake.setDir(Snake::Direction::STILL); // Set initial direction to STILL
 
 	// Setup background
 	spawnTiles(texture);
@@ -73,9 +65,9 @@ void Game::spawnTiles(RenderTexture& texture) {
 			Tile tile(tileSize, xPos, yPos);
 
 			if (colorFlag)
-				tile.setColor(tileColor1);
+				tile.setColor(colorTile1);
 			else
-				tile.setColor(tileColor2);
+				tile.setColor(colorTile2);
 
 			tiles[xIt][yIt] = tile;
 			xPos += tileSize;
@@ -359,7 +351,7 @@ void Game::doGameOverMenuAction(RenderWindow& window, int chosenItemIdx) {
 
 void Game::restartGame() {
 	// Reset snake and apple
-	snake = Snake(tileSize, 1, 1, Color(103, 0, 255), Color(143, 0, 204));
+	snake = Snake(tileSize, initPosX, initPosY);
 	apple = Apple(tileSize);
 	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 
