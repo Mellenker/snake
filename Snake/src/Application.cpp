@@ -1,5 +1,5 @@
-#include "includes/Application.h"
-#include "includes/Game.h"
+#include "includes/Application.hpp"
+#include "includes/Game.hpp"
 #include <iostream>
 
 using namespace sf;

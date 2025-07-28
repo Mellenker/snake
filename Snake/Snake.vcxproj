@@ -134,17 +134,23 @@
     <ClCompile Include="src\Apple.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GameOverMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
+    <ClCompile Include="src\PauseMenu.cpp" />
     <ClCompile Include="src\Snake.cpp" />
     <ClCompile Include="src\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\Apple.h" />
-    <ClInclude Include="includes\Application.h" />
-    <ClInclude Include="includes\Game.h" />
-    <ClInclude Include="includes\Menu.h" />
-    <ClInclude Include="includes\Snake.h" />
-    <ClInclude Include="includes\Tile.h" />
+    <ClInclude Include="includes\Apple.hpp" />
+    <ClInclude Include="includes\Application.hpp" />
+    <ClInclude Include="includes\Game.hpp" />
+    <ClInclude Include="includes\GameOverMenu.hpp" />
+    <ClInclude Include="includes\State.hpp" />
+    <ClInclude Include="includes\PauseMenu.hpp" />
+    <ClInclude Include="includes\hejma.hpp" />
+    <ClInclude Include="includes\Menu.hpp" />
+    <ClInclude Include="includes\Snake.hpp" />
+    <ClInclude Include="includes\Tile.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

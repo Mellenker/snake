@@ -1,4 +1,4 @@
-#include "includes/Game.h"
+#include "includes/Game.hpp"
 #include <iostream>
 
 using namespace sf;
@@ -24,7 +24,7 @@ Game::Game()
 
 	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 
-	gameState = PLAY;
+	gameState = State::PLAY;
 
 	// Setup background
 	spawnTiles(texture);
@@ -35,17 +35,16 @@ void Game::drawGameObjects(RenderWindow& window) {
 	window.draw(background);
 	window.draw(apple);
 	window.draw(snake);
-
 	std::cout << "DRAW!\n";
 }
 
 // Handle ingame keyboard input
 void Game::handleKeyboardInput(Keyboard::Key keyPressed) {
 	if (keyPressed == Keyboard::Key::Escape) {
-		gameState = PAUSED;
+		gameState = State::PAUSED;
 		std::cout << "PAUSE\n";
 	}
-	else if (gameState == PLAY) {
+	else if (gameState == State::PLAY) {
 		snake.handleInput(keyPressed);
 	}
 }
@@ -134,13 +133,13 @@ void Game::checkCollision(int nextHeadX, int nextHeadY) {
 		|| nextHeadY < 0
 		|| nextHeadY >= mapSizeInTilesY)
 	{
-		gameState = GAMEOVER;
+		gameState = State::GAMEOVER;
 		std::cout << "STAY ON SCREEN" << std::endl;
 	}
 	else if (tiles[nextHeadX][nextHeadY].isOccupied()
 		&& (snake.getCurrDir() != Snake::STILL))
 	{
-		gameState = GAMEOVER;
+		gameState = State::GAMEOVER;
 		std::cout << "DO NOT COLLIDE WITH TAIL" << std::endl;
 
 		std::cout << "AFTER: " << nextHeadX << ", " << nextHeadY << std::endl;
@@ -163,11 +162,11 @@ void Game::checkCollision(int nextHeadX, int nextHeadY) {
 void Game::handleGameState(RenderWindow& window) {
 	// Handle game state
 	switch (gameState) {
-	case PAUSED:
+	case State::PAUSED:
 		std::cout << "PAUSE" << std::endl;
 		showPauseMenu(window);
 		break;
-	case GAMEOVER:
+	case State::GAMEOVER:
 		std::cout << "GAMEOVER" << std::endl;
 		showGameOverMenu(window);
 		break;
@@ -182,7 +181,7 @@ void Game::showPauseMenu(RenderWindow& window) {
 	window.display();
 
 	// PAUSE MENU LOOP
-	while (window.isOpen() && gameState == PAUSED) {
+	while (window.isOpen() && gameState == State::PAUSED) {
 		Event event;
 		Event lastKeyPressedEvent;
 
@@ -223,7 +222,7 @@ void Game::showPauseMenu(RenderWindow& window) {
 					break;
 				case Keyboard::Key::Escape:
 					//window.setFramerateLimit(inGameFPSLimit);
-					gameState = PLAY;
+					gameState = State::PLAY;
 					break;
 				default:
 					break;
@@ -256,7 +255,7 @@ void Game::showGameOverMenu(RenderWindow& window) {
 	window.display();
 
 	// PAUSE MENU LOOP
-	while (window.isOpen() && gameState == GAMEOVER) {
+	while (window.isOpen() && gameState == State::GAMEOVER) {
 		Event event;
 		Event lastKeyPressedEvent;
 
@@ -295,7 +294,7 @@ void Game::showGameOverMenu(RenderWindow& window) {
 					doGameOverMenuAction(window, gameOverMenu.getHighlightedIdx());
 					break;
 				case Keyboard::Key::Escape:
-					gameState = PLAY;
+					gameState = State::PLAY;
 					break;
 				default:
 					break;
@@ -323,7 +322,7 @@ void Game::showGameOverMenu(RenderWindow& window) {
 void Game::doPauseMenuAction(RenderWindow& window, int chosenItemIdx) {
 	switch (chosenItemIdx) {
 	case 0:
-		gameState = PLAY;
+		gameState = State::PLAY;
 		break;
 	case 1:
 		restartGame();
@@ -349,6 +348,10 @@ void Game::doGameOverMenuAction(RenderWindow& window, int chosenItemIdx) {
 	}
 }
 
+void Game::setGameState(State::GameState newState) {
+	gameState = newState;
+}
+
 void Game::restartGame() {
 	// Reset snake and apple
 	snake = Snake(tileSize, initPosX, initPosY);
@@ -363,5 +366,5 @@ void Game::restartGame() {
 	}
 
 	snake.setDir(Snake::Direction::STILL);
-	gameState = PLAY;
+	gameState = State::PLAY;
 }

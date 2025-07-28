@@ -1,4 +1,4 @@
-#include "includes/Apple.h"
+#include "includes/Apple.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>

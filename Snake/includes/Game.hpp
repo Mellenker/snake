@@ -2,10 +2,11 @@
 
 #include <SFML/Graphics.hpp>  
 
-#include "includes/Snake.h"  
-#include "includes/Apple.h"  
-#include "includes/Tile.h"  
-#include "includes/Menu.h"  
+#include "includes/State.hpp"
+#include "includes/Snake.hpp"  
+#include "includes/Apple.hpp"  
+#include "includes/Tile.hpp"  
+#include "includes/Menu.hpp"
 
 class Game {
 public:
@@ -23,7 +24,7 @@ public:
 	void moveSnake();
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 	int getTileSize() const;
-	enum GameState { PLAY, PAUSED, GAMEOVER }; // Game states  
+	void setGameState(State::GameState newState);
 private:
 	static constexpr int tileSize = 30;
 	static constexpr int mapSizeInTilesX = 29;
@@ -33,7 +34,7 @@ private:
 	const sf::Color colorTile1;
 	const sf::Color colorTile2;
 
-	enum GameState gameState;
+	State::GameState gameState;
 	Menu pauseMenu;
 	Menu gameOverMenu;
 

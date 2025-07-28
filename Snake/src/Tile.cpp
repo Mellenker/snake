@@ -1,4 +1,4 @@
-#include "includes/Tile.h"
+#include "includes/Tile.hpp"
 #include <SFML/Graphics.hpp>'
 #include <iostream>
 

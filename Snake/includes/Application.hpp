@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "includes/Game.h"
+#include "includes/Game.hpp"
 
 class Application {
 public:

@@ -1,4 +1,4 @@
-#include "includes/Menu.h"
+#include "includes/Menu.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>

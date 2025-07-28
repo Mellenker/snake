@@ -1,7 +1,7 @@
-#include "includes/Snake.h"
+#include "includes/Snake.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <includes/Tile.h>
+#include <includes/Tile.hpp>
 
 using namespace sf;
 
