@@ -5,7 +5,7 @@
 class Apple : public sf::Drawable {
 public:
 	Apple(float tileSize);
-	void placeAppleRandomly(int tileSize, int xMax, int yMax);
+	void spawnAtRandomTile(int tileSize, int xMax, int yMax);
 	std::map<char, int> getAppleCoords();
 	void draw(sf::RenderWindow& window);
 private:

@@ -12,17 +12,7 @@ Game::Game()
 	colorTile2(Color(0, 118, 9))
 {
 
-	// Prepare menus 
-	pauseMenu.setTitle("Paused");
-	pauseMenu.addItem("Unpause");
-	pauseMenu.addItem("Restart");
-	pauseMenu.addItem("Exit");
-
-	gameOverMenu.setTitle("Game Over");
-	gameOverMenu.addItem("Restart");
-	gameOverMenu.addItem("Exit");
-
-	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+	apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 
 	gameState = State::PLAY;
 
@@ -78,6 +68,7 @@ void Game::spawnTiles(RenderTexture& texture) {
 	}
 }
 
+// Use pair instead of map!
 std::map<char, int> Game::getMapSizeInTiles() const {
 	std::map<char, int> mapSize = {
 		{'x', mapSizeInTilesX},
@@ -124,7 +115,7 @@ void Game::checkCollision(int nextHeadX, int nextHeadY) {
 		&& nextHeadY == appleCoords['y']) {
 		// Add score here
 		snake.addSegment();
-		apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+		apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 	}
 
 	// Wall and tail (Game Over checks)
@@ -162,13 +153,51 @@ void Game::checkCollision(int nextHeadX, int nextHeadY) {
 void Game::handleGameState(RenderWindow& window) {
 	// Handle game state
 	switch (gameState) {
-	case State::PAUSED:
-		std::cout << "PAUSE" << std::endl;
-		showPauseMenu(window);
+	case State::PAUSED: {
+		handlePauseMenuActions(window);
+	}
+
+
+		// Call a function from here named like "handlePauseMenuInput" or something
+		// Call "show" from pauseMenu
+		// When input is received, a switch statement is used to determine the action. That action is then returned. (No performAction function maybe?)
+
+		/*
+			Actions:
+			- Unpause
+			- Restart
+			- Exit
+		*/
+
+		// What do we do with the main menu?
+		// MAINMENU would also be a game state, but its actions should not be handled here.
+		// If gameState is set to MAINMENU, this function simply returns to the main loop in Application.cpp
+
+
 		break;
 	case State::GAMEOVER:
 		std::cout << "GAMEOVER" << std::endl;
 		showGameOverMenu(window);
+		break;
+	}
+}
+
+void Game::handlePauseMenuActions(RenderWindow& window) {
+	std::cout << "PAUSE" << std::endl;
+	// Retrive action from pause menu
+	PauseMenu::Action action = pauseMenu.show(window);
+
+	switch (action) {
+	case PauseMenu::Action::UNPAUSE:
+		gameState = State::PLAY;
+		break;
+	case PauseMenu::Action::RESTART:
+		restartGame();
+		break;
+	case PauseMenu::Action::EXIT:
+		window.close();
+		break;
+	default:
 		break;
 	}
 }
@@ -291,7 +320,8 @@ void Game::showGameOverMenu(RenderWindow& window) {
 					gameOverMenu.moveDown();
 					break;
 				case Keyboard::Key::Enter:
-					doGameOverMenuAction(window, gameOverMenu.getHighlightedIdx());
+					//doGameOverMenuAction(window, gameOverMenu.getHighlightedIdx());
+					//gameOverMenu.performAction(window, gameOverMenu.getHighlightedIdx(), setGameState, restartGame);
 					break;
 				case Keyboard::Key::Escape:
 					gameState = State::PLAY;
@@ -356,7 +386,7 @@ void Game::restartGame() {
 	// Reset snake and apple
 	snake = Snake(tileSize, initPosX, initPosY);
 	apple = Apple(tileSize);
-	apple.placeAppleRandomly(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+	apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
 
 	// Reset tile occupation
 	for (auto& row : tiles) {

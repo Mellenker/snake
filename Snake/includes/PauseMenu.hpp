@@ -8,12 +8,9 @@
 class PauseMenu : public Menu {
 public:
 	PauseMenu(int windowSizeX, int windowSizeY);
-	void performAction(
-		sf::RenderWindow& window, 
-		int selectedIdx, 
-		std::function<void()> setGameState(State::GameState newState),
-		std::function<void()> restartGame
-	);
+	const enum Action { UNPAUSE, RESTART, EXIT };
+	Action show(sf::RenderWindow& window);
+	PauseMenu::Action decideAction(int chosenIdx);
 private:
-
+	Action action;
 };

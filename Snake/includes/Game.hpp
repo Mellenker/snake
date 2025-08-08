@@ -6,7 +6,8 @@
 #include "includes/Snake.hpp"  
 #include "includes/Apple.hpp"  
 #include "includes/Tile.hpp"  
-#include "includes/Menu.hpp"
+#include "includes/PauseMenu.hpp"
+#include "includes/GameOverMenu.hpp"
 
 class Game {
 public:
@@ -25,6 +26,7 @@ public:
 	void checkCollision(int nextSnakeHeadPosX, int nextSnakeHeadPosY);
 	int getTileSize() const;
 	void setGameState(State::GameState newState);
+	void handlePauseMenuActions(sf::RenderWindow& window);
 private:
 	static constexpr int tileSize = 30;
 	static constexpr int mapSizeInTilesX = 29;
@@ -35,8 +37,8 @@ private:
 	const sf::Color colorTile2;
 
 	State::GameState gameState;
-	Menu pauseMenu;
-	Menu gameOverMenu;
+	PauseMenu pauseMenu;
+	GameOverMenu gameOverMenu;
 
 	// Game background  
 	sf::RenderTexture texture;

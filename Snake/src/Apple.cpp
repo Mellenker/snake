@@ -11,7 +11,7 @@ Apple::Apple(float tileSize)
 	shape.setFillColor(Color::Red);
 }
 
-void Apple::placeAppleRandomly(int tileSize, int xMax, int yMax) {
+void Apple::spawnAtRandomTile(int tileSize, int xMax, int yMax) {
 	// Generate random coordinates
 	std::random_device random;
 	std::mt19937 rng(random());
