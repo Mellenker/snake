@@ -71,7 +71,7 @@
     <ClInclude Include="includes\GameOverMenu.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\State.hpp">
+    <ClInclude Include="includes\Utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

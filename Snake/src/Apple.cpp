@@ -1,17 +1,17 @@
 #include "includes/Apple.hpp"
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
 
 using namespace sf;
 
-Apple::Apple(float tileSize)
-	: xTile(xTileInit), yTile(yTileInit), shape(Vector2f(tileSize, tileSize))
+Apple::Apple()
+	: appleTilePos(initTileX, initTileY), shape(Vector2f(Utils::tileSize, Utils::tileSize))
 {
 	shape.setFillColor(Color::Red);
 }
 
-void Apple::spawnAtRandomTile(int tileSize, int xMax, int yMax) {
+// I don't remember how this one works exactly...
+void Apple::spawnAtRandomTile(int xMax, int yMax) {
 	// Generate random coordinates
 	std::random_device random;
 	std::mt19937 rng(random());
@@ -19,23 +19,19 @@ void Apple::spawnAtRandomTile(int tileSize, int xMax, int yMax) {
 	std::uniform_int_distribution<> disY(0, yMax);
 	int randomizedXTile = disX(rng);
 	int randomizedYTile = disY(rng);
-	int randomizedX = randomizedXTile * tileSize;
-	int randomizedY = randomizedYTile * tileSize;
+	int randomizedX = randomizedXTile * Utils::tileSize;
+	int randomizedY = randomizedYTile * Utils::tileSize;
 
 	//std::cout << "X: " << randomizedX << std::endl;
 	//std::cout << "Y: " << randomizedY << std::endl;
 
 	shape.setPosition(randomizedX, randomizedY);
-	xTile = randomizedXTile;
-	yTile = randomizedYTile;
+	appleTilePos = Vector2i(randomizedXTile, randomizedYTile);
+
 }
 
-std::map<char, int> Apple::getAppleCoords() {
-	std::map<char, int> coords = {
-		{'x', xTile},
-		{'y', yTile}
-	};
-	return coords;
+Vector2i Apple::getAppleTilePos() {
+	return appleTilePos;
 }
 
 // Override

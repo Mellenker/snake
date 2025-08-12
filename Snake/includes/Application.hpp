@@ -2,17 +2,28 @@
 
 #include <SFML/Graphics.hpp>
 #include "includes/Game.hpp"
+#include "includes/Utils.hpp"
+#include "includes/PauseMenu.hpp"
+#include "includes/GameOverMenu.hpp"
 
 class Application {
 public:
 	Application();
 	void runGameLoop();
+	sf::Keyboard::Key processEvent();
+	void update(sf::Keyboard::Key keyPressed);
+	void render();
 private:
 	Game game;
 
 	sf::RenderWindow window;
 
+	Utils::GameState gameState;
+	PauseMenu pauseMenu;
+	PauseMenu::Action pauseMenuAction = PauseMenu::Action::NONE;
+	GameOverMenu gameOverMenu;
+	GameOverMenu::Action gameOverMenuAction = GameOverMenu::Action::NONE;
+
 	static constexpr int maxFPS = 10;
-	static constexpr int winSizeInTilesX = 29;
-	static constexpr int winSizeInTilesY = 29;
+
 };

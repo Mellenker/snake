@@ -4,17 +4,12 @@
 using namespace sf;
 
 Game::Game()
-	: snake(tileSize, initPosX, initPosY),
-	apple(tileSize),
-	pauseMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize),
-	gameOverMenu(mapSizeInTilesX* tileSize, mapSizeInTilesY* tileSize),
+	: snake(initPosX, initPosY),
+	apple(),
 	colorTile1(Color(0, 132, 9)),
 	colorTile2(Color(0, 118, 9))
 {
-
-	apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
-
-	gameState = State::PLAY;
+	apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
 
 	// Setup background
 	spawnTiles(texture);
@@ -28,15 +23,9 @@ void Game::drawGameObjects(RenderWindow& window) {
 	std::cout << "DRAW!\n";
 }
 
-// Handle ingame keyboard input
-void Game::handleKeyboardInput(Keyboard::Key keyPressed) {
-	if (keyPressed == Keyboard::Key::Escape) {
-		gameState = State::PAUSED;
-		std::cout << "PAUSE\n";
-	}
-	else if (gameState == State::PLAY) {
-		snake.handleInput(keyPressed);
-	}
+// Handle ingame keyboard input (I don't know about this one...)
+void Game::forwardSnakeInput(Keyboard::Key keyPressed) {
+	snake.changeDir(keyPressed);
 }
 
 // Populate map with tiles
@@ -44,14 +33,14 @@ void Game::spawnTiles(RenderTexture& texture) {
 
 	std::cout << "Spawning tiles\n";
 
-	texture.create(mapSizeInTilesX * tileSize, mapSizeInTilesY * tileSize);
+	texture.create(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize);
 
 	int xPos = 0;
 	int yPos = 0;
 	bool colorFlag = true; // Flag to alternate colors
-	for (int yIt = 0; yIt < mapSizeInTilesY; yIt++) {
-		for (int xIt = 0; xIt < mapSizeInTilesX; xIt++) {
-			Tile tile(tileSize, xPos, yPos);
+	for (int yIt = 0; yIt < Utils::mapSizeInTilesY; yIt++) {
+		for (int xIt = 0; xIt < Utils::mapSizeInTilesX; xIt++) {
+			Tile tile(Utils::tileSize, xPos, yPos);
 
 			if (colorFlag)
 				tile.setColor(colorTile1);
@@ -59,334 +48,111 @@ void Game::spawnTiles(RenderTexture& texture) {
 				tile.setColor(colorTile2);
 
 			tiles[xIt][yIt] = tile;
-			xPos += tileSize;
+			xPos += Utils::tileSize;
 			texture.draw(tile);
 			colorFlag = !colorFlag;
 		}
 		xPos = 0; // Reset x position after each row
-		yPos += tileSize;
+		yPos += Utils::tileSize;
 	}
 }
 
-// Use pair instead of map!
-std::map<char, int> Game::getMapSizeInTiles() const {
-	std::map<char, int> mapSize = {
-		{'x', mapSizeInTilesX},
-		{'y', mapSizeInTilesY}
-	};
-	return mapSize;
+bool Game::tryUpdateSnakeState() {
+
+	std::cout << "Try Update Snake State\n";
+
+	Vector2i nextHeadPos = getNextSnakeHeadTilePos();
+	
+	if (detectGameOverCollision(nextHeadPos)) {
+		return true;
+	}
+	
+	if (detectAppleCollision(nextHeadPos)) {
+		snake.addSegment();
+		apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
+	}
+	
+	// Move the snake
+	std::cout << "X: " << nextHeadPos.x << "\n";
+	snake.move(tiles[nextHeadPos.x][nextHeadPos.y].getPosition());
+	snake.setHeadTilePos(nextHeadPos);
+
+	tiles[nextHeadPos.x][nextHeadPos.y].setOccupied(true);
+
+	int tailEndX = snake.getTailEnd().x / Utils::tileSize;
+	int tailEndY = snake.getTailEnd().y / Utils::tileSize;
+
+	tiles[tailEndX][tailEndY].setOccupied(false);
+
+	return false;
 }
 
-void Game::moveSnake() {
+// Good function name or not?
+Vector2i Game::getNextSnakeHeadTilePos() {
 
-	std::map<char, int> snakeCoords = snake.getHeadTileCoords();
+	Vector2i snakeHeadPos = snake.getHeadTilePos();
 
 	switch (snake.getCurrDir()) {
 	case Snake::UP:
-		snakeCoords['y']--;
+		snakeHeadPos.y--;
 		break;
 	case Snake::LEFT:
-		snakeCoords['x']--;
+		snakeHeadPos.x--;
 		break;
 	case Snake::DOWN:
-		snakeCoords['y']++;
+		snakeHeadPos.y++;
 		break;
 	case Snake::RIGHT:
-		snakeCoords['x']++;
+		snakeHeadPos.x++;
 		break;
 	default:
 		break;
 	}
-
-	checkCollision(snakeCoords['x'], snakeCoords['y']);
+	
+	return snakeHeadPos;
 }
 
-int Game::getTileSize() const {
-	return tileSize;
-}
+bool Game::detectAppleCollision(Vector2i nextHeadPos) {
+	std::cout << "Check Apple Collision \n";
+	Vector2i appleTilePos = apple.getAppleTilePos();
 
-void Game::checkCollision(int nextHeadX, int nextHeadY) {
-	std::cout << "Check Colllision \n";
-
-	std::map<char, int> appleCoords = apple.getAppleCoords();
-
-	// Apple
-	if (nextHeadX == appleCoords['x']
-		&& nextHeadY == appleCoords['y']) {
-		// Add score here
-		snake.addSegment();
-		apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+	if (nextHeadPos == appleTilePos) {
+		return true; // Collision with apple
 	}
+	else {
+		return false;
+	}
+}
 
-	// Wall and tail (Game Over checks)
-	if (nextHeadX < 0
-		|| nextHeadX >= mapSizeInTilesX
-		|| nextHeadY < 0
-		|| nextHeadY >= mapSizeInTilesY)
+bool Game::detectGameOverCollision(Vector2i nextHeadPos) {
+	std::cout << "Check Game Over Colllision \n";
+
+	if (nextHeadPos.y < 0
+		|| nextHeadPos.x >= Utils::mapSizeInTilesX
+		|| nextHeadPos.y < 0
+		|| nextHeadPos.y >= Utils::mapSizeInTilesY)
 	{
-		gameState = State::GAMEOVER;
+		return true; // Collision with screen edge
 		std::cout << "STAY ON SCREEN" << std::endl;
 	}
-	else if (tiles[nextHeadX][nextHeadY].isOccupied()
-		&& (snake.getCurrDir() != Snake::STILL))
+	else if (tiles[nextHeadPos.x][nextHeadPos.y].isOccupied()
+		&& (snake.getCurrDir() != Snake::NONE))
 	{
-		gameState = State::GAMEOVER;
-		std::cout << "DO NOT COLLIDE WITH TAIL" << std::endl;
+		return true; // Collision with body
+		std::cout << "DO NOT COLLIDE WITH BODY" << std::endl;
 
-		std::cout << "AFTER: " << nextHeadX << ", " << nextHeadY << std::endl;
+		std::cout << "AFTER: " << nextHeadPos.x << ", " << nextHeadPos.y<< std::endl;
 	}
-	// If no collision, move the snake
 	else {
-		snake.move(tiles[nextHeadX][nextHeadY].getPosition());
-		snake.setHeadTileCoords(nextHeadX, nextHeadY);
-
-		tiles[nextHeadX][nextHeadY].setOccupied(true);
-
-		int xTailEnd = snake.getTailEnd().x / tileSize;
-		int yTailEnd = snake.getTailEnd().y / tileSize;
-
-		tiles[xTailEnd][yTailEnd].setOccupied(false);
-
+		return false; // No collision
 	}
 }
 
-void Game::handleGameState(RenderWindow& window) {
-	// Handle game state
-	switch (gameState) {
-	case State::PAUSED: {
-		handlePauseMenuActions(window);
-	}
-
-
-		// Call a function from here named like "handlePauseMenuInput" or something
-		// Call "show" from pauseMenu
-		// When input is received, a switch statement is used to determine the action. That action is then returned. (No performAction function maybe?)
-
-		/*
-			Actions:
-			- Unpause
-			- Restart
-			- Exit
-		*/
-
-		// What do we do with the main menu?
-		// MAINMENU would also be a game state, but its actions should not be handled here.
-		// If gameState is set to MAINMENU, this function simply returns to the main loop in Application.cpp
-
-
-		break;
-	case State::GAMEOVER:
-		std::cout << "GAMEOVER" << std::endl;
-		showGameOverMenu(window);
-		break;
-	}
-}
-
-void Game::handlePauseMenuActions(RenderWindow& window) {
-	std::cout << "PAUSE" << std::endl;
-	// Retrive action from pause menu
-	PauseMenu::Action action = pauseMenu.show(window);
-
-	switch (action) {
-	case PauseMenu::Action::UNPAUSE:
-		gameState = State::PLAY;
-		break;
-	case PauseMenu::Action::RESTART:
-		restartGame();
-		break;
-	case PauseMenu::Action::EXIT:
-		window.close();
-		break;
-	default:
-		break;
-	}
-}
-
-void Game::showPauseMenu(RenderWindow& window) {
-	// Implement pause menu logic here
-
-	// window.setFramerateLimit(menuFPSLimit);
-	pauseMenu.draw(window);
-	window.display();
-
-	// PAUSE MENU LOOP
-	while (window.isOpen() && gameState == State::PAUSED) {
-		Event event;
-		Event lastKeyPressedEvent;
-
-		// Block until at least one event is available
-		if (window.waitEvent(event)) {
-			lastKeyPressedEvent = event;
-
-			if (event.type == Event::Closed) {
-				window.close();
-			}
-			if (event.type == Event::KeyPressed) {
-				lastKeyPressedEvent = event;
-			}
-
-			// Drain the rest of the queue, keeping only the last KeyPressed event
-			while (window.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					window.close();
-					break;
-				}
-				if (event.type == Event::KeyPressed) {
-					lastKeyPressedEvent = event;
-				}
-			}
-
-			// Process only the latest event
-			if (lastKeyPressedEvent.type == Event::KeyPressed) {
-				switch (lastKeyPressedEvent.key.code) {
-				case Keyboard::Key::W:
-					pauseMenu.moveUp();
-					break;
-				case Keyboard::Key::S:
-					pauseMenu.moveDown();
-					break;
-				case Keyboard::Key::Enter:
-					doPauseMenuAction(window, pauseMenu.getHighlightedIdx());
-					std::cout << "Selected menu item: " << pauseMenu.getHighlightedIdx() << std::endl;
-					break;
-				case Keyboard::Key::Escape:
-					//window.setFramerateLimit(inGameFPSLimit);
-					gameState = State::PLAY;
-					break;
-				default:
-					break;
-				}
-			}
-
-			//std::cout << "FRAME" << std::endl;
-
-			// Clear window
-			window.clear();
-
-			// Draw background game
-			window.draw(background);
-			window.draw(apple);
-			window.draw(snake);
-
-			// Draw changes
-			pauseMenu.draw(window);
-			window.display();
-
-		}
-	}
-
-}
-
-void Game::showGameOverMenu(RenderWindow& window) {
-
-	// window.setFramerateLimit(menuFPSLimit);
-	gameOverMenu.draw(window);
-	window.display();
-
-	// PAUSE MENU LOOP
-	while (window.isOpen() && gameState == State::GAMEOVER) {
-		Event event;
-		Event lastKeyPressedEvent;
-
-		// Block until at least one event is available
-		if (window.waitEvent(event)) {
-			lastKeyPressedEvent = event;
-
-			if (event.type == Event::Closed) {
-				window.close();
-			}
-			if (event.type == Event::KeyPressed) {
-				lastKeyPressedEvent = event;
-			}
-
-			// Drain the rest of the queue, keeping only the last KeyPressed event
-			while (window.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					window.close();
-					break;
-				}
-				if (event.type == Event::KeyPressed) {
-					lastKeyPressedEvent = event;
-				}
-			}
-
-			// Process only the latest event
-			if (lastKeyPressedEvent.type == Event::KeyPressed) {
-				switch (lastKeyPressedEvent.key.code) {
-				case Keyboard::Key::W:
-					gameOverMenu.moveUp();
-					break;
-				case Keyboard::Key::S:
-					gameOverMenu.moveDown();
-					break;
-				case Keyboard::Key::Enter:
-					//doGameOverMenuAction(window, gameOverMenu.getHighlightedIdx());
-					//gameOverMenu.performAction(window, gameOverMenu.getHighlightedIdx(), setGameState, restartGame);
-					break;
-				case Keyboard::Key::Escape:
-					gameState = State::PLAY;
-					break;
-				default:
-					break;
-				}
-			}
-
-			//std::cout << "FRAME" << std::endl;
-
-			// Clear window
-			window.clear();
-
-			// Draw background game
-			window.draw(background);
-			window.draw(snake);
-			window.draw(apple);
-
-			// Draw changes
-			gameOverMenu.draw(window);
-			window.display();
-
-		}
-	}
-}
-
-void Game::doPauseMenuAction(RenderWindow& window, int chosenItemIdx) {
-	switch (chosenItemIdx) {
-	case 0:
-		gameState = State::PLAY;
-		break;
-	case 1:
-		restartGame();
-		break;
-	case 2:
-		window.close();
-		break;
-	default:
-		break;
-	}
-}
-
-void Game::doGameOverMenuAction(RenderWindow& window, int chosenItemIdx) {
-	switch (chosenItemIdx) {
-	case 0:
-		restartGame();
-		break;
-	case 1:
-		window.close();
-		break;
-	default:
-		break;
-	}
-}
-
-void Game::setGameState(State::GameState newState) {
-	gameState = newState;
-}
-
-void Game::restartGame() {
+void Game::resetGame() {
 	// Reset snake and apple
-	snake = Snake(tileSize, initPosX, initPosY);
-	apple = Apple(tileSize);
-	apple.spawnAtRandomTile(tileSize, mapSizeInTilesX - 1, mapSizeInTilesY - 1);
+	snake = Snake(initPosX, initPosY);
+	apple = Apple();
+	apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
 
 	// Reset tile occupation
 	for (auto& row : tiles) {
@@ -395,6 +161,5 @@ void Game::restartGame() {
 		}
 	}
 
-	snake.setDir(Snake::Direction::STILL);
-	gameState = State::PLAY;
+	snake.setDir(Snake::Direction::NONE);
 }

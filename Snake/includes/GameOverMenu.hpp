@@ -7,7 +7,8 @@
 class GameOverMenu : public Menu {
 public:
 	GameOverMenu(int windowSizeX, int windowSizeY);
-	void performAction(sf::RenderWindow& window, int selectedIdx, std::function<void()> restartGame);
+	const enum Action { NONE, RESTART, EXIT };
+	GameOverMenu::Action decideAction();
 private:
 
 };

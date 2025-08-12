@@ -1,15 +1,19 @@
 #include "includes/Application.hpp"
-#include "includes/Game.hpp"
+
 #include <iostream>
 
 using namespace sf;
 
-Application::Application() {
+Application::Application()
+	: game(),
+	window(),
+	gameState(Utils::GameState::PLAY),
+	pauseMenu(Utils::mapSizeInTilesX* Utils::tileSize, Utils::mapSizeInTilesY* Utils::tileSize),
+	gameOverMenu(Utils::mapSizeInTilesX* Utils::tileSize, Utils::mapSizeInTilesY* Utils::tileSize)
+{
 
 	// Set window size based on tile size and map size
-	std::map<char, int> gameMapSize = game.getMapSizeInTiles();
-	int tileSize = game.getTileSize();
-	window.create(VideoMode(gameMapSize['x'] * tileSize, gameMapSize['y'] * tileSize), "Snake Game");
+	window.create(VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
 
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
@@ -21,46 +25,177 @@ void Application::runGameLoop() {
 	// GAME LOOP
 	while (window.isOpen()) {
 
-		Event event;
-		Event lastKeyPressedEvent;
+		// What if no key is pressed?
+		Keyboard::Key keyPressed = processEvent();
+		update(keyPressed);
+		render();
 
-		// Handle events
-		if (window.pollEvent(event)) {
-			lastKeyPressedEvent = event; // Needs to be initialized (Find other solution)
+	}
+}
+
+Keyboard::Key Application::processEvent() {
+	Event event;
+	Event lastKeyPressedEvent;
+
+	// Handle events (Place this in its own function?)
+	if (window.pollEvent(event)) {
+		lastKeyPressedEvent = event; // Needs to be initialized (Find other solution)
+		if (event.type == Event::Closed) {
+			window.close();
+		}
+		if (event.type == Event::KeyPressed) {
+			lastKeyPressedEvent = event;
+		}
+
+		// Drain the rest of the queue, keeping only the last KeyPressed event
+		while (window.pollEvent(event)) {
 			if (event.type == Event::Closed) {
 				window.close();
+				break;
 			}
 			if (event.type == Event::KeyPressed) {
 				lastKeyPressedEvent = event;
 			}
+		}
 
-			// Drain the rest of the queue, keeping only the last KeyPressed event
-			while (window.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					window.close();
+		// Process only latest keyboard input
+		if (lastKeyPressedEvent.type == Event::KeyPressed) {
+			std::cout << "Key pressed" << std::endl;
+
+			switch (gameState) {
+			case Utils::GameState::PLAY:
+				if (lastKeyPressedEvent.key.code == Keyboard::Key::Escape) {
+					gameState = Utils::GameState::PAUSED;
+					std::cout << "PAUSED GAME\n";
+				}
+				else {
+					return lastKeyPressedEvent.key.code;
+				}
+				break;
+			case Utils::GameState::PAUSED:
+
+				switch (lastKeyPressedEvent.key.code) {
+				case Keyboard::Key::W:
+					pauseMenu.moveUp();
+					break;
+				case Keyboard::Key::S:
+					pauseMenu.moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					std::cout << "Selected menu item: " << pauseMenu.getHighlightedIdx() << std::endl;
+					pauseMenuAction = pauseMenu.decideAction();
+					break;
+				case Keyboard::Key::Escape:
+					pauseMenuAction = PauseMenu::Action::UNPAUSE;
+					break;
+				default:
 					break;
 				}
-				if (event.type == Event::KeyPressed) {
-					lastKeyPressedEvent = event;
-				}
-			}
 
-			// Process only latest keyboard input
-			if (lastKeyPressedEvent.type == Event::KeyPressed) {
-				std::cout << "Key pressed" << std::endl;
-				game.handleKeyboardInput(lastKeyPressedEvent.key.code);
+			case Utils::GameState::GAMEOVER:
+				
+				switch (lastKeyPressedEvent.key.code) {
+				case Keyboard::Key::W:
+					gameOverMenu.moveUp();
+					break;
+				case Keyboard::Key::S:
+					gameOverMenu.moveDown();
+					break;
+				case Keyboard::Key::Enter:
+					std::cout << "Selected menu item: " << gameOverMenu.getHighlightedIdx() << std::endl;
+					gameOverMenuAction = gameOverMenu.decideAction();
+					break;
+				default:
+					break;
+				}
+
+			default:
+				break;
 			}
 
 		}
 
-		game.moveSnake();
-
-		window.clear();
-
-		game.drawGameObjects(window);
-		game.handleGameState(window);
-
-		window.display();
-
 	}
+
+	return Keyboard::Key::Unknown; // Return an unknown key if no key was pressed
+
+}
+
+// Divide into multiple functions later
+void Application::update(Keyboard::Key keyPressed) {
+
+	switch (gameState) {
+	case Utils::GameState::PLAY:
+		std::cout << "Forward Snake Input\n";
+		game.forwardSnakeInput(keyPressed);
+
+		// Returns true if illegal move is attempted
+		if (game.tryUpdateSnakeState()) {
+			gameState = Utils::GameState::GAMEOVER;
+			std::cout << "GAME OVER\n";
+		}
+
+		break;
+
+	case Utils::GameState::PAUSED:
+		// Handle pause menu action
+
+		switch (pauseMenuAction) {
+		case PauseMenu::Action::UNPAUSE:
+			gameState = Utils::GameState::PLAY;
+			std::cout << "UNPAUSED GAME\n";
+			break;
+		case PauseMenu::Action::RESTART:
+			game.resetGame();
+			gameState = Utils::GameState::PLAY;
+			std::cout << "RESTARTED GAME\n";
+			break;
+		case PauseMenu::Action::EXIT:
+			window.close();
+			break;
+		default:
+			break;
+		}
+
+		pauseMenuAction = PauseMenu::Action::NONE;
+
+	case Utils::GameState::GAMEOVER:
+
+		// Handle game over menu actions
+		switch (gameOverMenuAction) {
+		case GameOverMenu::Action::RESTART:
+			game.resetGame();
+			gameState = Utils::GameState::PLAY;
+			std::cout << "RESTARTED GAME\n";
+			break;
+		case GameOverMenu::Action::EXIT:
+			window.close();
+			break;
+		break;
+		default:
+			break;
+		}
+
+		gameOverMenuAction = GameOverMenu::Action::NONE;
+
+	default:
+		break;
+	}
+}
+
+void Application::render() {
+	window.clear();
+	game.drawGameObjects(window);
+
+	switch (gameState) {
+	case Utils::GameState::PAUSED:
+		pauseMenu.draw(window);
+		break;
+	case Utils::GameState::GAMEOVER:
+		gameOverMenu.draw(window);
+		break;
+	default:
+		break;
+	}
+	window.display();
 }

@@ -145,7 +145,7 @@
     <ClInclude Include="includes\Application.hpp" />
     <ClInclude Include="includes\Game.hpp" />
     <ClInclude Include="includes\GameOverMenu.hpp" />
-    <ClInclude Include="includes\State.hpp" />
+    <ClInclude Include="includes\Utils.hpp" />
     <ClInclude Include="includes\PauseMenu.hpp" />
     <ClInclude Include="includes\hejma.hpp" />
     <ClInclude Include="includes\Menu.hpp" />

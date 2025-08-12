@@ -13,15 +13,18 @@ GameOverMenu::GameOverMenu(int windowSizeX, int windowSizeY)
 	addItem("Exit");
 }
 
-void GameOverMenu::performAction(RenderWindow& window, int chosenItemIdx, std::function<void()> restartGame) {
-	switch (chosenItemIdx) {
+GameOverMenu::Action GameOverMenu::decideAction() 
+{
+	switch (highlightedIdx) {
 	case 0:
-		restartGame();
+		return Action::RESTART;
 		break;
 	case 1:
-		window.close();
+		return Action::EXIT;
 		break;
 	default:
+		return Action::NONE;
 		break;
 	}
 }
+

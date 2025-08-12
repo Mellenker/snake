@@ -5,30 +5,29 @@
 
 using namespace sf;
 
-Snake::Snake(float tileSize, int startPosX, int startPosY)
-	: tileSize(tileSize),
-	headTileX(startPosX),
-	headTileY(startPosY),
+Snake::Snake(int startPosX, int startPosY)
+	: headTilePos(startPosX, startPosY),
 	colorHead(Color(103, 0, 255)),
 	colorTail(Color(143, 0, 204)),
-	currDir(STILL)
+	currDir(NONE)
 {
 
 	// Create snake head and tail 
-	RectangleShape head(Vector2f(tileSize, tileSize));
-	RectangleShape tail(Vector2f(tileSize, tileSize));
+	RectangleShape head(Vector2f(Utils::tileSize, Utils::tileSize));
+	RectangleShape tail(Vector2f(Utils::tileSize, Utils::tileSize));
 
 	head.setFillColor(colorHead);
 	tail.setFillColor(colorTail);
 
-	head.setPosition(startPosX * tileSize, startPosY * tileSize);
-	tail.setPosition((startPosX - 1) * tileSize, startPosY * tileSize);
+	head.setPosition(startPosX * Utils::tileSize, startPosY * Utils::tileSize);
+	tail.setPosition((startPosX - 1) * Utils::tileSize, startPosY * Utils::tileSize);
 
 	body.push_back(head);
 	body.push_back(tail);
 }
-
+	
 void Snake::move(Vector2f newPosition) {
+	std::cout << "Moving snake to: " << newPosition.x << ", " << newPosition.y << std::endl;
 	RectangleShape segment = body.front(); // Copy front segment
 	segment.setPosition(newPosition);
 	body.insert(body.begin(), segment);
@@ -37,25 +36,12 @@ void Snake::move(Vector2f newPosition) {
 	body.pop_back();
 }
 
-/*
-void Snake::draw(RenderWindow& window) {
-	for (auto& segment : body) {
-		window.draw(segment);
-	}
-}
-*/
-
-std::map<char, int> Snake::getHeadTileCoords() {
-	std::map<char, int> coords = {
-		{'x', headTileX},
-		{'y', headTileY}
-	};
-	return coords;
+Vector2i Snake::getHeadTilePos() {
+	return headTilePos;
 }
 
-void Snake::setHeadTileCoords(int x, int y) {
-	headTileX = x;
-	headTileY = y;
+void Snake::setHeadTilePos(Vector2i newHeadTilePos) {
+	headTilePos = newHeadTilePos;
 }
 
 void Snake::addSegment() {
@@ -69,7 +55,7 @@ Vector2f Snake::getTailEnd() {
 	return tailEnd;
 }
 
-void Snake::handleInput(Keyboard::Key keyPressed) {
+void Snake::changeDir(Keyboard::Key keyPressed) {
 	// Handle ingame keyboard input
 	switch (keyPressed) {
 	case Keyboard::Key::W:
@@ -99,7 +85,6 @@ void Snake::handleInput(Keyboard::Key keyPressed) {
 	default:
 		break;
 	}
-	return;
 }
 
 void Snake::setDir(Direction newDir) {
