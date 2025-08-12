@@ -3,9 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-using namespace sf;
-
-Font font;
+sf::Font font;
 
 Menu::Menu(int windowSizeX, int windowSizeY)
 	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(highlightedIdxInit)
@@ -27,7 +25,7 @@ void Menu::setTitle(std::string title) {
 }
 
 void Menu::addItem(std::string string) {
-	Text itemText = Text(string, font, 30);
+	sf::Text itemText = sf::Text(string, font, 30);
 	// Center the origin of the text
 	centerOrigin(itemText);
 
@@ -74,14 +72,14 @@ int Menu::getHighlightedIdx() {
 }
 
 void Menu::centerOrigin(sf::Text& text) {
-	FloatRect textRect = text.getLocalBounds();
+	sf::FloatRect textRect = text.getLocalBounds();
 	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 }
 
-void Menu::draw(RenderWindow& window) {
+void Menu::draw(sf::RenderWindow& window) {
 	if (!items.empty()) {
 		window.draw(titleText);
-		for (Text text : items) {
+		for (sf::Text text : items) {
 			window.draw(text);
 		}
 	}

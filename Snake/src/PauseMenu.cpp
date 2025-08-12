@@ -3,15 +3,6 @@
 #include "includes/Utils.hpp"
 #include <iostream>
 
-/*
-	ToDo:
-		- Item list should be an ordered list of actions.
-*/
-
-
-
-using namespace sf;
-
 PauseMenu::PauseMenu(int windowSizeX, int windowSizeY)
 	: Menu(windowSizeX, windowSizeY)
 {

@@ -2,8 +2,6 @@
 #include "includes/GameOverMenu.hpp"
 #include <iostream>
 
-using namespace sf;
-
 GameOverMenu::GameOverMenu(int windowSizeX, int windowSizeY)
 	: Menu(windowSizeX, windowSizeY)
 {

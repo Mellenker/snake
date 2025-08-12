@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace sf;
-
 Application::Application()
 	: game(),
 	window(),
@@ -13,7 +11,7 @@ Application::Application()
 {
 
 	// Set window size based on tile size and map size
-	window.create(VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
+	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
 
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
@@ -26,45 +24,45 @@ void Application::runGameLoop() {
 	while (window.isOpen()) {
 
 		// What if no key is pressed?
-		Keyboard::Key keyPressed = processEvent();
+		sf::Keyboard::Key keyPressed = processEvent();
 		update(keyPressed);
 		render();
 
 	}
 }
 
-Keyboard::Key Application::processEvent() {
-	Event event;
-	Event lastKeyPressedEvent;
+sf::Keyboard::Key Application::processEvent() {
+	sf::Event event;
+	sf::Event lastKeyPressedEvent;
 
 	// Handle events (Place this in its own function?)
 	if (window.pollEvent(event)) {
 		lastKeyPressedEvent = event; // Needs to be initialized (Find other solution)
-		if (event.type == Event::Closed) {
+		if (event.type == sf::Event::Closed) {
 			window.close();
 		}
-		if (event.type == Event::KeyPressed) {
+		if (event.type == sf::Event::KeyPressed) {
 			lastKeyPressedEvent = event;
 		}
 
 		// Drain the rest of the queue, keeping only the last KeyPressed event
 		while (window.pollEvent(event)) {
-			if (event.type == Event::Closed) {
+			if (event.type == sf::Event::Closed) {
 				window.close();
 				break;
 			}
-			if (event.type == Event::KeyPressed) {
+			if (event.type == sf::Event::KeyPressed) {
 				lastKeyPressedEvent = event;
 			}
 		}
 
 		// Process only latest keyboard input
-		if (lastKeyPressedEvent.type == Event::KeyPressed) {
+		if (lastKeyPressedEvent.type == sf::Event::KeyPressed) {
 			std::cout << "Key pressed" << std::endl;
 
 			switch (gameState) {
 			case Utils::GameState::PLAY:
-				if (lastKeyPressedEvent.key.code == Keyboard::Key::Escape) {
+				if (lastKeyPressedEvent.key.code == sf::Keyboard::Key::Escape) {
 					gameState = Utils::GameState::PAUSED;
 					std::cout << "PAUSED GAME\n";
 				}
@@ -75,17 +73,17 @@ Keyboard::Key Application::processEvent() {
 			case Utils::GameState::PAUSED:
 
 				switch (lastKeyPressedEvent.key.code) {
-				case Keyboard::Key::W:
+				case sf::Keyboard::Key::W:
 					pauseMenu.moveUp();
 					break;
-				case Keyboard::Key::S:
+				case sf::Keyboard::Key::S:
 					pauseMenu.moveDown();
 					break;
-				case Keyboard::Key::Enter:
+				case sf::Keyboard::Key::Enter:
 					std::cout << "Selected menu item: " << pauseMenu.getHighlightedIdx() << std::endl;
 					pauseMenuAction = pauseMenu.decideAction();
 					break;
-				case Keyboard::Key::Escape:
+				case sf::Keyboard::Key::Escape:
 					pauseMenuAction = PauseMenu::Action::UNPAUSE;
 					break;
 				default:
@@ -95,13 +93,13 @@ Keyboard::Key Application::processEvent() {
 			case Utils::GameState::GAMEOVER:
 				
 				switch (lastKeyPressedEvent.key.code) {
-				case Keyboard::Key::W:
+				case sf::Keyboard::Key::W:
 					gameOverMenu.moveUp();
 					break;
-				case Keyboard::Key::S:
+				case sf::Keyboard::Key::S:
 					gameOverMenu.moveDown();
 					break;
-				case Keyboard::Key::Enter:
+				case sf::Keyboard::Key::Enter:
 					std::cout << "Selected menu item: " << gameOverMenu.getHighlightedIdx() << std::endl;
 					gameOverMenuAction = gameOverMenu.decideAction();
 					break;
@@ -117,12 +115,12 @@ Keyboard::Key Application::processEvent() {
 
 	}
 
-	return Keyboard::Key::Unknown; // Return an unknown key if no key was pressed
+	return sf::Keyboard::Key::Unknown; // Return an unknown key if no key was pressed
 
 }
 
 // Divide into multiple functions later
-void Application::update(Keyboard::Key keyPressed) {
+void Application::update(sf::Keyboard::Key keyPressed) {
 
 	switch (gameState) {
 	case Utils::GameState::PLAY:

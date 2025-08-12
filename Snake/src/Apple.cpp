@@ -2,12 +2,10 @@
 #include <iostream>
 #include <random>
 
-using namespace sf;
-
 Apple::Apple()
-	: appleTilePos(initTileX, initTileY), shape(Vector2f(Utils::tileSize, Utils::tileSize))
+	: appleTilePos(initTileX, initTileY), shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
 {
-	shape.setFillColor(Color::Red);
+	shape.setFillColor(sf::Color::Red);
 }
 
 // I don't remember how this one works exactly...
@@ -26,11 +24,11 @@ void Apple::spawnAtRandomTile(int xMax, int yMax) {
 	//std::cout << "Y: " << randomizedY << std::endl;
 
 	shape.setPosition(randomizedX, randomizedY);
-	appleTilePos = Vector2i(randomizedXTile, randomizedYTile);
+	appleTilePos = sf::Vector2i(randomizedXTile, randomizedYTile);
 
 }
 
-Vector2i Apple::getAppleTilePos() {
+sf::Vector2i Apple::getAppleTilePos() {
 	return appleTilePos;
 }
 

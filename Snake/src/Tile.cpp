@@ -2,28 +2,26 @@
 #include <SFML/Graphics.hpp>'
 #include <iostream>
 
-using namespace sf;
-
-RectangleShape tile;
+sf::RectangleShape tile;
 
 // Default constructor
 Tile::Tile()
-	: shape(Vector2f(30, 30)), occupied(false)
+	: shape(sf::Vector2f(30, 30)), occupied(false)
 {
-	shape.setPosition(Vector2f(0, 0));
+	shape.setPosition(sf::Vector2f(0, 0));
 }
 
 Tile::Tile(float size, float xPos, float yPos) {
-	shape.setSize(Vector2f(size, size));
-	shape.setPosition(Vector2f(xPos, yPos));
+	shape.setSize(sf::Vector2f(size, size));
+	shape.setPosition(sf::Vector2f(xPos, yPos));
 	occupied = false;
 }
 
-void Tile::setColor(Color color) {
+void Tile::setColor(sf::Color color) {
 	shape.setFillColor(color);
 }
 
-Vector2f Tile::getPosition() {
+sf::Vector2f Tile::getPosition() {
 	return shape.getPosition();
 }
 

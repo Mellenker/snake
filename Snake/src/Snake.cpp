@@ -3,18 +3,16 @@
 #include <iostream>
 #include <includes/Tile.hpp>
 
-using namespace sf;
-
 Snake::Snake(int startPosX, int startPosY)
 	: headTilePos(startPosX, startPosY),
-	colorHead(Color(103, 0, 255)),
-	colorTail(Color(143, 0, 204)),
+	colorHead(sf::Color(103, 0, 255)),
+	colorTail(sf::Color(143, 0, 204)),
 	currDir(NONE)
 {
 
 	// Create snake head and tail 
-	RectangleShape head(Vector2f(Utils::tileSize, Utils::tileSize));
-	RectangleShape tail(Vector2f(Utils::tileSize, Utils::tileSize));
+	sf::RectangleShape head(sf::Vector2f(Utils::tileSize, Utils::tileSize));
+	sf::RectangleShape tail(sf::Vector2f(Utils::tileSize, Utils::tileSize));
 
 	head.setFillColor(colorHead);
 	tail.setFillColor(colorTail);
@@ -26,9 +24,9 @@ Snake::Snake(int startPosX, int startPosY)
 	body.push_back(tail);
 }
 	
-void Snake::move(Vector2f newPosition) {
+void Snake::move(sf::Vector2f newPosition) {
 	std::cout << "Moving snake to: " << newPosition.x << ", " << newPosition.y << std::endl;
-	RectangleShape segment = body.front(); // Copy front segment
+	sf::RectangleShape segment = body.front(); // Copy front segment
 	segment.setPosition(newPosition);
 	body.insert(body.begin(), segment);
 	body[1].setFillColor(colorTail);
@@ -36,47 +34,47 @@ void Snake::move(Vector2f newPosition) {
 	body.pop_back();
 }
 
-Vector2i Snake::getHeadTilePos() {
+sf::Vector2i Snake::getHeadTilePos() {
 	return headTilePos;
 }
 
-void Snake::setHeadTilePos(Vector2i newHeadTilePos) {
+void Snake::setHeadTilePos(sf::Vector2i newHeadTilePos) {
 	headTilePos = newHeadTilePos;
 }
 
 void Snake::addSegment() {
-	RectangleShape segment = body.back(); // Copy front segment
+	sf::RectangleShape segment = body.back(); // Copy front segment
 	segment.setPosition(tailEnd);
 	segment.setFillColor(colorTail);
 	body.insert(body.end(), segment);
 }
 
-Vector2f Snake::getTailEnd() {
+sf::Vector2f Snake::getTailEnd() {
 	return tailEnd;
 }
 
-void Snake::changeDir(Keyboard::Key keyPressed) {
+void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 	// Handle ingame keyboard input
 	switch (keyPressed) {
-	case Keyboard::Key::W:
+	case sf::Keyboard::Key::W:
 		if (currDir != DOWN) {
 			std::cout << "UP" << std::endl;
 			currDir = UP;
 		}
 		break;
-	case Keyboard::Key::A:
+	case sf::Keyboard::Key::A:
 		if (currDir != RIGHT) {
 			std::cout << "UP" << std::endl;
 			currDir = LEFT;
 		}
 		break;
-	case Keyboard::Key::S:
+	case sf::Keyboard::Key::S:
 		if (currDir != UP) {
 			std::cout << "DOWN" << std::endl;
 			currDir = DOWN;
 		}
 		break;
-	case Keyboard::Key::D:
+	case sf::Keyboard::Key::D:
 		if (currDir != LEFT) {
 			std::cout << "RIGHT" << std::endl;
 			currDir = RIGHT;

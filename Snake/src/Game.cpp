@@ -1,22 +1,20 @@
 #include "includes/Game.hpp"
 #include <iostream>
 
-using namespace sf;
-
 Game::Game()
 	: snake(initPosX, initPosY),
 	apple(),
-	colorTile1(Color(0, 132, 9)),
-	colorTile2(Color(0, 118, 9))
+	colorTile1(sf::Color(0, 132, 9)),
+	colorTile2(sf::Color(0, 118, 9))
 {
 	apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
 
 	// Setup background
 	spawnTiles(texture);
-	background = Sprite(texture.getTexture());
+	background = sf::Sprite(texture.getTexture());
 }
 
-void Game::drawGameObjects(RenderWindow& window) {
+void Game::drawGameObjects(sf::RenderWindow& window) {
 	window.draw(background);
 	window.draw(apple);
 	window.draw(snake);
@@ -24,12 +22,12 @@ void Game::drawGameObjects(RenderWindow& window) {
 }
 
 // Handle ingame keyboard input (I don't know about this one...)
-void Game::forwardSnakeInput(Keyboard::Key keyPressed) {
+void Game::forwardSnakeInput(sf::Keyboard::Key keyPressed) {
 	snake.changeDir(keyPressed);
 }
 
 // Populate map with tiles
-void Game::spawnTiles(RenderTexture& texture) {
+void Game::spawnTiles(sf::RenderTexture& texture) {
 
 	std::cout << "Spawning tiles\n";
 
@@ -61,7 +59,7 @@ bool Game::tryUpdateSnakeState() {
 
 	std::cout << "Try Update Snake State\n";
 
-	Vector2i nextHeadPos = getNextSnakeHeadTilePos();
+	sf::Vector2i nextHeadPos = getNextSnakeHeadTilePos();
 	
 	if (detectGameOverCollision(nextHeadPos)) {
 		return true;
@@ -88,9 +86,9 @@ bool Game::tryUpdateSnakeState() {
 }
 
 // Good function name or not?
-Vector2i Game::getNextSnakeHeadTilePos() {
+sf::Vector2i Game::getNextSnakeHeadTilePos() {
 
-	Vector2i snakeHeadPos = snake.getHeadTilePos();
+	sf::Vector2i snakeHeadPos = snake.getHeadTilePos();
 
 	switch (snake.getCurrDir()) {
 	case Snake::UP:
@@ -112,9 +110,9 @@ Vector2i Game::getNextSnakeHeadTilePos() {
 	return snakeHeadPos;
 }
 
-bool Game::detectAppleCollision(Vector2i nextHeadPos) {
+bool Game::detectAppleCollision(sf::Vector2i nextHeadPos) {
 	std::cout << "Check Apple Collision \n";
-	Vector2i appleTilePos = apple.getAppleTilePos();
+	sf::Vector2i appleTilePos = apple.getAppleTilePos();
 
 	if (nextHeadPos == appleTilePos) {
 		return true; // Collision with apple
@@ -124,7 +122,7 @@ bool Game::detectAppleCollision(Vector2i nextHeadPos) {
 	}
 }
 
-bool Game::detectGameOverCollision(Vector2i nextHeadPos) {
+bool Game::detectGameOverCollision(sf::Vector2i nextHeadPos) {
 	std::cout << "Check Game Over Colllision \n";
 
 	if (nextHeadPos.y < 0
