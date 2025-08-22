@@ -1,9 +1,7 @@
-#include "includes/Menu.hpp"
+#include "../includes/Menu.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
-
-sf::Font font;
 
 Menu::Menu(int windowSizeX, int windowSizeY)
 	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(highlightedIdxInit)

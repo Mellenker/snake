@@ -4,9 +4,11 @@
 
 using namespace sf;
 
+// SOMETHING IS WRONG WITH HOW SFML OBJECTS ARE DESTRUCTED
+
 int main() {
 
 	Application app;
 	app.runGameLoop();
-
+	return 0;
 }

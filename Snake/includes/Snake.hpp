@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "includes/Utils.hpp"
+#include "../includes/Utils.hpp"
 #include <vector>
 
 class Snake : public sf::Drawable {

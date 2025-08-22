@@ -19,8 +19,11 @@ protected:
 	int windowSizeX;
 	int windowSizeY;
 	sf::Text titleText;
-	std::vector<sf::Text> items;
+
 	int highlightedIdx;
 	static constexpr int highlightedIdxInit = 0;
 	std::string highlightedItem;
+
+	std::vector<sf::Text> items;
+	sf::Font font;
 };

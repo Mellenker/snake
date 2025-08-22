@@ -1,7 +1,7 @@
-#include "includes/Snake.hpp"
+#include "../includes/Snake.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <includes/Tile.hpp>
+#include "../includes/Tile.hpp"
 
 Snake::Snake(int startPosX, int startPosY)
 	: headTilePos(startPosX, startPosY),
@@ -9,7 +9,7 @@ Snake::Snake(int startPosX, int startPosY)
 	colorTail(sf::Color(143, 0, 204)),
 	currDir(NONE)
 {
-
+	std::cout << _MSC_VER << std::endl;
 	// Create snake head and tail 
 	sf::RectangleShape head(sf::Vector2f(Utils::tileSize, Utils::tileSize));
 	sf::RectangleShape tail(sf::Vector2f(Utils::tileSize, Utils::tileSize));

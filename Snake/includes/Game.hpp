@@ -2,12 +2,12 @@
 
 #include <SFML/Graphics.hpp>  
 
-#include "includes/Utils.hpp"
-#include "includes/Snake.hpp"  
-#include "includes/Apple.hpp"  
-#include "includes/Tile.hpp"  
-#include "includes/PauseMenu.hpp"
-#include "includes/GameOverMenu.hpp"
+#include "../includes/Utils.hpp"
+#include "../includes/Snake.hpp"  
+#include "../includes/Apple.hpp"  
+#include "../includes/Tile.hpp"  
+#include "../includes/PauseMenu.hpp"
+#include "../includes/GameOverMenu.hpp"
 
 class Game {
 public:
@@ -38,4 +38,5 @@ private:
 
 	// Tiles  
 	Tile tiles[Utils::mapSizeInTilesX][Utils::mapSizeInTilesY];
+
 };

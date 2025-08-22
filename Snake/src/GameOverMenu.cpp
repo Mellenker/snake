@@ -1,5 +1,5 @@
-#include "includes/Menu.hpp"
-#include "includes/GameOverMenu.hpp"
+#include "../includes/Menu.hpp"
+#include "../includes/GameOverMenu.hpp"
 #include <iostream>
 
 GameOverMenu::GameOverMenu(int windowSizeX, int windowSizeY)

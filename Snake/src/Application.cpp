@@ -1,4 +1,4 @@
-#include "includes/Application.hpp"
+#include "../includes/Application.hpp"
 
 #include <iostream>
 
@@ -72,6 +72,8 @@ sf::Keyboard::Key Application::processEvent() {
 				break;
 			case Utils::GameState::PAUSED:
 
+				// PAUSE THREAD UNTIL KEY IS PRESSED
+
 				switch (lastKeyPressedEvent.key.code) {
 				case sf::Keyboard::Key::W:
 					pauseMenu.moveUp();
@@ -91,6 +93,8 @@ sf::Keyboard::Key Application::processEvent() {
 				}
 
 			case Utils::GameState::GAMEOVER:
+
+				// PAUSE THREAD UNTIL KEY IS PRESSED
 				
 				switch (lastKeyPressedEvent.key.code) {
 				case sf::Keyboard::Key::W:

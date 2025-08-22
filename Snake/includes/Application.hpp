@@ -1,10 +1,10 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "includes/Game.hpp"
-#include "includes/Utils.hpp"
-#include "includes/PauseMenu.hpp"
-#include "includes/GameOverMenu.hpp"
+#include "../includes/Game.hpp"
+#include "../includes/Utils.hpp"
+#include "../includes/PauseMenu.hpp"
+#include "../includes/GameOverMenu.hpp"
 
 class Application {
 public:
@@ -16,14 +16,13 @@ public:
 private:
 	Game game;
 
-	sf::RenderWindow window;
-
 	Utils::GameState gameState;
 	PauseMenu pauseMenu;
 	PauseMenu::Action pauseMenuAction = PauseMenu::Action::NONE;
 	GameOverMenu gameOverMenu;
 	GameOverMenu::Action gameOverMenuAction = GameOverMenu::Action::NONE;
 
-	static constexpr int maxFPS = 10;
+	static constexpr int maxFPS = 5;
 
+	sf::RenderWindow window;
 };

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "includes/Menu.hpp"
-#include "includes/Utils.hpp"
+#include "../includes/Menu.hpp"
+#include "../includes/Utils.hpp"
 #include <functional>
 
 class PauseMenu : public Menu {

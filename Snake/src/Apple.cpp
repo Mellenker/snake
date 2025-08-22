@@ -1,4 +1,4 @@
-#include "includes/Apple.hpp"
+#include "../includes/Apple.hpp"
 #include <iostream>
 #include <random>
 
@@ -8,7 +8,7 @@ Apple::Apple()
 	shape.setFillColor(sf::Color::Red);
 }
 
-// I don't remember how this one works exactly...
+// MAKE SURE IT DOESN'T SPAWN ON TOP OF THE SNAKE
 void Apple::spawnAtRandomTile(int xMax, int yMax) {
 	// Generate random coordinates
 	std::random_device random;
@@ -19,9 +19,6 @@ void Apple::spawnAtRandomTile(int xMax, int yMax) {
 	int randomizedYTile = disY(rng);
 	int randomizedX = randomizedXTile * Utils::tileSize;
 	int randomizedY = randomizedYTile * Utils::tileSize;
-
-	//std::cout << "X: " << randomizedX << std::endl;
-	//std::cout << "Y: " << randomizedY << std::endl;
 
 	shape.setPosition(randomizedX, randomizedY);
 	appleTilePos = sf::Vector2i(randomizedXTile, randomizedYTile);

@@ -1,10 +1,9 @@
-#include "includes/Tile.hpp"
+#include "../includes/Tile.hpp"
 #include <SFML/Graphics.hpp>'
 #include <iostream>
 
 sf::RectangleShape tile;
 
-// Default constructor
 Tile::Tile()
 	: shape(sf::Vector2f(30, 30)), occupied(false)
 {

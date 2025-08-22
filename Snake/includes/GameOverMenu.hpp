@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "includes/Menu.hpp"
+#include "../includes/Menu.hpp"
 #include <functional>
 
 class GameOverMenu : public Menu {
