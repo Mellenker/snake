@@ -2,16 +2,21 @@
 #include <iostream>
 
 Game::Game()
-	: snake(initPosX, initPosY),
+	: snake(initSnakeTilePosX, initSnakeTilePosY),
 	apple(),
 	colorTile1(sf::Color(0, 132, 9)),
 	colorTile2(sf::Color(0, 118, 9))
 {
-	apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
+	int maxTileId = (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY) - 1;
 
 	// Setup background
 	spawnTiles(texture);
 	background = sf::Sprite(texture.getTexture());
+
+	// Set scale of game objects
+	background.setScale(Utils::scale, Utils::scale);
+
+	apple.spawnAtTile(generateRandomFreeTilePos());
 }
 
 void Game::drawGameObjects(sf::RenderWindow& window) {
@@ -33,6 +38,8 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 
 	texture.create(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize);
 
+	int tileNum = 0;
+
 	int xPos = 0;
 	int yPos = 0;
 	bool colorFlag = true; // Flag to alternate colors
@@ -46,6 +53,11 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 				tile.setColor(colorTile2);
 
 			tiles[xIt][yIt] = tile;
+			
+			freeTiles.push_back(tileNum);
+			posInFreeTiles.push_back(tileNum);
+			tileNum++;
+
 			xPos += Utils::tileSize;
 			texture.draw(tile);
 			colorFlag = !colorFlag;
@@ -59,49 +71,50 @@ bool Game::tryUpdateSnakeState() {
 
 	std::cout << "Try Update Snake State\n";
 
-	sf::Vector2i nextHeadPos = getNextSnakeHeadTilePos();
+	sf::Vector2f nextHeadPos = getNextSnakeHeadTilePos();
 	
 	if (detectGameOverCollision(nextHeadPos)) {
 		return true;
 	}
 	
 	if (detectAppleCollision(nextHeadPos)) {
-		snake.addSegment();
-		apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
+		apple.spawnAtTile(generateRandomFreeTilePos());
 	}
 	
 	// Move the snake
-	std::cout << "X: " << nextHeadPos.x << "\n";
-	snake.move(tiles[nextHeadPos.x][nextHeadPos.y].getPosition());
-	snake.setHeadTilePos(nextHeadPos);
 
-	tiles[nextHeadPos.x][nextHeadPos.y].setOccupied(true);
+	std::cout << "X: " << nextHeadPos.x << "\n";
+	std::cout << "Y: " << nextHeadPos.y << "\n";
+
+	snake.move(nextHeadPos);
+
+	occupyTile(nextHeadPos.x, nextHeadPos.y);
 
 	int tailEndX = snake.getTailEnd().x / Utils::tileSize;
 	int tailEndY = snake.getTailEnd().y / Utils::tileSize;
 
-	tiles[tailEndX][tailEndY].setOccupied(false);
+	freeTile(tailEndX, tailEndY);
 
 	return false;
 }
 
 // Good function name or not?
-sf::Vector2i Game::getNextSnakeHeadTilePos() {
+sf::Vector2f Game::getNextSnakeHeadTilePos() {
 
-	sf::Vector2i snakeHeadPos = snake.getHeadTilePos();
+	sf::Vector2f snakeHeadPos = snake.getHeadPos();
 
 	switch (snake.getCurrDir()) {
 	case Snake::UP:
-		snakeHeadPos.y--;
+		snakeHeadPos.y = snakeHeadPos.y - Utils::tileSize;
 		break;
 	case Snake::LEFT:
-		snakeHeadPos.x--;
+		snakeHeadPos.x = snakeHeadPos.x - Utils::tileSize;
 		break;
 	case Snake::DOWN:
-		snakeHeadPos.y++;
+		snakeHeadPos.y = snakeHeadPos.y + Utils::tileSize;
 		break;
 	case Snake::RIGHT:
-		snakeHeadPos.x++;
+		snakeHeadPos.x = snakeHeadPos.x + Utils::tileSize;
 		break;
 	default:
 		break;
@@ -110,9 +123,9 @@ sf::Vector2i Game::getNextSnakeHeadTilePos() {
 	return snakeHeadPos;
 }
 
-bool Game::detectAppleCollision(sf::Vector2i nextHeadPos) {
+bool Game::detectAppleCollision(sf::Vector2f nextHeadPos) {
 	std::cout << "Check Apple Collision \n";
-	sf::Vector2i appleTilePos = apple.getAppleTilePos();
+	sf::Vector2f appleTilePos = apple.getApplePos();
 
 	if (nextHeadPos == appleTilePos) {
 		return true; // Collision with apple
@@ -122,35 +135,38 @@ bool Game::detectAppleCollision(sf::Vector2i nextHeadPos) {
 	}
 }
 
-bool Game::detectGameOverCollision(sf::Vector2i nextHeadPos) {
+bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
 	std::cout << "Check Game Over Colllision \n";
 
-	if (nextHeadPos.y < 0
+	if (nextHeadPos.x < 0
 		|| nextHeadPos.x >= Utils::mapSizeInTilesX
 		|| nextHeadPos.y < 0
 		|| nextHeadPos.y >= Utils::mapSizeInTilesY)
 	{
-		return true; // Collision with screen edge
 		std::cout << "STAY ON SCREEN" << std::endl;
+		return true; // Collision with screen edge
 	}
-	else if (tiles[nextHeadPos.x][nextHeadPos.y].isOccupied()
+	
+	int tileId = nextHeadPos.y * Utils::mapSizeInTilesX + nextHeadPos.x;
+	int tileIndex = posInFreeTiles[tileId];
+
+	if (tileIndex == -1
 		&& (snake.getCurrDir() != Snake::NONE))
 	{
-		return true; // Collision with body
 		std::cout << "DO NOT COLLIDE WITH BODY" << std::endl;
+		std::cout << "AFTER: " << nextHeadPos.x << ", " << nextHeadPos.y << std::endl;
+		return true; // Collision with body
+	}
 
-		std::cout << "AFTER: " << nextHeadPos.x << ", " << nextHeadPos.y<< std::endl;
-	}
-	else {
-		return false; // No collision
-	}
+	return false; // No collision
 }
 
 void Game::resetGame() {
 	// Reset snake and apple
-	snake = Snake(initPosX, initPosY);
+	snake = Snake(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
 	apple = Apple();
-	apple.spawnAtRandomTile(Utils::mapSizeInTilesX - 1, Utils::mapSizeInTilesY - 1);
+
+	apple.spawnAtTile(generateRandomFreeTilePos());
 
 	// Reset tile occupation
 	for (auto& row : tiles) {
@@ -160,4 +176,54 @@ void Game::resetGame() {
 	}
 
 	snake.setDir(Snake::Direction::NONE);
+}
+
+void Game::occupyTile(int x, int y) {
+
+	int tileId = y * Utils::mapSizeInTilesX + x;
+	int tilePos = posInFreeTiles[tileId];
+
+	// If this is 0, the tile is already occupied
+	if (tilePos != -1) {
+		int lastFreeTileId = freeTiles.back();
+		freeTiles[tilePos] = lastFreeTileId;
+		posInFreeTiles[lastFreeTileId] = tilePos;
+		freeTiles.pop_back();
+		posInFreeTiles[tileId] = -1;
+	}
+	else {
+		std::cout << "Tile already occupied!\n";
+	}
+}
+
+void Game::freeTile(int x, int y) {
+	
+	int tileId = y * Utils::mapSizeInTilesX + x;
+	int tilePos = posInFreeTiles[tileId];
+
+	if (tilePos == -1) {
+		freeTiles.push_back(tileId);
+		posInFreeTiles[tileId] = freeTiles.size() - 1;
+	}
+	else {
+		std::cout << "Tile already free!\n";
+	}
+}
+
+sf::Vector2i Game::generateRandomFreeTilePos() {
+	// Generate random coordinates
+	std::random_device random;
+	std::mt19937 rng(random());
+
+	int min = 0;
+	int max = freeTiles.size() - 1;
+
+	std::uniform_int_distribution<> disY(min, max);
+	int randomFreeTileIdx = disY(rng);
+	// Translate freeTile ID to coordinates
+	int x = freeTiles[randomFreeTileIdx] % Utils::mapSizeInTilesX;
+	int y = freeTiles[randomFreeTileIdx] / Utils::mapSizeInTilesX;
+
+	return sf::Vector2i(x * Utils::tileSize, y * Utils::tileSize);
+
 }

@@ -22,7 +22,7 @@ private:
 	GameOverMenu gameOverMenu;
 	GameOverMenu::Action gameOverMenuAction = GameOverMenu::Action::NONE;
 
-	static constexpr int maxFPS = 5;
+	static constexpr int maxFPS = 2;
 
 	sf::RenderWindow window;
 };

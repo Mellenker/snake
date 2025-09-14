@@ -1,6 +1,7 @@
 #pragma once  
 
 #include <SFML/Graphics.hpp>  
+#include <random>
 
 #include "../includes/Utils.hpp"
 #include "../includes/Snake.hpp"  
@@ -17,14 +18,20 @@ public:
 	void forwardSnakeInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
 	void resetGame();
-	sf::Vector2i getNextSnakeHeadTilePos();
-	bool detectAppleCollision(sf::Vector2i nextHeadPos);
-	bool detectGameOverCollision(sf::Vector2i nextHeadPos);
+	sf::Vector2f getNextSnakeHeadTilePos();
+	bool detectAppleCollision(sf::Vector2f nextHeadPos);
+	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	bool tryUpdateSnakeState();
+	sf::Vector2i generateRandomFreeTilePos();
+	
+	// Tile management
+	void occupyTile(int x, int y);
+	void freeTile(int x, int y);
+
 private:
 
-	static constexpr int initPosX = 1;
-	static constexpr int initPosY = 1;
+	static constexpr int initSnakeTilePosX = 2;
+	static constexpr int initSnakeTilePosY = 2;
 	const sf::Color colorTile1;
 	const sf::Color colorTile2;
 
@@ -37,6 +44,15 @@ private:
 	Snake snake;
 
 	// Tiles  
+	// REMOVE TILES ARRAY?
 	Tile tiles[Utils::mapSizeInTilesX][Utils::mapSizeInTilesY];
 
+	std::vector<int> freeTiles;
+	std::vector<int> posInFreeTiles;
+
+	/*
+		- freeTiles: Vector of all currently free tiles
+		- posInFreeTiles: The positions of all tiles within the freeTiles vector (non-free tiles have value -1)
+
+	*/
 };

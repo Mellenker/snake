@@ -4,12 +4,11 @@
 #include "../includes/Tile.hpp"
 
 Snake::Snake(int startPosX, int startPosY)
-	: headTilePos(startPosX, startPosY),
+	: headPos(startPosX* Utils::tileSize, startPosY* Utils::tileSize),
 	colorHead(sf::Color(103, 0, 255)),
 	colorTail(sf::Color(143, 0, 204)),
 	currDir(NONE)
 {
-	std::cout << _MSC_VER << std::endl;
 	// Create snake head and tail 
 	sf::RectangleShape head(sf::Vector2f(Utils::tileSize, Utils::tileSize));
 	sf::RectangleShape tail(sf::Vector2f(Utils::tileSize, Utils::tileSize));
@@ -17,35 +16,38 @@ Snake::Snake(int startPosX, int startPosY)
 	head.setFillColor(colorHead);
 	tail.setFillColor(colorTail);
 
-	head.setPosition(startPosX * Utils::tileSize, startPosY * Utils::tileSize);
-	tail.setPosition((startPosX - 1) * Utils::tileSize, startPosY * Utils::tileSize);
+	head.setPosition(headPos);
+	tail.setPosition(headPos.x - Utils::tileSize, headPos.y);
+	
+	// Scale segments
+	head.setScale(Utils::scale, Utils::scale);
+	tail.setScale(Utils::scale, Utils::scale);
 
 	body.push_back(head);
 	body.push_back(tail);
 }
-	
+
 void Snake::move(sf::Vector2f newPosition) {
 	std::cout << "Moving snake to: " << newPosition.x << ", " << newPosition.y << std::endl;
 	sf::RectangleShape segment = body.front(); // Copy front segment
 	segment.setPosition(newPosition);
+	headPos = newPosition;
 	body.insert(body.begin(), segment);
 	body[1].setFillColor(colorTail);
 	tailEnd = body.back().getPosition();
 	body.pop_back();
 }
 
-sf::Vector2i Snake::getHeadTilePos() {
-	return headTilePos;
+sf::Vector2f Snake::getHeadPos() {
+	return headPos;
 }
 
-void Snake::setHeadTilePos(sf::Vector2i newHeadTilePos) {
-	headTilePos = newHeadTilePos;
-}
 
 void Snake::addSegment() {
 	sf::RectangleShape segment = body.back(); // Copy front segment
 	segment.setPosition(tailEnd);
 	segment.setFillColor(colorTail);
+	segment.setScale(Utils::scale, Utils::scale);
 	body.insert(body.end(), segment);
 }
 

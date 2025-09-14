@@ -11,11 +11,12 @@ Application::Application()
 {
 
 	// Set window size based on tile size and map size
-	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
+	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::scale, Utils::mapSizeInTilesY * Utils::scale), "Snake Game");
 
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
 	window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
+
 
 }
 
@@ -23,7 +24,6 @@ void Application::runGameLoop() {
 	// GAME LOOP
 	while (window.isOpen()) {
 
-		// What if no key is pressed?
 		sf::Keyboard::Key keyPressed = processEvent();
 		update(keyPressed);
 		render();

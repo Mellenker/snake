@@ -1,6 +1,7 @@
 #include "../includes/Menu.hpp"
-#include <iostream>
+#include "../includes/Utils.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <string>
 
 Menu::Menu(int windowSizeX, int windowSizeY)
@@ -41,6 +42,8 @@ void Menu::addItem(std::string string) {
 		float prevItemY = items.back().getPosition().y;
 		itemText.setPosition(prevItemX, prevItemY + 75);
 	}
+
+	//itemText.setScale(Utils::scale, Utils::scale);
 
 	items.push_back(itemText);
 }

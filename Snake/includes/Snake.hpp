@@ -9,8 +9,8 @@ public:
 	Snake(int startPosX, int startPosY);
 	void move(sf::Vector2f newPosition);
 	void draw(sf::RenderWindow& window);
-	sf::Vector2i getHeadTilePos();
-	void setHeadTilePos(sf::Vector2i newHeadPos);
+	sf::Vector2f getHeadPos();
+	void setHeadTilePos(sf::Vector2f newHeadPos);
 	void addSegment();
 	sf::Vector2f getTailEnd();
 	enum Direction { NONE, UP, LEFT, RIGHT, DOWN };
@@ -20,7 +20,7 @@ public:
 
 
 private:
-	sf::Vector2i headTilePos;
+	sf::Vector2f headPos;
 
 	sf::Color colorHead;
 	sf::Color colorTail;

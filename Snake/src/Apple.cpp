@@ -1,32 +1,22 @@
 #include "../includes/Apple.hpp"
 #include <iostream>
-#include <random>
 
 Apple::Apple()
-	: appleTilePos(initTileX, initTileY), shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
+	: shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
 {
 	shape.setFillColor(sf::Color::Red);
+	shape.setScale(Utils::scale, Utils::scale);
 }
 
-// MAKE SURE IT DOESN'T SPAWN ON TOP OF THE SNAKE
-void Apple::spawnAtRandomTile(int xMax, int yMax) {
-	// Generate random coordinates
-	std::random_device random;
-	std::mt19937 rng(random());
-	std::uniform_int_distribution<> disX(0, xMax);
-	std::uniform_int_distribution<> disY(0, yMax);
-	int randomizedXTile = disX(rng);
-	int randomizedYTile = disY(rng);
-	int randomizedX = randomizedXTile * Utils::tileSize;
-	int randomizedY = randomizedYTile * Utils::tileSize;
+void Apple::spawnAtTile(sf::Vector2i tile) {
+	shape.setPosition(tile.x, tile.y);
 
-	shape.setPosition(randomizedX, randomizedY);
-	appleTilePos = sf::Vector2i(randomizedXTile, randomizedYTile);
+	std::cout << "Apple spawned at tile: " << tile.x << ", " << tile.y << std::endl;
 
 }
 
-sf::Vector2i Apple::getAppleTilePos() {
-	return appleTilePos;
+sf::Vector2f Apple::getApplePos() {
+	return shape.getPosition();
 }
 
 // Override
