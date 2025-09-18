@@ -5,10 +5,9 @@ Apple::Apple()
 	: shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
 {
 	shape.setFillColor(sf::Color::Red);
-	shape.setScale(Utils::scale, Utils::scale);
 }
 
-void Apple::spawnAtTile(sf::Vector2i tile) {
+void Apple::spawnAtTile(sf::Vector2f tile) {
 	shape.setPosition(tile.x, tile.y);
 
 	std::cout << "Apple spawned at tile: " << tile.x << ", " << tile.y << std::endl;

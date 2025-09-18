@@ -22,7 +22,7 @@ public:
 	bool detectAppleCollision(sf::Vector2f nextHeadPos);
 	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	bool tryUpdateSnakeState();
-	sf::Vector2i generateRandomFreeTilePos();
+	sf::Vector2f generateRandomFreeTilePos();
 	
 	// Tile management
 	void occupyTile(int x, int y);

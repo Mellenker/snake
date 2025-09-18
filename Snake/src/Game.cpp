@@ -7,14 +7,20 @@ Game::Game()
 	colorTile1(sf::Color(0, 132, 9)),
 	colorTile2(sf::Color(0, 118, 9))
 {
-	int maxTileId = (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY) - 1;
 
 	// Setup background
 	spawnTiles(texture);
 	background = sf::Sprite(texture.getTexture());
 
-	// Set scale of game objects
-	background.setScale(Utils::scale, Utils::scale);
+	// Initialize free tiles
+	for (int i = 0; i < (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY); i++) {
+		freeTiles.push_back(i);
+		posInFreeTiles.push_back(i);
+	}
+
+	// Occupy initial snake tiles
+	occupyTile(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
+	occupyTile((initSnakeTilePosX * Utils::tileSize) - Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
 
 	apple.spawnAtTile(generateRandomFreeTilePos());
 }
@@ -54,8 +60,6 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 
 			tiles[xIt][yIt] = tile;
 			
-			freeTiles.push_back(tileNum);
-			posInFreeTiles.push_back(tileNum);
 			tileNum++;
 
 			xPos += Utils::tileSize;
@@ -71,6 +75,11 @@ bool Game::tryUpdateSnakeState() {
 
 	std::cout << "Try Update Snake State\n";
 
+	if (snake.getCurrDir() == Snake::NONE) {
+		std::cout << "Snake not moving\n";
+		return false; // No movement, no update
+	}
+
 	sf::Vector2f nextHeadPos = getNextSnakeHeadTilePos();
 	
 	if (detectGameOverCollision(nextHeadPos)) {
@@ -78,7 +87,18 @@ bool Game::tryUpdateSnakeState() {
 	}
 	
 	if (detectAppleCollision(nextHeadPos)) {
-		apple.spawnAtTile(generateRandomFreeTilePos());
+		snake.addSegment();
+
+		// Spawn apple at random free tile
+		sf::Vector2f nextApplePos = generateRandomFreeTilePos();
+
+		// Make sure apple doesn't spawn in its previous position
+		while (detectAppleCollision(nextApplePos)) {
+			nextApplePos = generateRandomFreeTilePos();
+		}
+
+		apple.spawnAtTile(nextApplePos);
+
 	}
 	
 	// Move the snake
@@ -139,15 +159,15 @@ bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
 	std::cout << "Check Game Over Colllision \n";
 
 	if (nextHeadPos.x < 0
-		|| nextHeadPos.x >= Utils::mapSizeInTilesX
+		|| nextHeadPos.x >= (Utils::mapSizeInTilesX * Utils::tileSize)
 		|| nextHeadPos.y < 0
-		|| nextHeadPos.y >= Utils::mapSizeInTilesY)
+		|| nextHeadPos.y >= (Utils::mapSizeInTilesY * Utils::tileSize))
 	{
 		std::cout << "STAY ON SCREEN" << std::endl;
 		return true; // Collision with screen edge
 	}
 	
-	int tileId = nextHeadPos.y * Utils::mapSizeInTilesX + nextHeadPos.x;
+	int tileId = (nextHeadPos.y / Utils::tileSize) * Utils::mapSizeInTilesX + (nextHeadPos.x / Utils::tileSize);
 	int tileIndex = posInFreeTiles[tileId];
 
 	if (tileIndex == -1
@@ -163,24 +183,37 @@ bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
 
 void Game::resetGame() {
 	// Reset snake and apple
-	snake = Snake(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
+	snake = Snake(initSnakeTilePosX, initSnakeTilePosY);
 	apple = Apple();
 
-	apple.spawnAtTile(generateRandomFreeTilePos());
-
-	// Reset tile occupation
-	for (auto& row : tiles) {
-		for (auto& elem : row) {
-			elem.setOccupied(false);
-		}
+	// Reset free tiles
+	freeTiles.clear();
+	posInFreeTiles.clear();
+	for (int i = 0; i < (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY); i++) {
+		freeTiles.push_back(i);
+		posInFreeTiles.push_back(i);
 	}
+
+	// Occupy initial snake tiles
+	occupyTile(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
+	occupyTile((initSnakeTilePosX * Utils::tileSize) - Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
+
+	// Spawn apple at random free tile
+	sf::Vector2f nextApplePos = generateRandomFreeTilePos();
+	
+	// Make sure apple doesn't spawn in its previous position
+	while (detectAppleCollision(nextApplePos)) {
+		nextApplePos = generateRandomFreeTilePos();
+	}
+
+	apple.spawnAtTile(nextApplePos);
 
 	snake.setDir(Snake::Direction::NONE);
 }
 
 void Game::occupyTile(int x, int y) {
 
-	int tileId = y * Utils::mapSizeInTilesX + x;
+	int tileId = ((y / Utils::tileSize) * Utils::mapSizeInTilesX + (x / Utils::tileSize));
 	int tilePos = posInFreeTiles[tileId];
 
 	// If this is 0, the tile is already occupied
@@ -210,7 +243,7 @@ void Game::freeTile(int x, int y) {
 	}
 }
 
-sf::Vector2i Game::generateRandomFreeTilePos() {
+sf::Vector2f Game::generateRandomFreeTilePos() {
 	// Generate random coordinates
 	std::random_device random;
 	std::mt19937 rng(random());
@@ -224,6 +257,6 @@ sf::Vector2i Game::generateRandomFreeTilePos() {
 	int x = freeTiles[randomFreeTileIdx] % Utils::mapSizeInTilesX;
 	int y = freeTiles[randomFreeTileIdx] / Utils::mapSizeInTilesX;
 
-	return sf::Vector2i(x * Utils::tileSize, y * Utils::tileSize);
+	return sf::Vector2f(x * Utils::tileSize, y * Utils::tileSize);
 
 }

@@ -18,10 +18,6 @@ Snake::Snake(int startPosX, int startPosY)
 
 	head.setPosition(headPos);
 	tail.setPosition(headPos.x - Utils::tileSize, headPos.y);
-	
-	// Scale segments
-	head.setScale(Utils::scale, Utils::scale);
-	tail.setScale(Utils::scale, Utils::scale);
 
 	body.push_back(head);
 	body.push_back(tail);
@@ -47,7 +43,6 @@ void Snake::addSegment() {
 	sf::RectangleShape segment = body.back(); // Copy front segment
 	segment.setPosition(tailEnd);
 	segment.setFillColor(colorTail);
-	segment.setScale(Utils::scale, Utils::scale);
 	body.insert(body.end(), segment);
 }
 

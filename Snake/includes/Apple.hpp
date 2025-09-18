@@ -6,7 +6,7 @@
 class Apple : public sf::Drawable {
 public:
 	Apple();
-	void spawnAtTile(sf::Vector2i tile);
+	void spawnAtTile(sf::Vector2f tile);
 	sf::Vector2f getApplePos();
 	void draw(sf::RenderWindow& window);
 private:

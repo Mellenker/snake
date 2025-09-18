@@ -7,8 +7,7 @@ struct Utils {
         GAMEOVER
     };
 
-    static constexpr int tileSize = 1;
-    static constexpr int mapSizeInTilesX = 5;
-    static constexpr int mapSizeInTilesY = 5;
-    static constexpr int scale = 50;
+    static constexpr int tileSize = 45;
+    static constexpr int mapSizeInTilesX = 3;
+    static constexpr int mapSizeInTilesY = 3;
 };

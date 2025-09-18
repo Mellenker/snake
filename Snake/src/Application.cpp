@@ -11,7 +11,7 @@ Application::Application()
 {
 
 	// Set window size based on tile size and map size
-	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::scale, Utils::mapSizeInTilesY * Utils::scale), "Snake Game");
+	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
 
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
@@ -116,7 +116,7 @@ sf::Keyboard::Key Application::processEvent() {
 			}
 
 		}
-
+		
 	}
 
 	return sf::Keyboard::Key::Unknown; // Return an unknown key if no key was pressed

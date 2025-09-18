@@ -43,8 +43,6 @@ void Menu::addItem(std::string string) {
 		itemText.setPosition(prevItemX, prevItemY + 75);
 	}
 
-	//itemText.setScale(Utils::scale, Utils::scale);
-
 	items.push_back(itemText);
 }
 
