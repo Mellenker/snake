@@ -5,7 +5,7 @@
 sf::RectangleShape tile;
 
 Tile::Tile()
-	: shape(sf::Vector2f(30, 30)), occupied(false)
+	: shape(sf::Vector2f(30, 30))
 {
 	shape.setPosition(sf::Vector2f(0, 0));
 }
@@ -13,17 +13,11 @@ Tile::Tile()
 Tile::Tile(float size, float xPos, float yPos) {
 	shape.setSize(sf::Vector2f(size, size));
 	shape.setPosition(sf::Vector2f(xPos, yPos));
-	occupied = false;
 }
 
 void Tile::setColor(sf::Color color) {
 	shape.setFillColor(color);
 }
-
-sf::Vector2f Tile::getPosition() {
-	return shape.getPosition();
-}
-
 
 // Override
 void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const {

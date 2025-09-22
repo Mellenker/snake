@@ -57,8 +57,6 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 				tile.setColor(colorTile1);
 			else
 				tile.setColor(colorTile2);
-
-			tiles[xIt][yIt] = tile;
 			
 			tileNum++;
 
