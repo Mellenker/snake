@@ -149,6 +149,7 @@
     <ClCompile Include="src\GameOverMenu.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\PauseMenu.cpp" />
+    <ClCompile Include="src\ScoreCounter.cpp" />
     <ClCompile Include="src\Snake.cpp" />
     <ClCompile Include="src\Tile.cpp" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="includes\Application.hpp" />
     <ClInclude Include="includes\Game.hpp" />
     <ClInclude Include="includes\GameOverMenu.hpp" />
+    <ClInclude Include="includes\ScoreCounter.hpp" />
     <ClInclude Include="includes\Utils.hpp" />
     <ClInclude Include="includes\PauseMenu.hpp" />
     <ClInclude Include="includes\hejma.hpp" />

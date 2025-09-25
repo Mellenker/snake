@@ -1,6 +1,4 @@
 #pragma once
-
-#include <SFML/Graphics.hpp>
 #include "../includes/Game.hpp"
 #include "../includes/Utils.hpp"
 #include "../includes/PauseMenu.hpp"
@@ -22,7 +20,7 @@ private:
 	GameOverMenu gameOverMenu;
 	GameOverMenu::Action gameOverMenuAction = GameOverMenu::Action::NONE;
 
-	static constexpr int maxFPS = 2;
+	static constexpr int maxFPS = 4;
 
 	sf::RenderWindow window;
 };

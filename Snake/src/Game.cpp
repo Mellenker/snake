@@ -25,10 +25,11 @@ Game::Game()
 	apple.spawnAtTile(generateRandomFreeTilePos());
 }
 
-void Game::drawGameObjects(sf::RenderWindow& window) {
+void Game::drawObjects(sf::RenderWindow& window) {
 	window.draw(background);
 	window.draw(apple);
 	window.draw(snake);
+	window.draw(scoreCounter);
 	std::cout << "DRAW!\n";
 }
 
@@ -86,6 +87,8 @@ bool Game::tryUpdateSnakeState() {
 	
 	if (detectAppleCollision(nextHeadPos)) {
 		snake.addSegment();
+
+		scoreCounter.addPoint();
 
 		// Spawn apple at random free tile
 		sf::Vector2f nextApplePos = generateRandomFreeTilePos();
@@ -180,9 +183,10 @@ bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
 }
 
 void Game::resetGame() {
-	// Reset snake and apple
+	// Reset objects
 	snake = Snake(initSnakeTilePosX, initSnakeTilePosY);
 	apple = Apple();
+	scoreCounter.resetPoints();
 
 	// Reset free tiles
 	freeTiles.clear();

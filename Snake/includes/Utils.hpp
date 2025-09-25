@@ -8,6 +8,6 @@ struct Utils {
     };
 
     static constexpr int tileSize = 45;
-    static constexpr int mapSizeInTilesX = 3;
-    static constexpr int mapSizeInTilesY = 3;
+    static constexpr int mapSizeInTilesX = 15;
+    static constexpr int mapSizeInTilesY = 15;
 };

@@ -187,7 +187,7 @@ void Application::update(sf::Keyboard::Key keyPressed) {
 
 void Application::render() {
 	window.clear();
-	game.drawGameObjects(window);
+	game.drawObjects(window);
 
 	switch (gameState) {
 	case Utils::GameState::PAUSED:

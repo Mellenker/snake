@@ -9,12 +9,13 @@
 #include "../includes/Tile.hpp"  
 #include "../includes/PauseMenu.hpp"
 #include "../includes/GameOverMenu.hpp"
+#include "../includes/ScoreCounter.hpp"
 
 class Game {
 public:
 	Game();
 	std::map<char, int> getMapSizeInTiles() const;
-	void drawGameObjects(sf::RenderWindow& window);
+	void drawObjects(sf::RenderWindow& window);
 	void forwardSnakeInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
 	void resetGame();
@@ -35,24 +36,15 @@ private:
 	const sf::Color colorTile1;
 	const sf::Color colorTile2;
 
-	// Game background  
+
 	sf::RenderTexture texture;
 	sf::Sprite background;
 
-	// Game objects  
+	ScoreCounter scoreCounter;
+
 	Apple apple;
 	Snake snake;
 
-	// Tiles  
-	// REMOVE TILES ARRAY?
-	Tile tiles[Utils::mapSizeInTilesX][Utils::mapSizeInTilesY];
-
-	std::vector<int> freeTiles;
-	std::vector<int> posInFreeTiles;
-
-	/*
-		- freeTiles: Vector of all currently free tiles
-		- posInFreeTiles: The positions of all tiles within the freeTiles vector (non-free tiles have value -1)
-
-	*/
+	std::vector<int> freeTiles; // Vector of all currently free tiles
+	std::vector<int> posInFreeTiles; // Indexes of all tiles within the freeTiles vector (occupied tiles have index -1)
 };
