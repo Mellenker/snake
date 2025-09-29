@@ -14,7 +14,6 @@
 class Game {
 public:
 	Game();
-	std::map<char, int> getMapSizeInTiles() const;
 	void drawObjects(sf::RenderWindow& window);
 	void forwardSnakeInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
@@ -36,7 +35,6 @@ private:
 	static constexpr int initSnakeTilePosY = 2;
 	const sf::Color colorTile1;
 	const sf::Color colorTile2;
-
 
 	sf::RenderTexture texture;
 	sf::Sprite background;

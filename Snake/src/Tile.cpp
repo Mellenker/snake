@@ -1,5 +1,4 @@
 #include "../includes/Tile.hpp"
-#include <iostream>
 
 sf::RectangleShape tile;
 
@@ -9,9 +8,9 @@ Tile::Tile()
 	shape.setPosition(sf::Vector2f(0, 0));
 }
 
-Tile::Tile(float size, float xPos, float yPos) {
+Tile::Tile(float size, float x, float y) {
 	shape.setSize(sf::Vector2f(size, size));
-	shape.setPosition(sf::Vector2f(xPos, yPos));
+	shape.setPosition(sf::Vector2f(x, y));
 }
 
 void Tile::setColor(sf::Color color) {

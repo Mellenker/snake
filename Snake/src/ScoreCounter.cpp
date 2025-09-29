@@ -1,9 +1,6 @@
-#include <iostream>
-
 #include "../includes/ScoreCounter.hpp"
 
 ScoreCounter::ScoreCounter() {
-	std::cout << "scoreCounter created\n";
 	resetPoints();
 	
 	// Font
@@ -18,13 +15,11 @@ ScoreCounter::ScoreCounter() {
 }
 
 void ScoreCounter::addPoint() {
-	std::cout << "Point added\n";
 	score++;
 	text.setString(std::to_string(score));
 }
 
 void ScoreCounter::resetPoints() {
-	std::cout << "Points reset\n";
 	score = 0;
 	text.setString(std::to_string(score));
 }

@@ -1,5 +1,4 @@
 #include "../includes/Apple.hpp"
-#include <iostream>
 
 Apple::Apple()
 	: shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
@@ -9,9 +8,6 @@ Apple::Apple()
 
 void Apple::spawnAtTile(sf::Vector2f tile) {
 	shape.setPosition(tile.x, tile.y);
-
-	std::cout << "Apple spawned at tile: " << tile.x << ", " << tile.y << std::endl;
-
 }
 
 sf::Vector2f Apple::getApplePos() {

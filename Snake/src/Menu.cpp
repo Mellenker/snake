@@ -1,5 +1,4 @@
 #include "../includes/Menu.hpp"
-#include <iostream>
 #include <string>
 
 Menu::Menu()

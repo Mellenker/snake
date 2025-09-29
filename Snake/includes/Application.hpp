@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include "../includes/Game.hpp"
 #include "../includes/Utils.hpp"
 #include "../includes/PauseMenu.hpp"

@@ -1,6 +1,5 @@
-#include "../includes/Snake.hpp"
 #include <SFML/Graphics.hpp>
-#include <iostream>
+#include "../includes/Snake.hpp"
 
 Snake::Snake(int startTilePosX, int startTilePosY)
 	: headPos(startTilePosX* Utils::tileSize, startTilePosY* Utils::tileSize),
@@ -23,7 +22,6 @@ Snake::Snake(int startTilePosX, int startTilePosY)
 }
 
 void Snake::move(sf::Vector2f newPosition) {
-	std::cout << "Moving snake to: " << newPosition.x << ", " << newPosition.y << std::endl;
 	sf::RectangleShape segment = body.front(); // Copy front segment
 	segment.setPosition(newPosition);
 	headPos = newPosition;
@@ -53,25 +51,21 @@ void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 	switch (keyPressed) {
 	case sf::Keyboard::Key::W:
 		if (currDir != DOWN) {
-			std::cout << "UP" << std::endl;
 			currDir = UP;
 		}
 		break;
 	case sf::Keyboard::Key::A:
 		if (currDir != RIGHT) {
-			std::cout << "UP" << std::endl;
 			currDir = LEFT;
 		}
 		break;
 	case sf::Keyboard::Key::S:
 		if (currDir != UP) {
-			std::cout << "DOWN" << std::endl;
 			currDir = DOWN;
 		}
 		break;
 	case sf::Keyboard::Key::D:
 		if (currDir != LEFT) {
-			std::cout << "RIGHT" << std::endl;
 			currDir = RIGHT;
 		}
 		break;

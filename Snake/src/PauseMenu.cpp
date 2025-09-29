@@ -1,6 +1,5 @@
 #include "../includes/Menu.hpp"
 #include "../includes/PauseMenu.hpp"
-#include <iostream>
 
 PauseMenu::PauseMenu()
 	: Menu()

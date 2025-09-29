@@ -1,7 +1,5 @@
 #include "../includes/Application.hpp"
 
-#include <iostream>
-
 Application::Application()
 	: game(),
 	window(),
@@ -16,7 +14,6 @@ Application::Application()
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
 	window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
-
 }
 
 void Application::runGameLoop() {
@@ -32,7 +29,7 @@ sf::Keyboard::Key Application::processEvent() {
 	sf::Event event;
 
 	if (window.pollEvent(event)) {
-		
+
 		if (event.type == sf::Event::Closed) {
 			window.close();
 		}
@@ -44,26 +41,20 @@ sf::Keyboard::Key Application::processEvent() {
 		}
 
 		// Process only latest keyboard input
-		
-		std::cout << "Key pressed" << std::endl;
-
 		switch (gameState) {
 		case Utils::GameState::PLAY:
 			if (lastKeyPressedEvent.key.code == sf::Keyboard::Key::Escape) {
 				gameState = Utils::GameState::PAUSED;
-				std::cout << "PAUSED GAME\n";
 			}
 			else {
 				return lastKeyPressedEvent.key.code;
 			}
 			break;
 		case Utils::GameState::PAUSED:
-			// PAUSE THREAD UNTIL KEY IS PRESSED
 			processPauseMenuInput(lastKeyPressedEvent.key.code);
 			break;
 
 		case Utils::GameState::GAMEOVER:
-			// PAUSE THREAD UNTIL KEY IS PRESSED
 			processGameOverMenuInput(lastKeyPressedEvent.key.code);
 			break;
 
@@ -74,7 +65,6 @@ sf::Keyboard::Key Application::processEvent() {
 	}
 
 	return sf::Keyboard::Key::Unknown;
-
 }
 
 sf::Event Application::checkForLastKeyPressedEvent(sf::Event event) {
@@ -106,7 +96,6 @@ sf::Event Application::checkForLastKeyPressedEvent(sf::Event event) {
 		// No KeyPressed event found, return original event
 		return event;
 	}
-
 }
 
 void Application::processPauseMenuInput(sf::Keyboard::Key key) {
@@ -118,7 +107,6 @@ void Application::processPauseMenuInput(sf::Keyboard::Key key) {
 		pauseMenu.moveDown();
 		break;
 	case sf::Keyboard::Key::Enter:
-		std::cout << "Selected menu item: " << pauseMenu.getHighlightedIdx() << std::endl;
 		pauseMenuAction = pauseMenu.decideAction();
 		break;
 	case sf::Keyboard::Key::Escape:
@@ -137,7 +125,6 @@ void Application::processGameOverMenuInput(sf::Keyboard::Key key) {
 		gameOverMenu.moveDown();
 		break;
 	case sf::Keyboard::Key::Enter:
-		std::cout << "Selected menu item: " << gameOverMenu.getHighlightedIdx() << std::endl;
 		gameOverMenuAction = gameOverMenu.decideAction();
 		break;
 	default:
@@ -163,13 +150,11 @@ void Application::update(sf::Keyboard::Key keyPressed) {
 }
 
 void Application::updatePlayState(sf::Keyboard::Key keyPressed) {
-	std::cout << "Forward Snake Input\n";
 	game.forwardSnakeInput(keyPressed);
 
 	// Returns true if illegal move is attempted
 	if (game.tryUpdateSnakeState()) {
 		gameState = Utils::GameState::GAMEOVER;
-		std::cout << "GAME OVER\n";
 	}
 
 }
@@ -178,12 +163,10 @@ void Application::updatePauseState(sf::Keyboard::Key keyPressed) {
 	switch (pauseMenuAction) {
 	case PauseMenu::Action::UNPAUSE:
 		gameState = Utils::GameState::PLAY;
-		std::cout << "UNPAUSED GAME\n";
 		break;
 	case PauseMenu::Action::RESTART:
 		game.resetGame();
 		gameState = Utils::GameState::PLAY;
-		std::cout << "RESTARTED GAME\n";
 		break;
 	case PauseMenu::Action::EXIT:
 		window.close();
@@ -196,12 +179,10 @@ void Application::updatePauseState(sf::Keyboard::Key keyPressed) {
 }
 
 void Application::updateGameOverState(sf::Keyboard::Key keyPressed) {
-	// Handle game over menu actions
 	switch (gameOverMenuAction) {
 	case GameOverMenu::Action::RESTART:
 		game.resetGame();
 		gameState = Utils::GameState::PLAY;
-		std::cout << "RESTARTED GAME\n";
 		break;
 	case GameOverMenu::Action::EXIT:
 		window.close();

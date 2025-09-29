@@ -5,7 +5,7 @@
 class Tile : public sf::Drawable {
 public:
 	Tile();
-	Tile(float size, float xPos, float yPos);
+	Tile(float size, float x, float y);
 	void setColor(sf::Color color);
 
 private:
