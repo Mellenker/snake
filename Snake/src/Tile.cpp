@@ -1,5 +1,4 @@
 #include "../includes/Tile.hpp"
-#include <SFML/Graphics.hpp>'
 #include <iostream>
 
 sf::RectangleShape tile;

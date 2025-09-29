@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "../includes/ScoreCounter.hpp"
-#include "../includes/Utils.hpp"
 
 ScoreCounter::ScoreCounter() {
 	std::cout << "scoreCounter created\n";

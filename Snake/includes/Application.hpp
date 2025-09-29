@@ -9,8 +9,16 @@ public:
 	Application();
 	void runGameLoop();
 	sf::Keyboard::Key processEvent();
+	sf::Event checkForLastKeyPressedEvent(sf::Event event);
+	void processPauseMenuInput(sf::Keyboard::Key key);
+	void processGameOverMenuInput(sf::Keyboard::Key key);
 	void update(sf::Keyboard::Key keyPressed);
+	void updatePlayState(sf::Keyboard::Key keyPressed);
+	void updatePauseState(sf::Keyboard::Key keyPressed);
+	void updateGameOverState(sf::Keyboard::Key keyPressed);
 	void render();
+
+
 private:
 	Game game;
 

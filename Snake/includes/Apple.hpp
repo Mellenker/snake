@@ -8,7 +8,6 @@ public:
 	Apple();
 	void spawnAtTile(sf::Vector2f tile);
 	sf::Vector2f getApplePos();
-	void draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape shape;
 	static constexpr int initTileX = 0;

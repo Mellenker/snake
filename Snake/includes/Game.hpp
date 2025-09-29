@@ -19,10 +19,11 @@ public:
 	void forwardSnakeInput(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
 	void resetGame();
-	sf::Vector2f getNextSnakeHeadTilePos();
 	bool detectAppleCollision(sf::Vector2f nextHeadPos);
 	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	bool tryUpdateSnakeState();
+
+	sf::Vector2f getNextSnakeHeadPos();
 	sf::Vector2f generateRandomFreeTilePos();
 	
 	// Tile management

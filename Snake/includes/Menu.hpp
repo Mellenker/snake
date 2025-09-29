@@ -1,12 +1,12 @@
 #pragma once  
 
 #include <SFML/Graphics.hpp>
-#include <map>
+#include "../includes/Utils.hpp"
 
 // Parent class for menus
 class Menu {
 public:
-	Menu(int windowSizeX, int windowSizeY);
+	Menu();
 	void setTitle(std::string title);
 	void addItem(std::string string);
 	void draw(sf::RenderWindow& window);
@@ -22,7 +22,6 @@ protected:
 
 	int highlightedIdx;
 	static constexpr int highlightedIdxInit = 0;
-	std::string highlightedItem;
 
 	std::vector<sf::Text> items;
 	sf::Font font;

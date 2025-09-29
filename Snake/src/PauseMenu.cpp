@@ -1,10 +1,9 @@
 #include "../includes/Menu.hpp"
 #include "../includes/PauseMenu.hpp"
-#include "../includes/Utils.hpp"
 #include <iostream>
 
-PauseMenu::PauseMenu(int windowSizeX, int windowSizeY)
-	: Menu(windowSizeX, windowSizeY)
+PauseMenu::PauseMenu()
+	: Menu()
 {
 	setTitle("Paused");
 

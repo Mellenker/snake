@@ -1,13 +1,12 @@
 #include "../includes/Menu.hpp"
-#include "../includes/Utils.hpp"
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 
-Menu::Menu(int windowSizeX, int windowSizeY)
-	: windowSizeX(windowSizeX), windowSizeY(windowSizeY), highlightedIdx(highlightedIdxInit)
+Menu::Menu()
+	: windowSizeX(Utils::mapSizeInTilesX * Utils::tileSize), 
+	windowSizeY(Utils::mapSizeInTilesY * Utils::tileSize), 
+	highlightedIdx(highlightedIdxInit)
 {
-	// Load font
 	font.loadFromFile("resources\\arial.ttf");
 }
 
@@ -17,15 +16,12 @@ void Menu::setTitle(std::string title) {
 	titleText.setCharacterSize(42);
 	titleText.setStyle(sf::Text::Bold);
 
-	// Center the origin of the text
 	centerOrigin(titleText);
-	// Set the position to the upper center of the window
 	titleText.setPosition(windowSizeX / 2.0f, windowSizeY / 2.5f);
 }
 
 void Menu::addItem(std::string string) {
 	sf::Text itemText = sf::Text(string, font, 30);
-	// Center the origin of the text
 	centerOrigin(itemText);
 
 	itemText.setOutlineColor(sf::Color::Blue);

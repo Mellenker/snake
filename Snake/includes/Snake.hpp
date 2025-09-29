@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../includes/Utils.hpp"
-#include <vector>
+
 
 class Snake : public sf::Drawable {
 public:
@@ -10,7 +10,6 @@ public:
 	void move(sf::Vector2f newPosition);
 	void draw(sf::RenderWindow& window);
 	sf::Vector2f getHeadPos();
-	void setHeadTilePos(sf::Vector2f newHeadPos);
 	void addSegment();
 	sf::Vector2f getTailEnd();
 	enum Direction { NONE, UP, LEFT, RIGHT, DOWN };

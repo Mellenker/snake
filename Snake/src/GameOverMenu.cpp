@@ -2,8 +2,8 @@
 #include "../includes/GameOverMenu.hpp"
 #include <iostream>
 
-GameOverMenu::GameOverMenu(int windowSizeX, int windowSizeY)
-	: Menu(windowSizeX, windowSizeY)
+GameOverMenu::GameOverMenu()
+	: Menu()
 {
 	setTitle("Game Over");
 

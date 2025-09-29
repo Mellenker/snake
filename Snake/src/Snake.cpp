@@ -1,10 +1,9 @@
 #include "../includes/Snake.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../includes/Tile.hpp"
 
-Snake::Snake(int startPosX, int startPosY)
-	: headPos(startPosX* Utils::tileSize, startPosY* Utils::tileSize),
+Snake::Snake(int startTilePosX, int startTilePosY)
+	: headPos(startTilePosX* Utils::tileSize, startTilePosY* Utils::tileSize),
 	colorHead(sf::Color(103, 0, 255)),
 	colorTail(sf::Color(143, 0, 204)),
 	currDir(NONE)
@@ -38,9 +37,8 @@ sf::Vector2f Snake::getHeadPos() {
 	return headPos;
 }
 
-
 void Snake::addSegment() {
-	sf::RectangleShape segment = body.back(); // Copy front segment
+	sf::RectangleShape segment = body.back(); // Copy back segment
 	segment.setPosition(tailEnd);
 	segment.setFillColor(colorTail);
 	body.insert(body.end(), segment);
