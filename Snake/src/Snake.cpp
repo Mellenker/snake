@@ -15,7 +15,7 @@ Snake::Snake(int startTilePosX, int startTilePosY)
 	tail.setFillColor(colorTail);
 
 	head.setPosition(headPos);
-	tail.setPosition(headPos.x - Utils::tileSize, headPos.y);
+	tail.setPosition(sf::Vector2f(headPos.x - Utils::tileSize, headPos.y));
 
 	body.push_back(head);
 	body.push_back(tail);

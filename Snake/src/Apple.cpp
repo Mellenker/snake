@@ -7,7 +7,7 @@ Apple::Apple()
 }
 
 void Apple::spawnAtTile(sf::Vector2f tile) {
-	shape.setPosition(tile.x, tile.y);
+	shape.setPosition(sf::Vector2f(tile.x, tile.y));
 }
 
 sf::Vector2f Apple::getApplePos() {

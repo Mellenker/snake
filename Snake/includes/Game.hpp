@@ -21,7 +21,7 @@ public:
 	bool detectAppleCollision(sf::Vector2f nextHeadPos);
 	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	bool tryUpdateSnakeState();
-
+	void initializeFreeTiles();
 	sf::Vector2f getNextSnakeHeadPos();
 	sf::Vector2f generateRandomFreeTilePos();
 	

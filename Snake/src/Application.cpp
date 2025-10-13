@@ -9,7 +9,7 @@ Application::Application()
 {
 
 	// Set window size based on tile size and map size
-	window.create(sf::VideoMode(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize), "Snake Game");
+	window.create(sf::VideoMode({ Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize }), "Snake Game");
 
 	window.setTitle("Snake");
 	window.setFramerateLimit(maxFPS);
@@ -26,77 +26,87 @@ void Application::runGameLoop() {
 }
 
 sf::Keyboard::Key Application::processEvent() {
-	sf::Event event;
 
-	if (window.pollEvent(event)) {
+	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
+	
+	while (const std::optional<sf::Event> event = window.pollEvent()) {
+		if (!event) {
+			continue;
+		}
 
-		if (event.type == sf::Event::Closed) {
+		if (event->is<sf::Event::Closed>()) {
 			window.close();
 		}
 
-		sf::Event lastKeyPressedEvent = checkForLastKeyPressedEvent(event);
-
-		if (lastKeyPressedEvent.type != sf::Event::KeyPressed) {
-			return sf::Keyboard::Key::Unknown;
+		// Drain queue and get latest keyboard input
+		while (const std::optional<sf::Event> tempEvent = window.pollEvent()) {
+			if (tempEvent->is<sf::Event::Closed>()) {
+				window.close();
+				break;
+			}
+			if (tempEvent->is<sf::Event::KeyPressed>()) {
+				lastKeyPressedEvent = tempEvent;
+			}
 		}
 
+	}
+
+	if (!lastKeyPressedEvent) {
+		return sf::Keyboard::Key::Unknown; // No key pressed
+	} 
+	else {
 		// Process only latest keyboard input
+
+		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
 		switch (gameState) {
 		case Utils::GameState::PLAY:
-			if (lastKeyPressedEvent.key.code == sf::Keyboard::Key::Escape) {
+			if (keyCode == sf::Keyboard::Key::Escape) {
 				gameState = Utils::GameState::PAUSED;
 			}
 			else {
-				return lastKeyPressedEvent.key.code;
+				return keyCode;
 			}
 			break;
 		case Utils::GameState::PAUSED:
-			processPauseMenuInput(lastKeyPressedEvent.key.code);
+			processPauseMenuInput(keyCode);
 			break;
 
 		case Utils::GameState::GAMEOVER:
-			processGameOverMenuInput(lastKeyPressedEvent.key.code);
+			processGameOverMenuInput(keyCode);
 			break;
 
 		default:
 			break;
 		}
-
 	}
-
-	return sf::Keyboard::Key::Unknown;
 }
 
-sf::Event Application::checkForLastKeyPressedEvent(sf::Event event) {
-	sf::Event lastKeyPressedEvent;
-	bool foundKeyPressed = false;
+// ANVÄND getIF FÖR ATT KOLLA EVENT TYP
+/*
+std::optional<sf::Keyboard::Key> Application::checkForLastKeyPressedEvent(const sf::Event& event) {
 
-	// Check the first event
-	if (event.type == sf::Event::KeyPressed) {
-		lastKeyPressedEvent = event;
-		foundKeyPressed = true;
+	if (event.is<sf::Event::KeyPressed>()) {
+		return event.getIf<sf::Event::KeyPressed>()->code;
 	}
 
-	// Drain the rest of the queue, keeping only the last KeyPressed event
-	while (window.pollEvent(event)) {
-		if (event.type == sf::Event::Closed) {
+	const sf::Event* lastKeyPressedEvent;
+
+
+	while (const std::optional<sf::Event> tempEvent = window.pollEvent()) {
+		if (tempEvent->is<sf::Event::Closed>()) {
 			window.close();
 			break;
 		}
-		if (event.type == sf::Event::KeyPressed) {
-			lastKeyPressedEvent = event;
-			foundKeyPressed = true;
+		if (tempEvent->is<sf::Event::KeyPressed>()) {
+			lastKeyPressedEvent = &tempEvent.value();
 		}
 	}
 
-	if (foundKeyPressed) {
-		return lastKeyPressedEvent;
-	}
-	else {
-		// No KeyPressed event found, return original event
-		return event;
+	if (event.is<sf::Event::KeyPressed>()) {
+		return lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
 	}
 }
+*/
 
 void Application::processPauseMenuInput(sf::Keyboard::Key key) {
 	switch (key) {

@@ -2,11 +2,14 @@
 #include <string>
 
 Menu::Menu()
-	: windowSizeX(Utils::mapSizeInTilesX * Utils::tileSize), 
-	windowSizeY(Utils::mapSizeInTilesY * Utils::tileSize), 
-	highlightedIdx(highlightedIdxInit)
+	: windowSizeX(Utils::mapSizeInTilesX* Utils::tileSize),
+	windowSizeY(Utils::mapSizeInTilesY* Utils::tileSize),
+	highlightedIdx(highlightedIdxInit),
+	titleText(font)
 {
-	font.loadFromFile("resources\\arial.ttf");
+
+	font.openFromFile("resources\\arial.ttf");
+
 }
 
 void Menu::setTitle(std::string title) {
@@ -16,18 +19,18 @@ void Menu::setTitle(std::string title) {
 	titleText.setStyle(sf::Text::Bold);
 
 	centerOrigin(titleText);
-	titleText.setPosition(windowSizeX / 2.0f, windowSizeY / 2.5f);
+	titleText.setPosition(sf::Vector2f(windowSizeX / 2.0f, windowSizeY / 2.5f));
 }
 
 void Menu::addItem(std::string string) {
-	sf::Text itemText = sf::Text(string, font, 30);
+	sf::Text itemText(font, string, 30);
 	centerOrigin(itemText);
 
 	itemText.setOutlineColor(sf::Color::Blue);
 
 	// Set the position in relation to previous items
 	if (items.empty()) {
-		itemText.setPosition(windowSizeX / 2.0f, windowSizeY / 2.0f);
+		itemText.setPosition(sf::Vector2f(windowSizeX / 2.0f, windowSizeY / 2.0f));
 
 		// Highlight first item by default
 		itemText.setOutlineThickness(3);
@@ -35,7 +38,7 @@ void Menu::addItem(std::string string) {
 	else {
 		float prevItemX = items.back().getPosition().x;
 		float prevItemY = items.back().getPosition().y;
-		itemText.setPosition(prevItemX, prevItemY + 75);
+		itemText.setPosition(sf::Vector2f(prevItemX, prevItemY + 75));
 	}
 
 	items.push_back(itemText);
@@ -67,7 +70,8 @@ int Menu::getHighlightedIdx() {
 
 void Menu::centerOrigin(sf::Text& text) {
 	sf::FloatRect textRect = text.getLocalBounds();
-	text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	sf::Vector2f origin(textRect.position.x + textRect.position.y / 2.0f, textRect.size.x + textRect.size.y / 2.0f);
+	text.setOrigin(origin);
 }
 
 void Menu::draw(sf::RenderWindow& window) {

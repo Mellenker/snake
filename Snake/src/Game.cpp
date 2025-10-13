@@ -4,23 +4,27 @@ Game::Game()
 	: snake(initSnakeTilePosX, initSnakeTilePosY),
 	apple(),
 	colorTile1(sf::Color(0, 132, 9)),
-	colorTile2(sf::Color(0, 118, 9))
+	colorTile2(sf::Color(0, 118, 9)),
+	background(texture.getTexture())
 {
 	// Setup background
 	spawnTiles(texture);
-	background = sf::Sprite(texture.getTexture());
 
-	// Initialize free tiles
-	for (int i = 0; i < (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY); i++) {
-		freeTiles.push_back(i);
-		posInFreeTiles.push_back(i);
-	}
+	initializeFreeTiles();
 
 	// Occupy initial snake tiles
 	occupyTile(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
 	occupyTile((initSnakeTilePosX * Utils::tileSize) - Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
 
 	apple.spawnAtTile(generateRandomFreeTilePos());
+}
+
+void Game::initializeFreeTiles() {
+
+	for (int i = 0; i < (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY); i++) {
+		freeTiles.push_back(i);
+		posInFreeTiles.push_back(i);
+	}
 }
 
 void Game::drawObjects(sf::RenderWindow& window) {
@@ -37,8 +41,7 @@ void Game::forwardSnakeInput(sf::Keyboard::Key keyPressed) {
 // Populate map with tiles
 void Game::spawnTiles(sf::RenderTexture& texture) {
 
-	texture.create(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize);
-
+	texture.resize(sf::Vector2u(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize)); 
 	int tileNum = 0;
 
 	int xPos = 0;
@@ -135,7 +138,7 @@ bool Game::detectAppleCollision(sf::Vector2f nextHeadPos) {
 }
 
 int getTileID(int x, int y) {
-	return (y / Utils::tileSize) * Utils::mapSizeInTilesX + (x / Utils::tileSize);
+	return (((y / Utils::tileSize) * Utils::mapSizeInTilesX) + (x / Utils::tileSize));
 }
 
 bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
@@ -169,10 +172,7 @@ void Game::resetGame() {
 
 	freeTiles.clear();
 	posInFreeTiles.clear();
-	for (int i = 0; i < (Utils::mapSizeInTilesX * Utils::mapSizeInTilesY); i++) {
-		freeTiles.push_back(i);
-		posInFreeTiles.push_back(i);
-	}
+	initializeFreeTiles();
 
 	// Occupy initial snake tiles
 	occupyTile(initSnakeTilePosX * Utils::tileSize, initSnakeTilePosY * Utils::tileSize);
@@ -189,6 +189,7 @@ void Game::resetGame() {
 	apple.spawnAtTile(nextApplePos);
 	scoreCounter.resetPoints();
 }
+
 
 
 

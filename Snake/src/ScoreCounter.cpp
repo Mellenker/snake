@@ -1,16 +1,18 @@
 #include "../includes/ScoreCounter.hpp"
 
-ScoreCounter::ScoreCounter() {
+ScoreCounter::ScoreCounter()
+	: text(font)
+{
 	resetPoints();
 	
 	// Font
-	font.loadFromFile("resources\\arial.ttf");
+	font.openFromFile("resources\\arial.ttf");
 	text.setFont(font);
 	text.setCharacterSize(36);
 	text.setStyle(sf::Text::Bold);
 
 	// Positioning
-	text.setPosition((Utils::mapSizeInTilesX * Utils::tileSize) - Utils::tileSize, 0);
+	text.setPosition(sf::Vector2f((Utils::mapSizeInTilesX * Utils::tileSize) - Utils::tileSize, 0));
 
 }
 

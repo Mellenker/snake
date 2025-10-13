@@ -1,5 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <optional>
 #include "../includes/Game.hpp"
 #include "../includes/Utils.hpp"
 #include "../includes/PauseMenu.hpp"
@@ -10,7 +13,7 @@ public:
 	Application();
 	void runGameLoop();
 	sf::Keyboard::Key processEvent();
-	sf::Event checkForLastKeyPressedEvent(sf::Event event);
+	std::optional<sf::Keyboard::Key> checkForLastKeyPressedEvent(const sf::Event& event);
 	void processPauseMenuInput(sf::Keyboard::Key key);
 	void processGameOverMenuInput(sf::Keyboard::Key key);
 	void update(sf::Keyboard::Key keyPressed);
