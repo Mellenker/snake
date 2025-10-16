@@ -6,7 +6,7 @@
 #include "../includes/Utils.hpp"
 #include "../includes/Snake.hpp"  
 #include "../includes/Apple.hpp"  
-#include "../includes/Tile.hpp"  
+#include "../includes/Colors.hpp"
 #include "../includes/PauseMenu.hpp"
 #include "../includes/GameOverMenu.hpp"
 #include "../includes/ScoreCounter.hpp"
@@ -31,19 +31,18 @@ public:
 
 private:
 
-	static constexpr int initSnakeTilePosX = 2;
-	static constexpr int initSnakeTilePosY = 2;
-	const sf::Color colorTile1;
-	const sf::Color colorTile2;
+	int initSnakeTilePosX;
+	int initSnakeTilePosY;
+
+	Snake snake;
+	Apple apple;
+
+	std::vector<int> freeTiles; // Vector of all currently free tiles
+	std::vector<int> posInFreeTiles; // Indexes of all tiles within the freeTiles vector (occupied tiles have index -1)
 
 	sf::RenderTexture texture;
 	sf::Sprite background;
 
 	ScoreCounter scoreCounter;
 
-	Apple apple;
-	Snake snake;
-
-	std::vector<int> freeTiles; // Vector of all currently free tiles
-	std::vector<int> posInFreeTiles; // Indexes of all tiles within the freeTiles vector (occupied tiles have index -1)
 };

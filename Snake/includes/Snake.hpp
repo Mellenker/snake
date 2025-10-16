@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../includes/Utils.hpp"
+#include "../includes/Colors.hpp"
 
 class Snake : public sf::Drawable {
 public:

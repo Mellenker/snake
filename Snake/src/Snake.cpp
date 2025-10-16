@@ -3,8 +3,8 @@
 
 Snake::Snake(int startTilePosX, int startTilePosY)
 	: headPos(startTilePosX* Utils::tileSize, startTilePosY* Utils::tileSize),
-	colorHead(sf::Color(103, 0, 255)),
-	colorTail(sf::Color(143, 0, 204)),
+	colorHead(Colors::snakeHead),
+	colorTail(Colors::snakeTail),
 	currDir(NONE)
 {
 	// Create snake head and tail 

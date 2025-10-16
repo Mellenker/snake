@@ -3,7 +3,7 @@
 Apple::Apple()
 	: shape(sf::Vector2f(Utils::tileSize, Utils::tileSize))
 {
-	shape.setFillColor(sf::Color::Red);
+	shape.setFillColor(Colors::appleColor);
 }
 
 void Apple::spawnAtTile(sf::Vector2f tile) {

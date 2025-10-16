@@ -1,10 +1,10 @@
 #include "../includes/Game.hpp"
 
 Game::Game()
-	: snake(initSnakeTilePosX, initSnakeTilePosY),
+	: initSnakeTilePosX(2),
+	initSnakeTilePosY(2),
+	snake(initSnakeTilePosX, initSnakeTilePosY),
 	apple(),
-	colorTile1(sf::Color(0, 132, 9)),
-	colorTile2(sf::Color(0, 118, 9)),
 	background(texture.getTexture())
 {
 	// Setup background
@@ -49,12 +49,13 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 	bool colorFlag = true; // Flag to alternate colors
 	for (int yIt = 0; yIt < Utils::mapSizeInTilesY; yIt++) {
 		for (int xIt = 0; xIt < Utils::mapSizeInTilesX; xIt++) {
-			Tile tile(Utils::tileSize, xPos, yPos);
+			sf::RectangleShape tile(sf::Vector2f(Utils::tileSize, Utils::tileSize));
+			tile.setPosition(sf::Vector2f(xPos, yPos));
 
 			if (colorFlag)
-				tile.setColor(colorTile1);
+				tile.setFillColor(Colors::grassDark);
 			else
-				tile.setColor(colorTile2);
+				tile.setFillColor(Colors::grassLight);
 			
 			tileNum++;
 

@@ -1,12 +1,12 @@
 #include "../includes/ScoreCounter.hpp"
 
 ScoreCounter::ScoreCounter()
-	: text(font)
+	: font("resources\\arial.ttf"),
+	text(font)
 {
 	resetPoints();
 	
 	// Font
-	font.openFromFile("resources\\arial.ttf");
 	text.setFont(font);
 	text.setCharacterSize(36);
 	text.setStyle(sf::Text::Bold);

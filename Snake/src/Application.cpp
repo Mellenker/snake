@@ -5,9 +5,10 @@ Application::Application()
 	window(),
 	gameState(Utils::GameState::PLAY),
 	pauseMenu(),
-	gameOverMenu()
+	pauseMenuAction(PauseMenu::Action::NONE),
+	gameOverMenu(),
+	gameOverMenuAction(GameOverMenu::Action::NONE)
 {
-
 	// Set window size based on tile size and map size
 	window.create(sf::VideoMode({ Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize }), "Snake Game");
 
@@ -48,7 +49,6 @@ sf::Keyboard::Key Application::processEvent() {
 				lastKeyPressedEvent = tempEvent;
 			}
 		}
-
 	}
 
 	if (!lastKeyPressedEvent) {

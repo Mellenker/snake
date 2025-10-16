@@ -18,11 +18,21 @@ public:
 protected:
 	int windowSizeX;
 	int windowSizeY;
+
+	sf::Font font;
 	sf::Text titleText;
+	std::vector<sf::Text> items;
 
 	int highlightedIdx;
-	static constexpr int highlightedIdxInit = 0;
 
-	std::vector<sf::Text> items;
-	sf::Font font;
 };
+
+/*
+Summary:
+Because sf::Text requires a font at construction, and your font is loaded in the constructor body, you 
+should use a pointer or std::optional for sf::Text so you can con
+struct it after the font is loaded. This is a safe and modern C++17 approach.
+
+NÄR SKA MAN ANVÄNDA POINTERS/REFERENCES? ÄR DETA ETT BRA LÄGE ATT ANVÄNDA POINTERS?
+
+*/

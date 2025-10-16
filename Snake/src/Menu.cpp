@@ -4,16 +4,13 @@
 Menu::Menu()
 	: windowSizeX(Utils::mapSizeInTilesX* Utils::tileSize),
 	windowSizeY(Utils::mapSizeInTilesY* Utils::tileSize),
-	highlightedIdx(highlightedIdxInit),
-	titleText(font)
-{
-
-	font.openFromFile("resources\\arial.ttf");
-
-}
+	font("resources\\arial.ttf"),
+	titleText(font),
+	highlightedIdx(0)
+{}
 
 void Menu::setTitle(std::string title) {
-	titleText.setFont(font);
+	//titleText.setFont(font);
 	titleText.setString(title);
 	titleText.setCharacterSize(42);
 	titleText.setStyle(sf::Text::Bold);

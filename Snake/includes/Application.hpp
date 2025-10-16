@@ -22,17 +22,17 @@ public:
 	void updateGameOverState(sf::Keyboard::Key keyPressed);
 	void render();
 
-
-private:
-	Game game;
+private: 
+	Game game; 
+	sf::RenderWindow window;
 
 	Utils::GameState gameState;
 	PauseMenu pauseMenu;
-	PauseMenu::Action pauseMenuAction = PauseMenu::Action::NONE;
+	PauseMenu::Action pauseMenuAction;
 	GameOverMenu gameOverMenu;
-	GameOverMenu::Action gameOverMenuAction = GameOverMenu::Action::NONE;
+	GameOverMenu::Action gameOverMenuAction;
 
 	static constexpr int maxFPS = 4;
 
-	sf::RenderWindow window;
+
 };
