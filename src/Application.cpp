@@ -1,5 +1,7 @@
 #include "Application.hpp"
 
+#include <iostream>
+
 Application::Application()
 	: game(),
 	window(),
@@ -39,20 +41,28 @@ sf::Keyboard::Key Application::processEvent() {
 			window.close();
 		}
 
+		if (event->is<sf::Event::KeyPressed>()) {
+			lastKeyPressedEvent = event;
+			continue;
+		}
+
 		// Drain queue and get latest keyboard input
 		while (const std::optional<sf::Event> tempEvent = window.pollEvent()) {
+			
 			if (tempEvent->is<sf::Event::Closed>()) {
 				window.close();
 				break;
 			}
 			if (tempEvent->is<sf::Event::KeyPressed>()) {
 				lastKeyPressedEvent = tempEvent;
+				std::cout << "KEY PRESSED" << "\n"; 
 			}
 		}
 	}
 
 	if (!lastKeyPressedEvent) {
 		return sf::Keyboard::Key::Unknown; // No key pressed
+		std::cout << "NO KEY PRESSED" << "\n";
 	} 
 	else {
 		// Process only latest keyboard input

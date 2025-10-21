@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include "Snake.hpp"
 
+#include <iostream>
+
 Snake::Snake(int startTilePosX, int startTilePosY)
 	: headPos(startTilePosX* Utils::tileSize, startTilePosY* Utils::tileSize),
 	colorHead(Colors::snakeHead),
@@ -51,21 +53,25 @@ void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 	switch (keyPressed) {
 	case sf::Keyboard::Key::W:
 		if (currDir != DOWN) {
+			std::cout << "UP" << "\n";
 			currDir = UP;
 		}
 		break;
 	case sf::Keyboard::Key::A:
 		if (currDir != RIGHT) {
+			std::cout << "LEFT" << "\n";
 			currDir = LEFT;
 		}
 		break;
 	case sf::Keyboard::Key::S:
 		if (currDir != UP) {
+			std::cout << "DOWN" << "\n";
 			currDir = DOWN;
 		}
 		break;
 	case sf::Keyboard::Key::D:
 		if (currDir != LEFT) {
+			std::cout << "RIGHT" << "\n";
 			currDir = RIGHT;
 		}
 		break;
