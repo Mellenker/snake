@@ -39,6 +39,8 @@ void Game::forwardSnakeInput(sf::Keyboard::Key keyPressed) {
 
 // Populate map with tiles
 void Game::spawnTiles(sf::RenderTexture& texture) {
+
+	texture.resize(sf::Vector2u(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize));
 	int tileNum = 0;
 
 	int xPos = 0;
