@@ -4,6 +4,7 @@ Game::Game()
 	: initSnakeTilePosX(2),
 	initSnakeTilePosY(2),
 	snake(initSnakeTilePosX, initSnakeTilePosY),
+	texture(sf::Vector2u(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize)),
 	background(texture.getTexture()) // Texture empty at this point
 {
 	// Setup background
@@ -40,7 +41,6 @@ void Game::forwardSnakeInput(sf::Keyboard::Key keyPressed) {
 // Populate map with tiles
 void Game::spawnTiles(sf::RenderTexture& texture) {
 
-	texture.resize(sf::Vector2u(Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize));
 	int tileNum = 0;
 
 	int xPos = 0;
