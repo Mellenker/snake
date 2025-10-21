@@ -25,6 +25,7 @@ void Application::runGameLoop() {
 		sf::Keyboard::Key keyPressed = processEvent();
 		update(keyPressed);
 		render();
+		std::cout << "FRAME" << "\n";
 	}
 }
 

@@ -10,13 +10,12 @@ Menu::Menu()
 {}
 
 void Menu::setTitle(std::string title) {
-	//titleText.setFont(font);
 	titleText.setString(title);
 	titleText.setCharacterSize(42);
 	titleText.setStyle(sf::Text::Bold);
 
 	centerOrigin(titleText);
-	titleText.setPosition(sf::Vector2f(windowSizeX / 2.0f, windowSizeY / 2.5f));
+	titleText.setPosition(sf::Vector2f(windowSizeX / 2.0f, windowSizeY / 3.0f));
 }
 
 void Menu::addItem(std::string string) {
@@ -67,7 +66,7 @@ int Menu::getHighlightedIdx() {
 
 void Menu::centerOrigin(sf::Text& text) {
 	sf::FloatRect textRect = text.getLocalBounds();
-	sf::Vector2f origin(textRect.position.x + textRect.position.y / 2.0f, textRect.size.x + textRect.size.y / 2.0f);
+	sf::Vector2f origin(textRect.size.x / 2.0f, textRect.size.y / 2.0f);
 	text.setOrigin(origin);
 }
 
