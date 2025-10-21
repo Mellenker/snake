@@ -79,6 +79,8 @@ sf::Keyboard::Key Application::processEvent() {
 			break;
 		}
 	}
+
+	return sf::Keyboard::Key::Unknown;
 }
 
 // ANV�ND getIF F�R ATT KOLLA EVENT TYP
