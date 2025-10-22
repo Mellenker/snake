@@ -22,52 +22,49 @@ Application::Application()
 void Application::runGameLoop() {
 
 	while (window.isOpen()) {
-		sf::Keyboard::Key keyPressed = processEvent();
+		// Block for events only when in menus to avoid busy waiting
+		bool isInMenu = (gameState == Utils::GameState::PAUSED || gameState == Utils::GameState::GAMEOVER);
+		sf::Keyboard::Key keyPressed = processEvent(isInMenu);
 		update(keyPressed);
 		render();
 		std::cout << "FRAME" << "\n";
 	}
 }
 
-sf::Keyboard::Key Application::processEvent() {
+sf::Keyboard::Key Application::processEvent(bool isInMenu) {
 
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
-	
-	while (const std::optional<sf::Event> event = window.pollEvent()) {
-		if (!event) {
-			continue;
-		}
 
-		if (event->is<sf::Event::Closed>()) {
+	auto handleEvent = [&](const sf::Event& ev) {
+		if (ev.is<sf::Event::Closed>()) {
 			window.close();
+			return;
 		}
-
-		if (event->is<sf::Event::KeyPressed>()) {
-			lastKeyPressedEvent = event;
-			continue;
+		if (ev.is<sf::Event::KeyPressed>()) {
+			lastKeyPressedEvent = ev;
 		}
+	};
 
-		// Drain queue and get latest keyboard input
-		while (const std::optional<sf::Event> tempEvent = window.pollEvent()) {
-			
-			if (tempEvent->is<sf::Event::Closed>()) {
-				window.close();
-				break;
+	if (isInMenu) {
+		// Ensure no busy waiting in menus
+		if (const std::optional<sf::Event> ev = window.waitEvent()) {
+			handleEvent(ev.value());
+			// Drain any additional events in queue, keep latest key pressed
+			while (const std::optional<sf::Event> pe = window.pollEvent()) {
+				handleEvent(pe.value());
 			}
-			if (tempEvent->is<sf::Event::KeyPressed>()) {
-				lastKeyPressedEvent = tempEvent;
-				std::cout << "KEY PRESSED" << "\n"; 
-			}
+		}
+	} else {
+		while (const std::optional<sf::Event> ev = window.pollEvent()) {
+			handleEvent(ev.value());
 		}
 	}
 
 	if (!lastKeyPressedEvent) {
-		return sf::Keyboard::Key::Unknown; // No key pressed
-		std::cout << "NO KEY PRESSED" << "\n";
-	} 
+		return sf::Keyboard::Key::Unknown; // No key was pressed
+	}
 	else {
 		// Process only latest keyboard input
-
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
 		switch (gameState) {
 		case Utils::GameState::PLAY:
@@ -91,35 +88,8 @@ sf::Keyboard::Key Application::processEvent() {
 		}
 	}
 
-	return sf::Keyboard::Key::Unknown;
+	return sf::Keyboard::Key::Unknown; // No key was pressed
 }
-
-// ANV�ND getIF F�R ATT KOLLA EVENT TYP
-/*
-std::optional<sf::Keyboard::Key> Application::checkForLastKeyPressedEvent(const sf::Event& event) {
-
-	if (event.is<sf::Event::KeyPressed>()) {
-		return event.getIf<sf::Event::KeyPressed>()->code;
-	}
-
-	const sf::Event* lastKeyPressedEvent;
-
-
-	while (const std::optional<sf::Event> tempEvent = window.pollEvent()) {
-		if (tempEvent->is<sf::Event::Closed>()) {
-			window.close();
-			break;
-		}
-		if (tempEvent->is<sf::Event::KeyPressed>()) {
-			lastKeyPressedEvent = &tempEvent.value();
-		}
-	}
-
-	if (event.is<sf::Event::KeyPressed>()) {
-		return lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
-	}
-}
-*/
 
 void Application::processPauseMenuInput(sf::Keyboard::Key key) {
 	switch (key) {

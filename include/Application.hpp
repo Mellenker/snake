@@ -12,7 +12,7 @@ class Application {
 public:
 	Application();
 	void runGameLoop();
-	sf::Keyboard::Key processEvent();
+	sf::Keyboard::Key processEvent(bool isInMenu = false);
 	std::optional<sf::Keyboard::Key> checkForLastKeyPressedEvent(const sf::Event& event);
 	void processPauseMenuInput(sf::Keyboard::Key key);
 	void processGameOverMenuInput(sf::Keyboard::Key key);
