@@ -3,12 +3,8 @@
 #include <iostream>
 
 Application::Application()
-	: game(),
-	window(),
-	gameState(Utils::GameState::PLAY),
-	pauseMenu(),
+	: gameState(Utils::GameState::PLAYING),
 	pauseMenuAction(PauseMenu::Action::NONE),
-	gameOverMenu(),
 	gameOverMenuAction(GameOverMenu::Action::NONE)
 {
 	// Set window size based on tile size and map size
@@ -67,7 +63,7 @@ sf::Keyboard::Key Application::processEvent(bool isInMenu) {
 		// Process only latest keyboard input
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
 		switch (gameState) {
-		case Utils::GameState::PLAY:
+		case Utils::GameState::PLAYING:
 			if (keyCode == sf::Keyboard::Key::Escape) {
 				gameState = Utils::GameState::PAUSED;
 			}
@@ -128,7 +124,7 @@ void Application::processGameOverMenuInput(sf::Keyboard::Key key) {
 void Application::update(sf::Keyboard::Key keyPressed) {
 
 	switch (gameState) {
-	case Utils::GameState::PLAY:
+	case Utils::GameState::PLAYING:
 		updatePlayState(keyPressed);
 		break;
 	case Utils::GameState::PAUSED:
@@ -155,11 +151,11 @@ void Application::updatePlayState(sf::Keyboard::Key keyPressed) {
 void Application::updatePauseState(sf::Keyboard::Key keyPressed) {
 	switch (pauseMenuAction) {
 	case PauseMenu::Action::UNPAUSE:
-		gameState = Utils::GameState::PLAY;
+		gameState = Utils::GameState::PLAYING;
 		break;
 	case PauseMenu::Action::RESTART:
 		game.resetGame();
-		gameState = Utils::GameState::PLAY;
+		gameState = Utils::GameState::PLAYING;
 		break;
 	case PauseMenu::Action::EXIT:
 		window.close();
@@ -175,7 +171,7 @@ void Application::updateGameOverState(sf::Keyboard::Key keyPressed) {
 	switch (gameOverMenuAction) {
 	case GameOverMenu::Action::RESTART:
 		game.resetGame();
-		gameState = Utils::GameState::PLAY;
+		gameState = Utils::GameState::PLAYING;
 		break;
 	case GameOverMenu::Action::EXIT:
 		window.close();

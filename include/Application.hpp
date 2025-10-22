@@ -7,6 +7,7 @@
 #include "Utils.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverMenu.hpp"
+#include "GameState.hpp"
 
 class Application {
 public:
@@ -34,5 +35,5 @@ private:
 
 	static constexpr int maxFPS = 4;
 
-
+	std::unique_ptr<GameState> currentState;
 };

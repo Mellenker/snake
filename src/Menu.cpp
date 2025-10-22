@@ -5,7 +5,7 @@ Menu::Menu()
 	: windowSizeX(Utils::mapSizeInTilesX* Utils::tileSize),
 	windowSizeY(Utils::mapSizeInTilesY* Utils::tileSize),
 	font("resources/arial.ttf"),
-	titleText(font),
+	titleText(font), 
 	highlightedIdx(0)
 {}
 

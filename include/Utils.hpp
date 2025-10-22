@@ -2,7 +2,7 @@
 
 struct Utils {
     enum class GameState {
-        PLAY,
+        PLAYING,
         PAUSED,
         GAMEOVER
     };
