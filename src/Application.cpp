@@ -4,8 +4,9 @@
 
 Application::Application()
 	: gameState(Utils::GameState::PLAYING),
-	pauseMenuAction(PauseMenu::Action::NONE),
-	gameOverMenuAction(GameOverMenu::Action::NONE)
+	  pauseMenuAction(PauseMenu::Action::NONE),
+	  gameOverMenuAction(GameOverMenu::Action::NONE),
+	  currentState(std::make_unique<PlayingState>(window, game))
 {
 	// Set window size based on tile size and map size
 	window.create(sf::VideoMode({ Utils::mapSizeInTilesX * Utils::tileSize, Utils::mapSizeInTilesY * Utils::tileSize }), "Snake Game");
@@ -62,6 +63,7 @@ sf::Keyboard::Key Application::processEvent(bool isInMenu) {
 	else {
 		// Process only latest keyboard input
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
+		Context context;
 		switch (gameState) {
 		case Utils::GameState::PLAYING:
 			if (keyCode == sf::Keyboard::Key::Escape) {
@@ -72,7 +74,10 @@ sf::Keyboard::Key Application::processEvent(bool isInMenu) {
 			}
 			break;
 		case Utils::GameState::PAUSED:
-			processPauseMenuInput(keyCode);
+			//processPauseMenuInput(keyCode);
+			context.keyPressed = keyCode;
+			context.action = pauseMenuAction;
+			currentState->processInput(context);
 			break;
 
 		case Utils::GameState::GAMEOVER:
@@ -123,12 +128,18 @@ void Application::processGameOverMenuInput(sf::Keyboard::Key key) {
 
 void Application::update(sf::Keyboard::Key keyPressed) {
 
+	Context context;
+
 	switch (gameState) {
 	case Utils::GameState::PLAYING:
 		updatePlayState(keyPressed);
 		break;
 	case Utils::GameState::PAUSED:
-		updatePauseState(keyPressed);
+		//updatePauseState(keyPressed);
+		context.changeState = [this](std::unique_ptr<State> newState) {
+			changeState(std::move(newState));
+		};
+		currentState->update(context);
 		break;
 	case Utils::GameState::GAMEOVER:
 		updateGameOverState(keyPressed);
@@ -180,7 +191,7 @@ void Application::updateGameOverState(sf::Keyboard::Key keyPressed) {
 	default:
 		break;
 	}
-
+	
 	gameOverMenuAction = GameOverMenu::Action::NONE; // Reset action
 }
 
@@ -190,6 +201,7 @@ void Application::render() {
 
 	switch (gameState) {
 	case Utils::GameState::PAUSED:
+		currentState->render();
 		pauseMenu.draw(window);
 		break;
 	case Utils::GameState::GAMEOVER:
@@ -199,4 +211,8 @@ void Application::render() {
 		break;
 	}
 	window.display();
+}
+
+void Application::changeState(std::unique_ptr<State> newState) {
+	currentState = std::move(newState);
 }
