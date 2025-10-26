@@ -1,11 +1,12 @@
-#include "PauseState.hpp"
 
-PauseState::PauseState(sf::RenderWindow& window, Game& game) :
+#include "GameOverState.hpp"
+
+GameOverState::GameOverState(sf::RenderWindow& window, Game& game) :
     State(window),    
     game(game)
 {}
 
-void PauseState::processInput(Context& context) {
+void GameOverState::processInput(Context& context) {
 
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
 
@@ -36,16 +37,13 @@ void PauseState::processInput(Context& context) {
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
         switch (keyCode) {
         case sf::Keyboard::Key::W:
-            if (context.pauseMenu) context.pauseMenu->moveUp();
+            if (context.gameOverMenu) context.gameOverMenu->moveUp();
             break;
         case sf::Keyboard::Key::S:
-            if (context.pauseMenu) context.pauseMenu->moveDown();
+            if (context.gameOverMenu) context.gameOverMenu->moveDown();
             break;
         case sf::Keyboard::Key::Enter:
-            if (context.pauseMenu) context.pauseMenuAction = context.pauseMenu->decideAction();
-            break;
-        case sf::Keyboard::Key::Escape:
-            context.pauseMenuAction = PauseMenu::Action::UNPAUSE;
+            if (context.gameOverMenu) context.gameOverMenuAction = context.gameOverMenu->decideAction();
             break;
         default:
             break;
@@ -53,30 +51,27 @@ void PauseState::processInput(Context& context) {
     }
 }
 
-void PauseState::update(Context& context) {
+void GameOverState::update(Context& context) {
     
-    switch (context.pauseMenuAction.value_or(PauseMenu::Action::NONE)) {
-    case PauseMenu::Action::UNPAUSE:
-        context.changeState(std::make_unique<PlayingState>(window, game));
-        break;
-    case PauseMenu::Action::RESTART:
+    switch (context.gameOverMenuAction.value_or(GameOverMenu::Action::NONE)) {
+    case GameOverMenu::Action::RESTART:
         game.resetGame();
         context.changeState(std::make_unique<PlayingState>(window, game));
         break;
-    case PauseMenu::Action::EXIT:
+    case GameOverMenu::Action::EXIT:
         window.close();
         break;
     default:
         break;  
     }
     
-    context.pauseMenuAction = PauseMenu::Action::NONE; // Reset action
+    context.gameOverMenuAction = GameOverMenu::Action::NONE; // Reset action
 }
 
-void PauseState::render(Context& context) {
+void GameOverState::render(Context& context) {
 
 	window.clear();
     game.drawObjects(window);
-    if (context.pauseMenu) context.pauseMenu->draw(window);
+    if (context.gameOverMenu) context.gameOverMenu->draw(window);
 	window.display();
 }

@@ -7,9 +7,9 @@
 #include "Context.hpp"
 #include "SFML/Graphics.hpp"
 
-class PauseState : public State {      
+class GameOverState : public State {      
 public:
-    PauseState(sf::RenderWindow& window, Game& game);
+    GameOverState(sf::RenderWindow& window, Game& game);
     void processInput(Context& context) override;
     void update(Context& context) override;
     void render(Context& context) override;

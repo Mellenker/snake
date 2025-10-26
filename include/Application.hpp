@@ -15,21 +15,12 @@ class Application {
 public:
 	Application();
 	void runGameLoop();
-	sf::Keyboard::Key processEvent(bool isInMenu = false);
-	void processPauseMenuInput(sf::Keyboard::Key key);
-	void processGameOverMenuInput(sf::Keyboard::Key key);
-	void update(sf::Keyboard::Key keyPressed);
-	void updatePlayState(sf::Keyboard::Key keyPressed);
-	void updatePauseState(sf::Keyboard::Key keyPressed);
-	void updateGameOverState(sf::Keyboard::Key keyPressed);
-	void render();
 	void changeState(std::unique_ptr<State> newState);
 
 private: 
-	Game game; 
 	sf::RenderWindow window;
+	Game game; 
 
-	Utils::GameState gameState;
 	PauseMenu pauseMenu;
 	PauseMenu::Action pauseMenuAction;
 	GameOverMenu gameOverMenu;
@@ -37,5 +28,6 @@ private:
 
 	static constexpr int maxFPS = 4;
 
+	Context context;
 	std::unique_ptr<State> currentState;
 };

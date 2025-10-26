@@ -2,8 +2,7 @@
 
 #include "Game.hpp"
 #include "PauseMenu.hpp"
-// forward-declare State to avoid circular include (State.hpp also needs Context)
-class State;
+#include "GameOverMenu.hpp"
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <memory>
@@ -12,6 +11,9 @@ class State;
 struct Context {
     //Context();
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;
-    std::optional<PauseMenu::Action> action;
+    PauseMenu* pauseMenu = nullptr;
+    GameOverMenu* gameOverMenu = nullptr;
+    std::optional<PauseMenu::Action> pauseMenuAction;
+    std::optional<GameOverMenu::Action> gameOverMenuAction;
     std::function<void(std::unique_ptr<State>)> changeState;
 };

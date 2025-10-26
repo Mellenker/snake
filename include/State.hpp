@@ -16,7 +16,7 @@ public:
 
     virtual void processInput(Context& context) = 0;
     virtual void update(Context& context) = 0;
-    virtual void render() = 0;
+    virtual void render(Context& context) = 0;
 
 protected:
     sf::RenderWindow& window;
