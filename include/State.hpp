@@ -19,6 +19,6 @@ public:
     virtual void render(Context& context) = 0;
 
 protected:
-    sf::RenderWindow& window;
+    sf::RenderWindow& m_window;
 };
 

@@ -16,13 +16,13 @@ public:
 	void centerOrigin(sf::Text& text);
 	int getHighlightedIdx();
 protected:
-	int windowSizeX;
-	int windowSizeY;
+	int m_windowSizeX;
+	int m_windowSizeY;
 
-	sf::Font font;
-	sf::Text titleText;
-	std::vector<sf::Text> items;
+	sf::Font m_font;
+	sf::Text m_titleText;
+	std::vector<sf::Text> m_items;
 
-	int highlightedIdx;
+	int m_highlightedIdx;
 
 };

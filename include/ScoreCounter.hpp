@@ -10,7 +10,7 @@ public:
 	void resetPoints();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 private:
-	int score;
-	sf::Font font;
-	sf::Text text;
+	int m_score;
+	sf::Font m_font;
+	sf::Text m_text;
 };

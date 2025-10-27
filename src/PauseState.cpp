@@ -2,7 +2,7 @@
 
 PauseState::PauseState(sf::RenderWindow& window, Game& game) :
     State(window),    
-    game(game)
+    m_game(game)
 {}
 
 void PauseState::processInput(Context& context) {
@@ -11,7 +11,7 @@ void PauseState::processInput(Context& context) {
 
 	auto handleEvent = [&](const sf::Event& ev) {
 		if (ev.is<sf::Event::Closed>()) {
-			window.close();
+			m_window.close();
 			return;
 		}
 		if (ev.is<sf::Event::KeyPressed>()) {
@@ -20,10 +20,10 @@ void PauseState::processInput(Context& context) {
 	};
 
     // Ensure no busy waiting in menus
-    if (const std::optional<sf::Event> ev = window.waitEvent()) {
+    if (const std::optional<sf::Event> ev = m_window.waitEvent()) {
         handleEvent(ev.value());
         // Drain any additional events in queue, keep latest key pressed
-        while (const std::optional<sf::Event> pe = window.pollEvent()) {
+        while (const std::optional<sf::Event> pe = m_window.pollEvent()) {
             handleEvent(pe.value());
         }
     }
@@ -57,14 +57,14 @@ void PauseState::update(Context& context) {
     
     switch (context.pauseMenuAction.value_or(PauseMenu::Action::NONE)) {
     case PauseMenu::Action::UNPAUSE:
-        context.changeState(std::make_unique<PlayingState>(window, game));
+        context.changeState(std::make_unique<PlayingState>(m_window, m_game));
         break;
     case PauseMenu::Action::RESTART:
-        game.resetGame();
-        context.changeState(std::make_unique<PlayingState>(window, game));
+        m_game.resetGame();
+        context.changeState(std::make_unique<PlayingState>(m_window, m_game));
         break;
     case PauseMenu::Action::EXIT:
-        window.close();
+        m_window.close();
         break;
     default:
         break;  
@@ -75,8 +75,8 @@ void PauseState::update(Context& context) {
 
 void PauseState::render(Context& context) {
 
-	window.clear();
-    game.drawObjects(window);
-    if (context.pauseMenu) context.pauseMenu->draw(window);
-	window.display();
+	m_window.clear();
+    m_game.drawObjects(m_window);
+    if (context.pauseMenu) context.pauseMenu->draw(m_window);
+	m_window.display();
 }

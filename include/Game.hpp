@@ -31,18 +31,18 @@ public:
 
 private:
 
-	int initSnakeTilePosX;
-	int initSnakeTilePosY;
+	int m_initSnakeTilePosX;
+	int m_initSnakeTilePosY;
 
-	Snake snake;
-	Apple apple;
+	Snake m_snake;
+	Apple m_apple;
 
-	std::vector<int> freeTiles; // Vector of all currently free tiles
-	std::vector<int> posInFreeTiles; // Indexes of all tiles within the freeTiles vector (occupied tiles have index -1)
+	std::vector<int> m_freeTiles; // Vector of all currently free tiles
+	std::vector<int> m_posInFreeTiles; // Indexes of all tiles within the freeTiles vector (occupied tiles have index -1)
 
-	sf::RenderTexture texture;
-	sf::Sprite background;
+	sf::RenderTexture m_texture;
+	sf::Sprite m_background;
 
-	ScoreCounter scoreCounter;
+	ScoreCounter m_scoreCounter;
 
 };

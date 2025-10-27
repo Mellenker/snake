@@ -1,13 +1,13 @@
 #pragma once
 
-struct Utils {
+namespace Utils {
     enum class GameState {
         PLAYING,
         PAUSED,
         GAMEOVER
     };
 
-    static constexpr int tileSize = 45;
-    static constexpr int mapSizeInTilesX = 15;
-    static constexpr int mapSizeInTilesY = 15;
+    inline const int g_tileSize = 45;
+    inline const int g_mapSizeInTilesX = 15;
+    inline const int g_mapSizeInTilesY = 15;
 };

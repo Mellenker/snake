@@ -12,7 +12,7 @@ GameOverMenu::GameOverMenu()
 
 GameOverMenu::Action GameOverMenu::decideAction() 
 {
-	switch (highlightedIdx) {
+	switch (m_highlightedIdx) {
 	case 0:
 		return Action::RESTART;
 		break;

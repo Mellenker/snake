@@ -14,5 +14,5 @@ public:
     void update(Context& context) override;
     void render(Context& context) override;
 private:
-    Game& game;
+    Game& m_game;
 };

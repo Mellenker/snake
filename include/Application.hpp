@@ -18,16 +18,16 @@ public:
 	void changeState(std::unique_ptr<State> newState);
 
 private: 
-	sf::RenderWindow window;
-	Game game; 
+	sf::RenderWindow m_window;
+	Game m_game; 
 
-	PauseMenu pauseMenu;
-	PauseMenu::Action pauseMenuAction;
-	GameOverMenu gameOverMenu;
-	GameOverMenu::Action gameOverMenuAction;
+	PauseMenu m_pauseMenu;
+	PauseMenu::Action m_pauseMenuAction;
+	GameOverMenu m_gameOverMenu;
+	GameOverMenu::Action m_gameOverMenuAction;
 
-	static constexpr int maxFPS = 4;
+	int m_maxFPS = 4;
 
-	Context context;
-	std::unique_ptr<State> currentState;
+	Context m_context;
+	std::unique_ptr<State> m_currentState;
 };

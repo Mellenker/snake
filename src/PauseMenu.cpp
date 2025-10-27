@@ -13,7 +13,7 @@ PauseMenu::PauseMenu()
 
 PauseMenu::Action PauseMenu::decideAction() 
 {
-	switch (highlightedIdx) {
+	switch (m_highlightedIdx) {
 	case 0:
 		return Action::UNPAUSE;
 		break;

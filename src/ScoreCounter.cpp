@@ -1,31 +1,31 @@
 #include "ScoreCounter.hpp"
 
 ScoreCounter::ScoreCounter()
-	: font("resources/arial.ttf"),
-	text(font)
+	: m_font("resources/arial.ttf"),
+	m_text(m_font)
 {
 	resetPoints();
 	
 	// Font
-	text.setFont(font);
-	text.setCharacterSize(36);
-	text.setStyle(sf::Text::Bold);
+	m_text.setFont(m_font);
+	m_text.setCharacterSize(36);
+	m_text.setStyle(sf::Text::Bold);
 
 	// Positioning
-	text.setPosition(sf::Vector2f((Utils::mapSizeInTilesX * Utils::tileSize) - Utils::tileSize, 0));
+	m_text.setPosition(sf::Vector2f((Utils::g_mapSizeInTilesX * Utils::g_tileSize) - Utils::g_tileSize, 0));
 
 }
 
 void ScoreCounter::addPoint() {
-	score++;
-	text.setString(std::to_string(score));
+	m_score++;
+	m_text.setString(std::to_string(m_score));
 }
 
 void ScoreCounter::resetPoints() {
-	score = 0;
-	text.setString(std::to_string(score));
+	m_score = 0;
+	m_text.setString(std::to_string(m_score));
 }
 
 void ScoreCounter::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(text, states);
+	target.draw(m_text, states);
 };

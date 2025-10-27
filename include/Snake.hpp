@@ -18,15 +18,15 @@ public:
 	void changeDir(sf::Keyboard::Key keyPressed);
 
 private:
-	sf::Vector2f headPos;
+	sf::Vector2f m_headPos;
 
-	sf::Color colorHead;
-	sf::Color colorTail;
+	sf::Color m_colorHead;
+	sf::Color m_colorTail;
 
-	std::vector<sf::RectangleShape> body;
+	std::vector<sf::RectangleShape> m_body;
 
-	sf::Vector2f tailEnd;
-	Direction currDir;
+	sf::Vector2f m_tailEnd;
+	Direction m_currDir;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

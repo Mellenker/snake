@@ -2,5 +2,5 @@
 #include <SFML/Graphics.hpp>    
 
 State::State(sf::RenderWindow& window) :
-    window(window)
+    m_window(window)
 {}  

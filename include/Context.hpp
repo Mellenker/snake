@@ -9,7 +9,6 @@
 #include <optional>
 
 struct Context {
-    //Context();
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;
     PauseMenu* pauseMenu = nullptr;
     GameOverMenu* gameOverMenu = nullptr;
