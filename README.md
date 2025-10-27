@@ -2,7 +2,7 @@
 
 Built using SFML 3.0.2
 
-![Alt text](/images/screenshot.png?raw=true "Screenshot")
+<img src="images/screenshot.png" alt="Screenshot" width="400">
 
 ## Controls
 - **WASD** — Move the snake
