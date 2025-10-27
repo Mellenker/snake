@@ -26,7 +26,7 @@ private:
 	GameOverMenu m_gameOverMenu;
 	GameOverMenu::Action m_gameOverMenuAction;
 
-	int m_maxFPS = 4;
+	int m_maxFPS = 2;
 
 	Context m_context;
 	std::unique_ptr<State> m_currentState;
