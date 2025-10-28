@@ -3,7 +3,9 @@
 PauseState::PauseState(sf::RenderWindow& window, Game& game) :
     State(window),    
     m_game(game)
-{}
+{
+    window.setFramerateLimit(0); // Disable FPS limit in menus
+}
 
 void PauseState::processInput(Context& context) {
 
@@ -57,11 +59,11 @@ void PauseState::update(Context& context) {
     
     switch (context.pauseMenuAction.value_or(PauseMenu::Action::NONE)) {
     case PauseMenu::Action::UNPAUSE:
-        context.changeState(std::make_unique<PlayingState>(m_window, m_game));
+        context.changeState(State::StateID::PLAY);
         break;
     case PauseMenu::Action::RESTART:
         m_game.resetGame();
-        context.changeState(std::make_unique<PlayingState>(m_window, m_game));
+        context.changeState(State::StateID::PLAY);
         break;
     case PauseMenu::Action::EXIT:
         m_window.close();

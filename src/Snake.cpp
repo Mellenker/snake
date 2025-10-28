@@ -53,25 +53,21 @@ void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 	switch (keyPressed) {
 	case sf::Keyboard::Key::W:
 		if (m_currDir != DOWN) {
-			std::cout << "UP" << "\n";
 			m_currDir = UP;
 		}
 		break;
 	case sf::Keyboard::Key::A:
 		if (m_currDir != RIGHT) {
-			std::cout << "LEFT" << "\n";
 			m_currDir = LEFT;
 		}
 		break;
 	case sf::Keyboard::Key::S:
 		if (m_currDir != UP) {
-			std::cout << "DOWN" << "\n";
 			m_currDir = DOWN;
 		}
 		break;
 	case sf::Keyboard::Key::D:
 		if (m_currDir != LEFT) {
-			std::cout << "RIGHT" << "\n";
 			m_currDir = RIGHT;
 		}
 		break;

@@ -3,18 +3,18 @@
 #include "State.hpp"
 #include "Application.hpp"
 #include "Utils.hpp"
-#include "PlayingState.hpp"
+#include "PlayState.hpp"
 #include "PauseState.hpp"
 #include "GameOverState.hpp"
 #include "Context.hpp"
 #include <memory>
 
-class PlayingState : public State {      
+class PlayState : public State {      
 public:
-    PlayingState(sf::RenderWindow& window, Game& game);
+    PlayState(sf::RenderWindow& window, Game& game, int inGameFpsLimit);
     void processInput(Context& context) override;
     void update(Context& context) override;
     void render(Context& context) override;
 private:
-    Game& game;
+    Game& m_game;
 };

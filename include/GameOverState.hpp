@@ -3,7 +3,7 @@
 #include "State.hpp"
 #include "Application.hpp"
 #include "Utils.hpp"
-#include "PlayingState.hpp"
+#include "PlayState.hpp"
 #include "Context.hpp"
 #include "SFML/Graphics.hpp"
 

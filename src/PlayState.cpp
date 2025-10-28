@@ -1,15 +1,16 @@
-#include "PlayingState.hpp"
+#include "PlayState.hpp"
 #include <iostream>
 
-PlayingState::PlayingState(sf::RenderWindow& window, Game& game) :
+PlayState::PlayState(sf::RenderWindow& window, Game& game, int inGameFpsLimit) :
     State(window),
-    game(game)
-{}
+    m_game(game)
+{
+	m_window.setFramerateLimit(inGameFpsLimit);
+}
 
-void PlayingState::processInput(Context& context) {
+void PlayState::processInput(Context& context) {
     
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
-
 	auto handleEvent = [&](const sf::Event& ev) {
 		if (ev.is<sf::Event::Closed>()) {
 			m_window.close();
@@ -32,7 +33,7 @@ void PlayingState::processInput(Context& context) {
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
         
         if (keyCode == sf::Keyboard::Key::Escape) {
-            context.changeState(std::make_unique<PauseState>(m_window, game));
+            context.changeState(State::StateID::PAUSE);
         }
         else {
             context.keyPressed = keyCode;
@@ -40,18 +41,18 @@ void PlayingState::processInput(Context& context) {
     }
 }
 
-void PlayingState::update(Context& context) {
-	game.forwardSnakeInput(context.keyPressed);
+void PlayState::update(Context& context) {
+	m_game.forwardSnakeInput(context.keyPressed);
 
 	// Returns true if illegal move is attempted
-	if (game.tryUpdateSnakeState()) {
-        context.changeState(std::make_unique<GameOverState>(m_window, game));    
+	if (m_game.tryUpdateSnakeState()) {
+        context.changeState(State::StateID::GAME_OVER);    
     }
 
 }
 
-void PlayingState::render(Context& context) {
+void PlayState::render(Context& context) {
 	m_window.clear();
-    game.drawObjects(m_window);
+    m_game.drawObjects(m_window);
 	m_window.display();
 }

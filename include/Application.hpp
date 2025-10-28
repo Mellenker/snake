@@ -8,15 +8,15 @@
 #include "PauseMenu.hpp"
 #include "GameOverMenu.hpp"
 #include "State.hpp"
-#include "PlayingState.hpp"
+#include "PlayState.hpp"
 #include "Context.hpp"
 
 class Application {
 public:
 	Application();
 	void runGameLoop();
-	void changeState(std::unique_ptr<State> newState);
-
+	std::unique_ptr<State> createState(State::StateID id);
+	void changeState(State::StateID id);
 private: 
 	sf::RenderWindow m_window;
 	Game m_game; 
@@ -26,7 +26,7 @@ private:
 	GameOverMenu m_gameOverMenu;
 	GameOverMenu::Action m_gameOverMenuAction;
 
-	int m_maxFPS = 2;
+	int m_inGameFpsLimit;	
 
 	Context m_context;
 	std::unique_ptr<State> m_currentState;

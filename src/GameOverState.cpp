@@ -4,7 +4,9 @@
 GameOverState::GameOverState(sf::RenderWindow& window, Game& game) :
     State(window),    
     m_game(game)
-{}
+{
+    window.setFramerateLimit(0); // Disable FPS limit in menus
+}
 
 void GameOverState::processInput(Context& context) {
 
@@ -56,7 +58,7 @@ void GameOverState::update(Context& context) {
     switch (context.gameOverMenuAction.value_or(GameOverMenu::Action::NONE)) {
     case GameOverMenu::Action::RESTART:
         m_game.resetGame();
-        context.changeState(std::make_unique<PlayingState>(m_window, m_game));
+        context.changeState(State::StateID::PLAY);
         break;
     case GameOverMenu::Action::EXIT:
         m_window.close();
