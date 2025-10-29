@@ -1,11 +1,7 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
-// Forward-declare Context to avoid circular include with Context.hpp
-struct Context;
 
-class Application;
-
+struct Context; // Forward declaration
 
 class State {
 public:

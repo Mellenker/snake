@@ -1,8 +1,5 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
-#include "Utils.hpp"
-#include "Colors.hpp"
 
 class Snake : public sf::Drawable {
 public:

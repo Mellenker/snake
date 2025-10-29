@@ -1,14 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <optional>
+#include <memory>
 #include "Game.hpp"
 #include "Utils.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverMenu.hpp"
 #include "State.hpp"
-#include "PlayState.hpp"
 #include "Context.hpp"
 
 class Application {

@@ -1,7 +1,5 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
-#include "Utils.hpp"
 
 class ScoreCounter : public sf::Drawable {
 public:

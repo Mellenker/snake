@@ -1,12 +1,7 @@
 #pragma once  
-
 #include <SFML/Graphics.hpp>  
-#include <random>
-
-#include "Utils.hpp"
 #include "Snake.hpp"  
 #include "Apple.hpp"  
-#include "Colors.hpp"
 #include "PauseMenu.hpp"
 #include "GameOverMenu.hpp"
 #include "ScoreCounter.hpp"

@@ -1,13 +1,13 @@
 #pragma once
-
-#include "Game.hpp"
-#include "PauseMenu.hpp"
-#include "GameOverMenu.hpp"
-#include "State.hpp"
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <memory>
 #include <optional>
+#include "State.hpp"
+#include "Game.hpp"
+
+class PauseMenu;
+class GameOverMenu;
 
 struct Context {
     PauseMenu* pauseMenu = nullptr;

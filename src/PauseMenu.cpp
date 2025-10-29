@@ -1,4 +1,3 @@
-#include "Menu.hpp"
 #include "PauseMenu.hpp"
 
 PauseMenu::PauseMenu()

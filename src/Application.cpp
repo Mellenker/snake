@@ -1,6 +1,8 @@
 #include "Application.hpp"
-
-#include <iostream>
+#include <optional>
+#include "PlayState.hpp"
+#include "PauseState.hpp"
+#include "GameOverState.hpp"
 
 Application::Application() : 
 	m_pauseMenuAction(PauseMenu::Action::NONE),

@@ -1,4 +1,5 @@
 #include "PauseState.hpp"
+#include "PlayState.hpp"
 
 PauseState::PauseState(sf::RenderWindow& window, Game& game) :
     State(window),    

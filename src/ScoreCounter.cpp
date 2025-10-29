@@ -1,4 +1,5 @@
 #include "ScoreCounter.hpp"
+#include "Utils.hpp"
 
 ScoreCounter::ScoreCounter()
 	: m_font("resources/arial.ttf"),

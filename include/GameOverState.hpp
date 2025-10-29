@@ -1,11 +1,8 @@
 #pragma once
-
+#include <SFML/Graphics.hpp>
 #include "State.hpp"
-#include "Application.hpp"
-#include "Utils.hpp"
-#include "PlayState.hpp"
+#include "Game.hpp"
 #include "Context.hpp"
-#include "SFML/Graphics.hpp"
 
 class GameOverState : public State {      
 public:

@@ -1,13 +1,8 @@
 #pragma once
-
+#include <SFML/Graphics.hpp>
 #include "State.hpp"
-#include "Application.hpp"
-#include "Utils.hpp"
-#include "PlayState.hpp"
-#include "PauseState.hpp"
-#include "GameOverState.hpp"
+#include "Game.hpp"
 #include "Context.hpp"
-#include <memory>
 
 class PlayState : public State {      
 public:

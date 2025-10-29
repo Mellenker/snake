@@ -1,4 +1,7 @@
 #include "Game.hpp"
+#include <random>
+#include "Utils.hpp"
+#include "Colors.hpp"
 
 Game::Game() : 
 	m_initSnakeTilePosX(2),

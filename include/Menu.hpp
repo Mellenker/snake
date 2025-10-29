@@ -1,9 +1,7 @@
 #pragma once  
-
 #include <SFML/Graphics.hpp>
-#include "Utils.hpp"
 
-// Parent class for menus
+// Parent class of menus
 class Menu {
 public:
 	Menu();

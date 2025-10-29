@@ -1,4 +1,6 @@
 #include "Apple.hpp"
+#include "Utils.hpp"
+#include "Colors.hpp"
 
 Apple::Apple()
 	: m_shape(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize))

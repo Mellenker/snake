@@ -1,5 +1,6 @@
 #include "Menu.hpp"
 #include <string>
+#include "Utils.hpp"
 
 Menu::Menu()
 	: m_windowSizeX(Utils::g_mapSizeInTilesX* Utils::g_tileSize),

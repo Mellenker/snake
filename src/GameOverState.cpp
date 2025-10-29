@@ -1,5 +1,5 @@
-
 #include "GameOverState.hpp"
+#include "PlayState.hpp"
 
 GameOverState::GameOverState(sf::RenderWindow& window, Game& game) :
     State(window),    

@@ -1,7 +1,6 @@
-#include <SFML/Graphics.hpp>
 #include "Snake.hpp"
-
-#include <iostream>
+#include "Utils.hpp"
+#include "Colors.hpp"
 
 Snake::Snake(int startTilePosX, int startTilePosY)
 	: m_headPos(startTilePosX* Utils::g_tileSize, startTilePosY* Utils::g_tileSize),
