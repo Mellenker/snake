@@ -17,8 +17,8 @@ Application::Application() :
 	m_window.setFramerateLimit(m_inGameFpsLimit);
 
 	// Build context
-	m_context.pauseMenu = &m_pauseMenu;
-	m_context.gameOverMenu = &m_gameOverMenu;
+	// m_context.pauseMenu = &m_pauseMenu;
+	// m_context.gameOverMenu = &m_gameOverMenu;
 	m_context.changeState = [this](State::StateID id) {
 		this->changeState(id);
 	};
@@ -38,10 +38,10 @@ std::unique_ptr<State> Application::createState(State::StateID id) {
 			return std::make_unique<PlayState>(m_window, m_game, m_inGameFpsLimit);
 			break;
 		case State::StateID::PAUSE:
-			return std::make_unique<PauseState>(m_window, m_game);
+			return std::make_unique<PauseState>(m_window, m_game, m_pauseMenu);
 			break;
 		case State::StateID::GAME_OVER:
-			return std::make_unique<GameOverState>(m_window, m_game);
+			return std::make_unique<GameOverState>(m_window, m_game, m_gameOverMenu);
 			break;
 		default:
 			throw std::runtime_error("Unknown state ID");

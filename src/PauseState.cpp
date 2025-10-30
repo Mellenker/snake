@@ -1,9 +1,10 @@
 #include "PauseState.hpp"
 #include "PlayState.hpp"
 
-PauseState::PauseState(sf::RenderWindow& window, Game& game) :
+PauseState::PauseState(sf::RenderWindow& window, Game& game, PauseMenu& menu) :
     State(window),    
-    m_game(game)
+    m_game(game),
+    m_menu(menu)
 {
     window.setFramerateLimit(0); // Disable FPS limit in menus
 }
@@ -38,13 +39,13 @@ void PauseState::processInput(Context& context) {
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
         switch (keyCode) {
         case sf::Keyboard::Key::W:
-            if (context.pauseMenu) context.pauseMenu->moveUp();
+            m_menu.moveUp();
             break;
         case sf::Keyboard::Key::S:
-            if (context.pauseMenu) context.pauseMenu->moveDown();
+            m_menu.moveDown();
             break;
         case sf::Keyboard::Key::Enter:
-            if (context.pauseMenu) context.pauseMenuAction = context.pauseMenu->decideAction();
+            context.pauseMenuAction = m_menu.decideAction();
             break;
         case sf::Keyboard::Key::Escape:
             context.pauseMenuAction = PauseMenu::Action::UNPAUSE;
@@ -77,6 +78,6 @@ void PauseState::update(Context& context) {
 void PauseState::render(Context& context) {
 	m_window.clear();
     m_game.drawObjects(m_window);
-    if (context.pauseMenu) context.pauseMenu->draw(m_window);
+    m_menu.draw(m_window);
 	m_window.display();
 }

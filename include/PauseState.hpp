@@ -6,10 +6,11 @@
 
 class PauseState : public State {      
 public:
-    PauseState(sf::RenderWindow& window, Game& game);
+    PauseState(sf::RenderWindow& window, Game& game, PauseMenu& menu);
     void processInput(Context& context) override;
     void update(Context& context) override;
     void render(Context& context) override;
 private:
     Game& m_game;
+    PauseMenu& m_menu;
 };
