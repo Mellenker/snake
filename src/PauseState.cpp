@@ -9,7 +9,6 @@ PauseState::PauseState(sf::RenderWindow& window, Game& game) :
 }
 
 void PauseState::processInput(Context& context) {
-
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
 
 	auto handleEvent = [&](const sf::Event& ev) {
@@ -57,7 +56,6 @@ void PauseState::processInput(Context& context) {
 }
 
 void PauseState::update(Context& context) {
-    
     switch (context.pauseMenuAction.value_or(PauseMenu::Action::NONE)) {
     case PauseMenu::Action::UNPAUSE:
         context.changeState(State::StateID::PLAY);
@@ -77,7 +75,6 @@ void PauseState::update(Context& context) {
 }
 
 void PauseState::render(Context& context) {
-
 	m_window.clear();
     m_game.drawObjects(m_window);
     if (context.pauseMenu) context.pauseMenu->draw(m_window);

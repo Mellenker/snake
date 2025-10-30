@@ -9,7 +9,6 @@ GameOverState::GameOverState(sf::RenderWindow& window, Game& game) :
 }
 
 void GameOverState::processInput(Context& context) {
-
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
 
 	auto handleEvent = [&](const sf::Event& ev) {
@@ -54,7 +53,6 @@ void GameOverState::processInput(Context& context) {
 }
 
 void GameOverState::update(Context& context) {
-    
     switch (context.gameOverMenuAction.value_or(GameOverMenu::Action::NONE)) {
     case GameOverMenu::Action::RESTART:
         m_game.resetGame();
@@ -66,12 +64,11 @@ void GameOverState::update(Context& context) {
     default:
         break;  
     }
-    
+
     context.gameOverMenuAction = GameOverMenu::Action::NONE; // Reset action
 }
 
 void GameOverState::render(Context& context) {
-
 	m_window.clear();
     m_game.drawObjects(m_window);
     if (context.gameOverMenu) context.gameOverMenu->draw(m_window);

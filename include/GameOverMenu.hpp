@@ -7,6 +7,4 @@ public:
 	GameOverMenu();
 	enum Action { NONE, RESTART, EXIT };
 	GameOverMenu::Action decideAction();
-private:
-
 };

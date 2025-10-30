@@ -25,7 +25,6 @@ public:
 	void freeTile(int x, int y);
 
 private:
-
 	int m_initSnakeTilePosX;
 	int m_initSnakeTilePosY;
 
@@ -39,5 +38,4 @@ private:
 	sf::Sprite m_background;
 
 	ScoreCounter m_scoreCounter;
-
 };

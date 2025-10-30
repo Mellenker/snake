@@ -22,5 +22,4 @@ protected:
 	std::vector<sf::Text> m_items;
 
 	int m_highlightedIdx;
-
 };

@@ -25,7 +25,6 @@ Application::Application() :
 }
 
 void Application::runGameLoop() {
-
 	while (m_window.isOpen()) {
 		m_currentState->processInput(m_context);
 		m_currentState->update(m_context);

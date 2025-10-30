@@ -7,6 +7,4 @@ public:
 	PauseMenu();
 	enum Action { NONE, UNPAUSE, RESTART, EXIT };
 	PauseMenu::Action decideAction();
-private:
-
 };

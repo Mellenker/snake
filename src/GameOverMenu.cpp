@@ -4,7 +4,6 @@ GameOverMenu::GameOverMenu()
 	: Menu()
 {
 	setTitle("Game Over");
-
 	addItem("Restart");
 	addItem("Exit");
 }

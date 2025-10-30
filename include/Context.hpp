@@ -11,7 +11,6 @@ class GameOverMenu;
 
 struct Context {
     PauseMenu* pauseMenu = nullptr;
-
     GameOverMenu* gameOverMenu = nullptr;
     
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;

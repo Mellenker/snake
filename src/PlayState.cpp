@@ -10,7 +10,6 @@ PlayState::PlayState(sf::RenderWindow& window, Game& game, int inGameFpsLimit) :
 }
 
 void PlayState::processInput(Context& context) {
-    
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
 	auto handleEvent = [&](const sf::Event& ev) {
 		if (ev.is<sf::Event::Closed>()) {
@@ -32,7 +31,7 @@ void PlayState::processInput(Context& context) {
 	else {
 		// Process only latest keyboard input
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
-        
+		
         if (keyCode == sf::Keyboard::Key::Escape) {
             context.changeState(State::StateID::PAUSE);
         }
