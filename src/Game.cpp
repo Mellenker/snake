@@ -50,7 +50,6 @@ void Game::spawnTiles(sf::RenderTexture& texture) {
 	for (int yIt = 0; yIt < Utils::g_mapSizeInTilesY; yIt++) {
 		for (int xIt = 0; xIt < Utils::g_mapSizeInTilesX; xIt++) {
 			sf::RectangleShape tile(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
-			
 			tile.setPosition(sf::Vector2f(xPos, yPos));
 
 			if (colorFlag)
@@ -163,7 +162,7 @@ bool Game::detectGameOverCollision(sf::Vector2f nextHeadPos) {
 }
 
 void Game::resetGame() {
-	m_snake = Snake(m_initSnakeTilePosX, m_initSnakeTilePosY);
+	m_snake.reset();
 	m_snake.setDir(Snake::Direction::NONE);
 
 	m_freeTiles.clear();

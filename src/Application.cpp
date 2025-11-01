@@ -17,11 +17,10 @@ Application::Application() :
 	m_window.setFramerateLimit(m_inGameFpsLimit);
 
 	// Build context
-	// m_context.pauseMenu = &m_pauseMenu;
-	// m_context.gameOverMenu = &m_gameOverMenu;
 	m_context.changeState = [this](State::StateID id) {
 		this->changeState(id);
 	};
+
 }
 
 void Application::runGameLoop() {

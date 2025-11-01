@@ -52,7 +52,7 @@ void PlayState::update(Context& context) {
 }
 
 void PlayState::render(Context& context) {
-	m_window.clear();
-    m_game.drawObjects(m_window);
+	m_window.clear();	
+	m_game.drawObjects(m_window);
 	m_window.display();
 }

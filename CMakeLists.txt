@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # For single-config generators 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 # For multi-config generators 
 else()
     foreach(OUTPUTCONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)

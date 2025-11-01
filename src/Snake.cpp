@@ -1,34 +1,29 @@
 #include "Snake.hpp"
 #include "Utils.hpp"
 #include "Colors.hpp"
+#include "CenteredRect.hpp"
 
-Snake::Snake(int startTilePosX, int startTilePosY)
-	: m_headPos(startTilePosX* Utils::g_tileSize, startTilePosY* Utils::g_tileSize),
+Snake::Snake(int startTilePosX, int startTilePosY) :
+	m_startTilePosX(startTilePosX),
+	m_startTilePosY(startTilePosY),
+	m_headPos(startTilePosX * Utils::g_tileSize, startTilePosY * Utils::g_tileSize),
 	m_colorHead(Colors::snakeHead),
-	m_colorTail(Colors::snakeTail),
-	m_currDir(NONE)
+	m_colorTail(Colors::snakeBody),
+	m_currDir(NONE),
+	m_snakeFace("resources/snake_face.png")
 {
-	// Create snake head and tail 
-	sf::RectangleShape head(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
-	sf::RectangleShape tail(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
-
-	head.setFillColor(m_colorHead);
-	tail.setFillColor(m_colorTail);
-
-	head.setPosition(m_headPos);
-	tail.setPosition(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
-
-	m_body.push_back(head);
-	m_body.push_back(tail);
+	reset();
 }
 
+// Adds new segment at the front and deletes the last segment
 void Snake::move(sf::Vector2f newPosition) {
-	sf::RectangleShape segment = m_body.front(); // Copy front segment
-	segment.setPosition(newPosition);
+	CenteredRect segment = m_body.front();
+	segment.setTopLeft(newPosition);
 	m_headPos = newPosition;
 	m_body.insert(m_body.begin(), segment);
 	m_body[1].setFillColor(m_colorTail);
-	m_tailEnd = m_body.back().getPosition();
+	m_body[1].setTexture(nullptr);
+	m_tailPos = m_body.back().getPosition();
 	m_body.pop_back();
 }
 
@@ -37,41 +32,58 @@ sf::Vector2f Snake::getHeadPos() {
 }
 
 void Snake::addSegment() {
-	sf::RectangleShape segment = m_body.back(); // Copy back segment
-	segment.setPosition(m_tailEnd);
+	CenteredRect segment = m_body.back();
+	segment.setTopLeft(m_tailPos);
 	segment.setFillColor(m_colorTail);
 	m_body.insert(m_body.end(), segment);
 }
 
 sf::Vector2f Snake::getTailEnd() {
-	return m_tailEnd;
+	return m_tailPos;
 }
 
 void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 	// Handle ingame keyboard input
 	switch (keyPressed) {
 	case sf::Keyboard::Key::W:
-		if (m_currDir != DOWN) {
+		if (m_currDir != DOWN)
 			m_currDir = UP;
-		}
 		break;
 	case sf::Keyboard::Key::A:
-		if (m_currDir != RIGHT) {
+		if (m_currDir != RIGHT)
 			m_currDir = LEFT;
-		}
 		break;
 	case sf::Keyboard::Key::S:
-		if (m_currDir != UP) {
+		if (m_currDir != UP)
 			m_currDir = DOWN;
-		}
 		break;
 	case sf::Keyboard::Key::D:
-		if (m_currDir != LEFT) {
+		if (m_currDir != LEFT)
 			m_currDir = RIGHT;
-		}
 		break;
 	default:
 		break;
+	}
+	// Rotate face with direction
+	rotateSegment(m_currDir, m_body[0]);
+}
+
+void Snake::rotateSegment(Direction dir, sf::Transformable& segment) {
+	switch(dir) {
+		case Direction::UP:
+			segment.setRotation(sf::degrees(270));
+			break;
+		case Direction::RIGHT:
+			segment.setRotation(sf::degrees(0));
+			break;
+		case Direction::DOWN:
+			segment.setRotation(sf::degrees(90));
+			break;
+		case Direction::LEFT:
+			segment.setRotation(sf::degrees(180));
+			break;
+		default:
+			break;	
 	}
 }
 
@@ -81,6 +93,25 @@ void Snake::setDir(Direction newDir) {
 
 enum Snake::Direction Snake::getCurrDir() {
 	return m_currDir;
+}
+
+void Snake::reset() {
+	m_body.clear();
+
+	// Create snake head and tail
+	CenteredRect head(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
+	CenteredRect tail(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
+
+	m_headPos = sf::Vector2f(m_startTilePosX * Utils::g_tileSize,m_startTilePosY * Utils::g_tileSize);
+
+	head.setTopLeft(m_headPos);
+	tail.setTopLeft(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
+
+	head.setTexture(&m_snakeFace);
+	tail.setFillColor(m_colorTail);
+
+	m_body.push_back(head);
+	m_body.push_back(tail);
 }
 
 // Override

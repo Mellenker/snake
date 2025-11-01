@@ -6,9 +6,6 @@
 #include "State.hpp"
 #include "Game.hpp"
 
-class PauseMenu;
-class GameOverMenu;
-
 struct Context {    
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;
 
