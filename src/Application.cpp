@@ -7,7 +7,7 @@
 Application::Application() : 
 	m_pauseMenuAction(PauseMenu::Action::NONE),
 	m_gameOverMenuAction(GameOverMenu::Action::NONE),
-	m_inGameFpsLimit(4),
+	m_inGameFpsLimit(5),
 	m_currentState(createState(State::StateID::PLAY))
 {
 	// Build window

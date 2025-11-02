@@ -50,7 +50,7 @@ void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 			m_currDir = UP;
 		break;
 	case sf::Keyboard::Key::A:
-		if (m_currDir != RIGHT)
+		if ((m_currDir != RIGHT) && (m_currDir != NONE))
 			m_currDir = LEFT;
 		break;
 	case sf::Keyboard::Key::S:
@@ -70,16 +70,16 @@ void Snake::changeDir(sf::Keyboard::Key keyPressed) {
 
 void Snake::rotateSegment(Direction dir, sf::Transformable& segment) {
 	switch(dir) {
-		case Direction::UP:
+		case UP:
 			segment.setRotation(sf::degrees(270));
 			break;
-		case Direction::RIGHT:
+		case RIGHT:
 			segment.setRotation(sf::degrees(0));
 			break;
-		case Direction::DOWN:
+		case DOWN:
 			segment.setRotation(sf::degrees(90));
 			break;
-		case Direction::LEFT:
+		case LEFT:
 			segment.setRotation(sf::degrees(180));
 			break;
 		default:

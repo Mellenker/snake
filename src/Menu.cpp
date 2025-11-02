@@ -16,7 +16,7 @@ void Menu::setTitle(std::string title) {
 	m_titleText.setStyle(sf::Text::Bold);
 
 	centerOrigin(m_titleText);
-	m_titleText.setPosition(sf::Vector2f(m_windowSizeX / 2.0f, m_windowSizeY / 3.0f));
+	m_titleText.setPosition(sf::Vector2f(m_windowSizeX / 2.0f, m_windowSizeY / 3.8f));
 }
 
 void Menu::addItem(std::string string) {

@@ -55,7 +55,7 @@ if (WIN32)
     elseif (MSVC)
         set_target_properties(snake PROPERTIES
             LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
-            LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS"
+            LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
         )
     endif()
 endif()
