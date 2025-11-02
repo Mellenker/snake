@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <iostream>
 #include <random>
 #include "Utils.hpp"
 #include "Colors.hpp"
@@ -191,7 +192,7 @@ void Game::occupyTile(int x, int y) {
 	int tileId = getTileID(x, y);
 	int tilePos = m_posInFreeTiles[tileId];
 
-	// If this is 0, the tile is already occupied
+	// If tilePos is -1, the tile is already occupied
 	if (tilePos != -1) {
 		int lastFreeTileId = m_freeTiles.back();
 		m_freeTiles[tilePos] = lastFreeTileId;
@@ -210,7 +211,6 @@ void Game::freeTile(int x, int y) {
 		m_posInFreeTiles[tileId] = m_freeTiles.size() - 1;
 	}
 }
-
 sf::Vector2f Game::generateRandomFreeTilePos() {
 	// Generate random coordinates
 	std::random_device random;

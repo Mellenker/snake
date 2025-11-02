@@ -18,12 +18,12 @@ Snake::Snake(int startTilePosX, int startTilePosY) :
 // Adds new segment at the front and deletes the last segment
 void Snake::move(sf::Vector2f newPosition) {
 	CenteredRect segment = m_body.front();
-	segment.setTopLeft(newPosition);
+	segment.setPosFromTopLeft(newPosition);
 	m_headPos = newPosition;
 	m_body.insert(m_body.begin(), segment);
 	m_body[1].setFillColor(m_colorTail);
 	m_body[1].setTexture(nullptr);
-	m_tailPos = m_body.back().getPosition();
+	m_tailPos = m_body.back().getTopLeftFromPos();
 	m_body.pop_back();
 }
 
@@ -33,7 +33,7 @@ sf::Vector2f Snake::getHeadPos() {
 
 void Snake::addSegment() {
 	CenteredRect segment = m_body.back();
-	segment.setTopLeft(m_tailPos);
+	segment.setPosFromTopLeft(m_tailPos);
 	segment.setFillColor(m_colorTail);
 	m_body.insert(m_body.end(), segment);
 }
@@ -104,8 +104,8 @@ void Snake::reset() {
 
 	m_headPos = sf::Vector2f(m_startTilePosX * Utils::g_tileSize,m_startTilePosY * Utils::g_tileSize);
 
-	head.setTopLeft(m_headPos);
-	tail.setTopLeft(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
+	head.setPosFromTopLeft(m_headPos);
+	tail.setPosFromTopLeft(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
 
 	head.setTexture(&m_snakeFace);
 	tail.setFillColor(m_colorTail);
