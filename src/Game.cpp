@@ -81,6 +81,8 @@ bool Game::tryUpdateSnakeState() {
 	}
 	
 	if (detectAppleCollision(nextHeadPos)) {
+		// Add 2 segments and a point
+		m_snake.addSegment();
 		m_snake.addSegment();
 		m_scoreCounter.addPoint();
 
