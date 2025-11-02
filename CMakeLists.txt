@@ -30,7 +30,10 @@ FetchContent_MakeAvailable(SFML)
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS 'include'/*.hpp)
 
-add_executable(snake ${SOURCES} ${HEADERS})
+add_executable(snake 
+    ${SOURCES} 
+    ${HEADERS}
+)
 
 target_include_directories(snake 
     PUBLIC 
@@ -41,6 +44,22 @@ target_link_libraries(snake
     PRIVATE 
         SFML::Graphics
 )
+
+# Disable terminal in release mode on Windows
+if (WIN32)
+    if (MINGW)
+        set_target_properties(snake PROPERTIES
+            LINK_FLAGS_DEBUG "-mconsole"
+            LINK_FLAGS_RELEASE "-mwindows"
+        )
+    elseif (MSVC)
+        set_target_properties(snake PROPERTIES
+            LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE"
+            LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS"
+        )
+    endif()
+endif()
+
 
 # Ensure resources can be acessed by executable
 add_custom_command(TARGET snake POST_BUILD
