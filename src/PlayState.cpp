@@ -12,7 +12,7 @@ PlayState::PlayState(sf::RenderWindow& window, Game& game) :
 void PlayState::processInput(Context& context) {
     while (const std::optional<sf::Event> ev = m_window.pollEvent()) {
 		if (ev->is<sf::Event::Closed>()) {
-			m_window.close();
+			m_window.close(); // Put into context and handle in update instead?
 			return;
 		}
     }
@@ -30,14 +30,19 @@ void PlayState::processInput(Context& context) {
 		context.keyPressed = sf::Keyboard::Key::D;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-		context.changeState(State::StateID::PAUSE);
+		context.keyPressed = sf::Keyboard::Key::Escape;
 	}
 }
 
 void PlayState::update(Context& context) {
-	if (m_moveClock.getElapsedTime() > m_moveInterval) {
+	// Pause
+	if (context.keyPressed == sf::Keyboard::Key::Escape) {
+		context.changeState(State::StateID::PAUSE);
+	}
+	// Movement
+	else if (m_moveClock.getElapsedTime() > m_moveInterval) {
 		m_moveClock.restart();
-	
+
 		m_game.forwardSnakeInput(context.keyPressed);
 
 		// Returns true if illegal move is attempted
