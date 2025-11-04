@@ -2,53 +2,49 @@
 #include "PauseState.hpp"
 #include "GameOverState.hpp"
 
-PlayState::PlayState(sf::RenderWindow& window, Game& game, int inGameFpsLimit) :
+PlayState::PlayState(sf::RenderWindow& window, Game& game) :
     State(window),
-    m_game(game)
-{
-	m_window.setFramerateLimit(inGameFpsLimit);
-}
+    m_game(game),
+	m_moveClock(),
+	m_moveInterval(sf::seconds(0.2f))
+{}
 
 void PlayState::processInput(Context& context) {
-	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
-	auto handleEvent = [&](const sf::Event& ev) {
-		if (ev.is<sf::Event::Closed>()) {
+    while (const std::optional<sf::Event> ev = m_window.pollEvent()) {
+		if (ev->is<sf::Event::Closed>()) {
 			m_window.close();
 			return;
 		}
-		if (ev.is<sf::Event::KeyPressed>()) {
-			lastKeyPressedEvent = ev;
-		}
-	};
-
-    while (const std::optional<sf::Event> ev = m_window.pollEvent()) {
-        handleEvent(ev.value());
     }
 
-	if (!lastKeyPressedEvent) {
-		context.keyPressed = sf::Keyboard::Key::Unknown; // No key was pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+		context.keyPressed = sf::Keyboard::Key::W;	
 	}
-	else {
-		// Process only latest keyboard input
-		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
-		
-        if (keyCode == sf::Keyboard::Key::Escape) {
-            context.changeState(State::StateID::PAUSE);
-        }
-        else {
-            context.keyPressed = keyCode;
-        }
-    }
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+		context.keyPressed = sf::Keyboard::Key::A;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+		context.keyPressed = sf::Keyboard::Key::S;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+		context.keyPressed = sf::Keyboard::Key::D;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
+		context.changeState(State::StateID::PAUSE);
+	}
 }
 
 void PlayState::update(Context& context) {
-	m_game.forwardSnakeInput(context.keyPressed);
+	if (m_moveClock.getElapsedTime() > m_moveInterval) {
+		m_moveClock.restart();
+	
+		m_game.forwardSnakeInput(context.keyPressed);
 
-	// Returns true if illegal move is attempted
-	if (m_game.tryUpdateSnakeState()) {
-        context.changeState(State::StateID::GAME_OVER);    
-    }
-
+		// Returns true if illegal move is attempted
+		if (m_game.tryUpdateSnakeState()) {
+			context.changeState(State::StateID::GAME_OVER);    
+		}
+	}
 }
 
 void PlayState::render(Context& context) {
