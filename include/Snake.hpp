@@ -15,6 +15,7 @@ public:
 	Direction getCurrDir();
 	void updateDir(sf::Keyboard::Key keyPressed);
 	void rotateSegment(Direction dir, sf::Transformable& segment);
+	void updateFaceTexture(std::string filePath);
 	void reset();
 private:
 	int m_startTilePosX;

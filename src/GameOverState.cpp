@@ -5,7 +5,10 @@ GameOverState::GameOverState(sf::RenderWindow& window, Game& game, GameOverMenu&
     State(window),    
     m_game(game),
     m_menu(menu)
-{}
+{
+    // Change snake face texture
+    m_game.updateSnakeFace("resources/snake_face_dead.png");
+}
 
 void GameOverState::processInput(Context& context) {
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;

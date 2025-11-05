@@ -234,3 +234,7 @@ sf::Vector2f Game::generateRandomFreeTilePos() {
 
 	return sf::Vector2f(x * Utils::g_tileSize, y * Utils::g_tileSize);
 }
+
+void Game::updateSnakeFace(std::string filePath) {
+	m_snake.updateFaceTexture(filePath);
+}

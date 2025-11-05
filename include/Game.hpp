@@ -18,6 +18,7 @@ public:
 	bool tryUpdateSnakeState();
 	void initializeFreeTiles();
 	void growSnake();
+	void updateSnakeFace(std::string filePath);
 	sf::Vector2f getNextSnakeHeadPos();
 	sf::Vector2f generateRandomFreeTilePos();
 	

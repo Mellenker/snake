@@ -10,7 +10,7 @@ Snake::Snake(int startTilePosX, int startTilePosY) :
 	m_colorHead(Colors::snakeHead),
 	m_colorTail(Colors::snakeBody),
 	m_currDir(NONE),
-	m_snakeFace("resources/snake_face.png")
+	m_snakeFace("resources/snake_face_alive.png")
 {
 	reset();
 }
@@ -108,6 +108,7 @@ void Snake::reset() {
 	head.setPosFromTopLeft(m_headPos);
 	tail.setPosFromTopLeft(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
 
+	updateFaceTexture("resources/snake_face_alive.png");
 	head.setTexture(&m_snakeFace);
 	tail.setFillColor(m_colorTail);
 
@@ -121,3 +122,9 @@ void Snake::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 		target.draw(segment, states);
 	}
 };
+
+void Snake::updateFaceTexture(std::string filePath) {
+	if (!m_snakeFace.loadFromFile(filePath)) {
+		throw std::runtime_error("Failed to load snake face texture");
+	}
+}
