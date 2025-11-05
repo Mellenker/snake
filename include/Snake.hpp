@@ -13,7 +13,7 @@ public:
 	void addSegment();
 	void setDir(Direction newDir);
 	Direction getCurrDir();
-	void changeDir(sf::Keyboard::Key keyPressed);
+	void updateDir(sf::Keyboard::Key keyPressed);
 	void rotateSegment(Direction dir, sf::Transformable& segment);
 	void reset();
 private:

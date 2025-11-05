@@ -6,7 +6,7 @@ PlayState::PlayState(sf::RenderWindow& window, Game& game) :
     State(window),
     m_game(game),
 	m_moveClock(),
-	m_moveInterval(sf::seconds(0.2f))
+	m_moveInterval(sf::seconds(0.1f))
 {}
 
 void PlayState::processInput(Context& context) {
@@ -43,7 +43,7 @@ void PlayState::update(Context& context) {
 	else if (m_moveClock.getElapsedTime() > m_moveInterval) {
 		m_moveClock.restart();
 
-		m_game.forwardSnakeInput(context.keyPressed);
+		m_game.updateSnakeDir(context.keyPressed);
 
 		// Returns true if illegal move is attempted
 		if (m_game.tryUpdateSnakeState()) {

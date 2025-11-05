@@ -42,7 +42,7 @@ sf::Vector2f Snake::getTailEnd() {
 	return m_tailPos;
 }
 
-void Snake::changeDir(sf::Keyboard::Key keyPressed) {
+void Snake::updateDir(sf::Keyboard::Key keyPressed) {
 	// Handle ingame keyboard input
 	switch (keyPressed) {
 	case sf::Keyboard::Key::W:

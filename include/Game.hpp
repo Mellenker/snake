@@ -10,7 +10,7 @@ class Game {
 public:
 	Game();
 	void drawObjects(sf::RenderWindow& window);
-	void forwardSnakeInput(sf::Keyboard::Key keyPressed);
+	void updateSnakeDir(sf::Keyboard::Key keyPressed);
 	void spawnTiles(sf::RenderTexture& texture);
 	void resetGame();
 	bool detectAppleCollision(sf::Vector2f nextHeadPos);

@@ -37,8 +37,8 @@ void Game::drawObjects(sf::RenderWindow& window) {
 	window.draw(m_scoreCounter);
 }
 
-void Game::forwardSnakeInput(sf::Keyboard::Key keyPressed) {
-	m_snake.changeDir(keyPressed);
+void Game::updateSnakeDir(sf::Keyboard::Key keyPressed) {
+	m_snake.updateDir(keyPressed);
 }
 
 // Populate map with tiles
@@ -82,6 +82,8 @@ bool Game::tryUpdateSnakeState() {
 	
 	if (detectAppleCollision(nextHeadPos)) {
 		m_snake.addSegment();
+		m_snake.addSegment();
+		m_snake.addSegment();
 		m_scoreCounter.addPoint();
 
 		sf::Vector2f nextApplePos = generateRandomFreeTilePos();
@@ -105,16 +107,16 @@ sf::Vector2f Game::getNextSnakeHeadPos() {
 	sf::Vector2f snakeHeadPos = m_snake.getHeadPos();
 
 	switch (m_snake.getCurrDir()) {
-	case Snake::UP:
+	case Snake::Direction::UP:
 		snakeHeadPos.y = snakeHeadPos.y - Utils::g_tileSize;
 		break;
-	case Snake::LEFT:
+	case Snake::Direction::LEFT:
 		snakeHeadPos.x = snakeHeadPos.x - Utils::g_tileSize;
 		break;
-	case Snake::DOWN:
+	case Snake::Direction::DOWN:
 		snakeHeadPos.y = snakeHeadPos.y + Utils::g_tileSize;
 		break;
-	case Snake::RIGHT:
+	case Snake::Direction::RIGHT:
 		snakeHeadPos.x = snakeHeadPos.x + Utils::g_tileSize;
 		break;
 	default:
