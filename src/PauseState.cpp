@@ -5,9 +5,7 @@ PauseState::PauseState(sf::RenderWindow& window, Game& game, PauseMenu& menu) :
     State(window),    
     m_game(game),
     m_menu(menu)
-{
-    window.setFramerateLimit(0); // Disable FPS limit in menus
-}
+{}
 
 void PauseState::processInput(Context& context) {
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
@@ -22,7 +20,7 @@ void PauseState::processInput(Context& context) {
 		}
 	};
 
-    // Ensure no busy waiting in menus
+    // Block until event
     if (const std::optional<sf::Event> ev = m_window.waitEvent()) {
         handleEvent(ev.value());
         // Drain any additional events in queue, keep latest key pressed
@@ -39,16 +37,16 @@ void PauseState::processInput(Context& context) {
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
         switch (keyCode) {
         case sf::Keyboard::Key::W:
-            m_menu.moveUp();
+            context.keyPressed = sf::Keyboard::Key::W;
             break;
         case sf::Keyboard::Key::S:
-            m_menu.moveDown();
+            context.keyPressed = sf::Keyboard::Key::S;
             break;
         case sf::Keyboard::Key::Enter:
-            context.pauseMenuAction = m_menu.decideAction();
+            context.keyPressed = sf::Keyboard::Key::Enter;
             break;
         case sf::Keyboard::Key::Escape:
-            context.pauseMenuAction = PauseMenu::Action::UNPAUSE;
+            context.keyPressed = sf::Keyboard::Key::Escape;
             break;
         default:
             break;
@@ -57,22 +55,40 @@ void PauseState::processInput(Context& context) {
 }
 
 void PauseState::update(Context& context) {
-    switch (context.pauseMenuAction.value_or(PauseMenu::Action::NONE)) {
-    case PauseMenu::Action::UNPAUSE:
-        context.changeState(State::StateID::PLAY);
-        break;
-    case PauseMenu::Action::RESTART:
-        m_game.resetGame();
-        context.changeState(State::StateID::PLAY);
-        break;
-    case PauseMenu::Action::EXIT:
-        m_window.close();
-        break;
-    default:
+    std::optional<PauseMenu::Action> action = std::nullopt;
+    switch (context.keyPressed)
+    {
+    case sf::Keyboard::Key::W:
+        m_menu.moveUp();
         break;  
+    case sf::Keyboard::Key::S:
+        m_menu.moveDown();    
+        break;  
+    case sf::Keyboard::Key::Enter:
+        action = m_menu.decideAction();
+        break;  
+    case sf::Keyboard::Key::Escape:
+        action = PauseMenu::Action::UNPAUSE;
+        break;
+    }
+
+    if (action) {
+        switch (action.value()) {
+        case PauseMenu::Action::UNPAUSE:
+            context.changeState(State::StateID::PLAY);
+            break;
+        case PauseMenu::Action::RESTART:
+            m_game.resetGame();
+            context.changeState(State::StateID::PLAY);
+            break;
+        case PauseMenu::Action::EXIT:
+            m_window.close();
+            break;
+        default:
+            break;  
+        }
     }
     
-    context.pauseMenuAction = PauseMenu::Action::NONE; // Reset action
 }
 
 void PauseState::render(Context& context) {

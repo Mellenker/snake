@@ -32,3 +32,4 @@ Built using SFML 3.0.2
 ```cmake -B build/vs2022 -G "Visual Studio 17 2022"```
 
 ```cmake --build build/vs2022 --config Release```
+

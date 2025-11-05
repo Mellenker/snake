@@ -8,9 +8,5 @@
 
 struct Context {    
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;
-
-    std::optional<PauseMenu::Action> pauseMenuAction;
-    std::optional<GameOverMenu::Action> gameOverMenuAction;
-
     std::function<void(State::StateID id)> changeState;
 };

@@ -5,9 +5,7 @@ GameOverState::GameOverState(sf::RenderWindow& window, Game& game, GameOverMenu&
     State(window),    
     m_game(game),
     m_menu(menu)
-{
-    window.setFramerateLimit(0); // Disable FPS limit in menus
-}
+{}
 
 void GameOverState::processInput(Context& context) {
 	std::optional<sf::Event> lastKeyPressedEvent = std::nullopt;
@@ -39,13 +37,13 @@ void GameOverState::processInput(Context& context) {
 		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
         switch (keyCode) {
         case sf::Keyboard::Key::W:
-            m_menu.moveUp();
+            context.keyPressed = sf::Keyboard::Key::W;
             break;
         case sf::Keyboard::Key::S:
-            m_menu.moveDown();
+            context.keyPressed = sf::Keyboard::Key::S;
             break;
         case sf::Keyboard::Key::Enter:
-            context.gameOverMenuAction = m_menu.decideAction();
+            context.keyPressed = sf::Keyboard::Key::Enter;
             break;
         default:
             break;
@@ -54,19 +52,32 @@ void GameOverState::processInput(Context& context) {
 }
 
 void GameOverState::update(Context& context) {
-    switch (context.gameOverMenuAction.value_or(GameOverMenu::Action::NONE)) {
-    case GameOverMenu::Action::RESTART:
-        m_game.resetGame();
-        context.changeState(State::StateID::PLAY);
-        break;
-    case GameOverMenu::Action::EXIT:
-        m_window.close();
-        break;
-    default:
+    std::optional<GameOverMenu::Action> action = std::nullopt;
+    switch (context.keyPressed) {
+    case sf::Keyboard::Key::W:
+        m_menu.moveUp();
+        break;  
+    case sf::Keyboard::Key::S:
+        m_menu.moveDown();    
+        break;  
+    case sf::Keyboard::Key::Enter:
+        action = m_menu.decideAction();
         break;  
     }
 
-    context.gameOverMenuAction = GameOverMenu::Action::NONE; // Reset action
+    if (action) {
+        switch (action.value()) {
+        case GameOverMenu::Action::RESTART:
+            m_game.resetGame();
+            context.changeState(State::StateID::PLAY);
+            break;
+        case GameOverMenu::Action::EXIT:
+            m_window.close();
+            break;
+        default:
+            break;  
+        }
+    }
 }
 
 void GameOverState::render(Context& context) {
