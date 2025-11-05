@@ -17,6 +17,7 @@ public:
 	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	bool tryUpdateSnakeState();
 	void initializeFreeTiles();
+	void growSnake();
 	sf::Vector2f getNextSnakeHeadPos();
 	sf::Vector2f generateRandomFreeTilePos();
 	

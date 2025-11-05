@@ -8,7 +8,7 @@ public:
 	void move(sf::Vector2f newPosition);
 	void draw(sf::RenderWindow& window);
 	sf::Vector2f getHeadPos();
-	sf::Vector2f getTailEnd();
+	sf::Vector2f getLastSegmentPos();
 	enum Direction { NONE, UP, LEFT, RIGHT, DOWN };
 	void addSegment();
 	void setDir(Direction newDir);
@@ -20,7 +20,7 @@ private:
 	int m_startTilePosX;
 	int m_startTilePosY;
 	sf::Vector2f m_headPos;
-	sf::Vector2f m_tailPos;
+	sf::Vector2f m_lastSegmentPos;
 	std::vector<CenteredRect> m_body;
 	Direction m_currDir;
 

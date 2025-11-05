@@ -6,7 +6,7 @@ PlayState::PlayState(sf::RenderWindow& window, Game& game) :
     State(window),
     m_game(game),
 	m_moveClock(),
-	m_moveInterval(sf::seconds(0.1f))
+	m_moveInterval(sf::seconds(0.15f))
 {}
 
 void PlayState::processInput(Context& context) {

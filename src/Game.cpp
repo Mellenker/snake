@@ -18,7 +18,7 @@ Game::Game() :
 
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
-	occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
+	//occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
 
 	m_apple.spawnAtTile(generateRandomFreeTilePos());
 }
@@ -81,9 +81,7 @@ bool Game::tryUpdateSnakeState() {
 	}
 	
 	if (detectAppleCollision(nextHeadPos)) {
-		m_snake.addSegment();
-		m_snake.addSegment();
-		m_snake.addSegment();
+		growSnake();
 		m_scoreCounter.addPoint();
 
 		sf::Vector2f nextApplePos = generateRandomFreeTilePos();
@@ -95,12 +93,18 @@ bool Game::tryUpdateSnakeState() {
 		m_apple.spawnAtTile(nextApplePos);
 	}
 	
+	occupyTile(nextHeadPos.x, nextHeadPos.y);
+	freeTile(m_snake.getLastSegmentPos().x, m_snake.getLastSegmentPos().y);
+
 	m_snake.move(nextHeadPos);
 
-	occupyTile(nextHeadPos.x, nextHeadPos.y);
-	freeTile(m_snake.getTailEnd().x, m_snake.getTailEnd().y);
-
 	return false;
+}
+
+void Game::growSnake() {
+	m_snake.addSegment();
+	m_snake.addSegment();
+	m_snake.addSegment();
 }
 
 sf::Vector2f Game::getNextSnakeHeadPos() {

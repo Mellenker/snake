@@ -23,8 +23,8 @@ void Snake::move(sf::Vector2f newPosition) {
 	m_body.insert(m_body.begin(), segment);
 	m_body[1].setFillColor(m_colorTail);
 	m_body[1].setTexture(nullptr);
-	m_tailPos = m_body.back().getTopLeftFromPos();
 	m_body.pop_back();
+	m_lastSegmentPos = m_body.back().getTopLeftFromPos();
 }
 
 sf::Vector2f Snake::getHeadPos() {
@@ -33,13 +33,14 @@ sf::Vector2f Snake::getHeadPos() {
 
 void Snake::addSegment() {
 	CenteredRect segment = m_body.back();
-	segment.setPosFromTopLeft(m_tailPos);
 	segment.setFillColor(m_colorTail);
+	segment.setPosFromTopLeft(m_lastSegmentPos); // Add on top of last segment
 	m_body.insert(m_body.end(), segment);
+	m_lastSegmentPos = segment.getTopLeftFromPos();
 }
 
-sf::Vector2f Snake::getTailEnd() {
-	return m_tailPos;
+sf::Vector2f Snake::getLastSegmentPos() {
+	return m_lastSegmentPos;
 }
 
 void Snake::updateDir(sf::Keyboard::Key keyPressed) {
