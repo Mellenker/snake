@@ -17,7 +17,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	void reset();
 private:
-	void rotateSegment(Direction dir, sf::Transformable& segment);
+	void rotateSegmentWithDir(Direction dir, sf::Transformable& segment);
 
 	std::vector<CenteredRect> m_body;
 	Direction m_currDir;

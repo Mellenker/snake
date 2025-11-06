@@ -62,22 +62,22 @@ void Snake::updateDir(sf::Keyboard::Key keyPressed) {
 		break;
 	}
 	// Rotate face with direction
-	rotateSegment(m_currDir, m_body[0]);
+	rotateSegmentWithDir(m_currDir, m_body[0]);
 }
 
-void Snake::rotateSegment(Direction dir, sf::Transformable& segment) {
+void Snake::rotateSegmentWithDir(Direction dir, sf::Transformable& segment) {
 	switch(dir) {
 		case UP:
-			segment.setRotation(sf::degrees(270));
+			segment.setRotation(sf::degrees(180));
 			break;
 		case RIGHT:
-			segment.setRotation(sf::degrees(0));
+			segment.setRotation(sf::degrees(270));
 			break;
 		case DOWN:
-			segment.setRotation(sf::degrees(90));
+			segment.setRotation(sf::degrees(0));
 			break;
 		case LEFT:
-			segment.setRotation(sf::degrees(180));
+			segment.setRotation(sf::degrees(90));
 			break;
 		default:
 			break;	
@@ -103,6 +103,7 @@ void Snake::reset() {
 	));
 	updateFaceTexture("assets/textures/snake_face_alive.png");
 	head.setTexture(&m_faceTexture);
+	head.rotate(sf::degrees(270));
 	m_body.push_back(head);
 
 	// Initialize tail

@@ -30,8 +30,15 @@ FetchContent_MakeAvailable(SFML)
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS 'include'/*.hpp)
 
-add_executable(snake 
-    ${SOURCES} 
+if(WIN32)
+    set(APP_ICON "${CMAKE_CURRENT_SOURCE_DIR}/misc/appicon.ico")
+    set(APP_RC "${CMAKE_CURRENT_BINARY_DIR}/appicon.rc")
+    file(WRITE ${APP_RC} "IDI_ICON1 ICON \"${APP_ICON}\"\n")
+    list(APPEND SOURCES ${APP_RC})
+endif()
+
+add_executable(snake
+    ${SOURCES}
     ${HEADERS}
 )
 
@@ -59,7 +66,6 @@ if (WIN32)
         )
     endif()
 endif()
-
 
 # Ensure assets can be acessed by executable
 add_custom_command(TARGET snake POST_BUILD

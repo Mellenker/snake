@@ -12,13 +12,18 @@ Application::Application() :
 	// Build window
 	m_window.create(sf::VideoMode({ Utils::g_mapSizeInTilesX * Utils::g_tileSize, Utils::g_mapSizeInTilesY * Utils::g_tileSize }), "Snake Game");
 	m_window.setTitle("Snake");
-	m_window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presses
+	m_window.setKeyRepeatEnabled(false); // Holding down keys should not count as multiple presse
+
+	// Set window icon
+	sf::Image image;
+	if (image.loadFromFile("assets/textures/snake_face_alive.png")) {
+		m_window.setIcon(image.getSize(), image.getPixelsPtr());
+	}
 
 	// Build context
 	m_context.changeState = [this](State::StateID id) {
 		this->changeState(id);
 	};
-
 }
 
 void Application::runGameLoop() {
