@@ -2,7 +2,7 @@
 #include "Utils.hpp"
 
 ScoreCounter::ScoreCounter()
-	: m_font("resources/arial.ttf"),
+	: m_font("assets/arial.ttf"),
 	m_text(m_font)
 {
 	resetPoints();

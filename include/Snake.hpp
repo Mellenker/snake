@@ -28,7 +28,7 @@ private:
 	sf::Color m_colorHead;
 	sf::Color m_colorTail;
 
-	sf::Texture m_snakeFace;
+	sf::Texture m_faceTexture;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

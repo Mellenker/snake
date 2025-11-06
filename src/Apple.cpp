@@ -3,13 +3,15 @@
 #include "Colors.hpp"
 
 Apple::Apple()
-	: m_shape(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize))
+	: m_shape(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize)),
+	m_texture("assets/textures/apple.png")
 {
-	m_shape.setFillColor(Colors::appleColor);
+	m_texture.setSmooth(true);
+	m_shape.setTexture(&m_texture);
 }
 
-void Apple::spawnAtTile(sf::Vector2f tile) {
-	m_shape.setPosition(sf::Vector2f(tile.x, tile.y));
+void Apple::setPosition(sf::Vector2f pos) {
+	m_shape.setPosition(pos);
 }
 
 sf::Vector2f Apple::getApplePos() {

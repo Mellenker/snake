@@ -61,10 +61,10 @@ if (WIN32)
 endif()
 
 
-# Ensure resources can be acessed by executable
+# Ensure assets can be acessed by executable
 add_custom_command(TARGET snake POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/resources
-    $<TARGET_FILE_DIR:snake>/resources
+    ${CMAKE_SOURCE_DIR}/assets
+    $<TARGET_FILE_DIR:snake>/assets
 )
 

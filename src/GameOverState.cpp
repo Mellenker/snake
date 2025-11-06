@@ -7,7 +7,7 @@ GameOverState::GameOverState(sf::RenderWindow& window, Game& game, GameOverMenu&
     m_menu(menu)
 {
     // Change snake face texture
-    m_game.updateSnakeFace("resources/snake_face_dead.png");
+    m_game.updateSnakeFace("assets/textures/snake_face_dead.png");
 }
 
 void GameOverState::processInput(Context& context) {

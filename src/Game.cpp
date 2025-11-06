@@ -20,7 +20,7 @@ Game::Game() :
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
 	//occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
 
-	m_apple.spawnAtTile(generateRandomFreeTilePos());
+	m_apple.setPosition(generateRandomFreeTilePos());
 }
 
 void Game::initializeFreeTiles() {
@@ -90,7 +90,7 @@ bool Game::tryUpdateSnakeState() {
 		while (detectAppleCollision(nextApplePos)) {
 			nextApplePos = generateRandomFreeTilePos();
 		}
-		m_apple.spawnAtTile(nextApplePos);
+		m_apple.setPosition(nextApplePos);
 	}
 	
 	occupyTile(nextHeadPos.x, nextHeadPos.y);
@@ -182,15 +182,13 @@ void Game::resetGame() {
 	occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize,
 			 	m_initSnakeTilePosY * Utils::g_tileSize);
 
-	m_apple = Apple();
-	sf::Vector2f nextApplePos = generateRandomFreeTilePos();
-	
 	// Make sure apple doesn't spawn in its previous position
-	while (detectAppleCollision(nextApplePos)) {
+	sf::Vector2f nextApplePos;
+	do {
 		nextApplePos = generateRandomFreeTilePos();
-	}
+	} while(detectAppleCollision(nextApplePos));
 
-	m_apple.spawnAtTile(nextApplePos);
+	m_apple.setPosition(nextApplePos);
 	m_scoreCounter.resetPoints();
 }
 
