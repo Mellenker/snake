@@ -7,8 +7,7 @@ Snake::Snake(int startTilePosX, int startTilePosY) :
 	m_startTilePosX(startTilePosX),
 	m_startTilePosY(startTilePosY),
 	m_headPos(startTilePosX * Utils::g_tileSize, startTilePosY * Utils::g_tileSize),
-	m_colorHead(Colors::snakeHead),
-	m_colorTail(Colors::snakeBody),
+	m_colorBody(Colors::snakeBody),
 	m_currDir(NONE),
 	m_faceTexture("assets/textures/snake_face_alive.png")
 {
@@ -22,7 +21,7 @@ void Snake::move(sf::Vector2f newPosition) {
 	segment.setPosFromTopLeft(newPosition);
 	m_headPos = newPosition;
 	m_body.insert(m_body.begin(), segment);
-	m_body[1].setFillColor(m_colorTail);
+	m_body[1].setFillColor(m_colorBody);
 	m_body[1].setTexture(nullptr);
 	m_body.pop_back();
 	m_lastSegmentPos = m_body.back().getTopLeftFromPos();
@@ -34,7 +33,7 @@ sf::Vector2f Snake::getHeadPos() {
 
 void Snake::addSegment() {
 	CenteredRect segment = m_body.back();
-	segment.setFillColor(m_colorTail);
+	segment.setFillColor(m_colorBody);
 	segment.setPosFromTopLeft(m_lastSegmentPos); // Add on top of last segment
 	m_body.insert(m_body.end(), segment);
 	m_lastSegmentPos = segment.getTopLeftFromPos();
@@ -111,7 +110,7 @@ void Snake::reset() {
 
 	updateFaceTexture("assets/textures/snake_face_alive.png");
 	head.setTexture(&m_faceTexture);
-	tail.setFillColor(m_colorTail);
+	tail.setFillColor(m_colorBody);
 
 	m_body.push_back(head);
 	m_body.push_back(tail);

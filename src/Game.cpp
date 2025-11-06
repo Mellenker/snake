@@ -7,13 +7,13 @@ Game::Game() :
 	m_initSnakeTilePosX(2),
 	m_initSnakeTilePosY(2),
 	m_snake(m_initSnakeTilePosX, m_initSnakeTilePosY),
-	m_texture(sf::Vector2u(Utils::g_mapSizeInTilesX * Utils::g_tileSize, Utils::g_mapSizeInTilesY * Utils::g_tileSize)),
-	m_background(m_texture.getTexture()) // Texture empty at this point
+	m_backgroundTexture(sf::Vector2u(Utils::g_mapSizeInTilesX * Utils::g_tileSize, Utils::g_mapSizeInTilesY * Utils::g_tileSize)),
+	m_background(m_backgroundTexture.getTexture()) // Texture empty at this point
 {
 	// Setup background
-	spawnTiles(m_texture);
-	m_background.setTexture(m_texture.getTexture(), true);
-	initializeFreeTiles();
+	initBackgroundTexture(m_backgroundTexture);
+	m_background.setTexture(m_backgroundTexture.getTexture(), true);
+	initFreeTiles();
 
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
@@ -22,7 +22,7 @@ Game::Game() :
 	m_apple.setPosition(generateRandomFreeTilePos());
 }
 
-void Game::initializeFreeTiles() {
+void Game::initFreeTiles() {
 	for (int i = 0; i < (Utils::g_mapSizeInTilesX * Utils::g_mapSizeInTilesY); i++) {
 		m_freeTiles.push_back(i);
 		m_posInFreeTiles.push_back(i);
@@ -41,7 +41,7 @@ void Game::updateSnakeDir(sf::Keyboard::Key keyPressed) {
 }
 
 // Populate map with tiles
-void Game::spawnTiles(sf::RenderTexture& texture) {
+void Game::initBackgroundTexture(sf::RenderTexture& texture) {
 	int tileNum = 0;
 	int xPos = 0;
 	int yPos = 0;
@@ -173,7 +173,7 @@ void Game::resetGame() {
 
 	m_freeTiles.clear();
 	m_posInFreeTiles.clear();
-	initializeFreeTiles();
+	initFreeTiles();
 
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize,

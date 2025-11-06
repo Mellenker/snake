@@ -5,21 +5,22 @@
 class Menu {
 public:
 	Menu();
-	void setTitle(std::string title);
-	void addItem(std::string string);
-	void draw(sf::RenderWindow& window);
 	void moveUp();
 	void moveDown();
-	void updateHighlighted(int newIdx, int oldIdx);
-	void centerOrigin(sf::Text& text);
-	int getHighlightedIdx();
+	void draw(sf::RenderWindow& window);
 protected:
-	int m_windowSizeX;
-	int m_windowSizeY;
+	void setTitle(std::string title);
+	void addItem(std::string string);
 
 	sf::Font m_font;
 	sf::Text m_titleText;
 	std::vector<sf::Text> m_items;
-
 	int m_highlightedIdx;
+
+	int m_windowSizeX;
+	int m_windowSizeY;
+private:
+	void updateHighlighted(int newIdx, int oldIdx);
+	void centerOrigin(sf::Text& text);
+	int getHighlightedIdx();
 };

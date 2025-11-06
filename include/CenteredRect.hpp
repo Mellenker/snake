@@ -3,24 +3,18 @@
 #include <SFML/Graphics.hpp>
 
 /*
-    Rectangle with centered origin but that can be positioned
-    relative to its top left corner.
+    A rectangle with a centered origin that can be positioned relative to
+    its top-left corner. This allows textures to rotate around the center
+    while maintaining position based on the top-left point.
 */
 
 class CenteredRect : public sf::RectangleShape {
 public:
-    CenteredRect(const sf::Vector2f& size) {
-        setSize(size);
-        setOrigin(size / 2.f);
-    }
+    CenteredRect(const sf::Vector2f& size);
 
     // Set position based on top left corner of rect
-    void setPosFromTopLeft(const sf::Vector2f& topLeft) {
-        setPosition(topLeft + getSize() / 2.f);
-    }
+    void setPosFromTopLeft(const sf::Vector2f& topLeft);
 
     // Get top left based on position
-    sf::Vector2f getTopLeftFromPos() {
-        return (getPosition() - getSize() / 2.f);
-    }
+    sf::Vector2f getTopLeftFromPos();
 };
