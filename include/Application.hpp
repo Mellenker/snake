@@ -12,9 +12,10 @@ class Application {
 public:
 	Application();
 	void runGameLoop();
+private: 
 	std::unique_ptr<State> createState(State::StateID id);
 	void changeState(State::StateID id);
-private: 
+
 	sf::RenderWindow m_window;
 	Game m_game; 
 

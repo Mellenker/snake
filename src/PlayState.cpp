@@ -8,34 +8,47 @@ PlayState::PlayState(sf::RenderWindow& window, Game& game) :
 {}
 
 void PlayState::processInput(Context& context) {
+	bool keyWasPressed = false;
     while (const std::optional<sf::Event> ev = m_window.pollEvent()) {
 		if (ev->is<sf::Event::Closed>()) {
 			m_window.close(); // Put into context and handle in update instead?
 			return;
 		}
+        else if (const auto* keyPressed = ev->getIf<sf::Event::KeyPressed>()) {
+            if (keyPressed->scancode == sf::Keyboard::Scancode::Escape) {
+				context.keyPressed = sf::Keyboard::Key::Escape;
+				keyWasPressed = true;
+			}
+        }
     }
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 		context.keyPressed = sf::Keyboard::Key::W;	
+		keyWasPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
 		context.keyPressed = sf::Keyboard::Key::A;
+		keyWasPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 		context.keyPressed = sf::Keyboard::Key::S;
+		keyWasPressed = true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
 		context.keyPressed = sf::Keyboard::Key::D;
+		keyWasPressed = true;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)) {
-		context.keyPressed = sf::Keyboard::Key::Escape;
+	if (!keyWasPressed) {
+		context.keyPressed = sf::Keyboard::Key::Unknown;
 	}
+
 }
 
 void PlayState::update(Context& context) {
 	// Pause
 	if (context.keyPressed == sf::Keyboard::Key::Escape) {
 		context.changeState(State::StateID::PAUSE);
+		context.keyPressed = sf::Keyboard::Key::Unknown; // Clear key state after handling
 	}
 	// Movement
 	else if (m_moveClock.getElapsedTime() > m_moveInterval) {

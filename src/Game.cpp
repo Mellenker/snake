@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include <iostream>
 #include <random>
 #include "Utils.hpp"
 #include "Colors.hpp"
@@ -179,8 +178,8 @@ void Game::resetGame() {
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize,
 				m_initSnakeTilePosY * Utils::g_tileSize);
-	occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize,
-			 	m_initSnakeTilePosY * Utils::g_tileSize);
+	// occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize,
+	// 		 	m_initSnakeTilePosY * Utils::g_tileSize);
 
 	// Make sure apple doesn't spawn in its previous position
 	sf::Vector2f nextApplePos;

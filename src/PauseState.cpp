@@ -71,7 +71,6 @@ void PauseState::update(Context& context) {
         action = PauseMenu::Action::UNPAUSE;
         break;
     }
-
     if (action) {
         switch (action.value()) {
         case PauseMenu::Action::UNPAUSE:
@@ -88,7 +87,7 @@ void PauseState::update(Context& context) {
             break;  
         }
     }
-    
+    context.keyPressed = sf::Keyboard::Key::Unknown; // Reset key state after handling
 }
 
 void PauseState::render(Context& context) {
