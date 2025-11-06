@@ -11,7 +11,7 @@ void PlayState::processInput(Context& context) {
 	bool keyWasPressed = false;
     while (const std::optional<sf::Event> ev = m_window.pollEvent()) {
 		if (ev->is<sf::Event::Closed>()) {
-			m_window.close(); // Put into context and handle in update instead?
+			context.closeWindow = true;
 			return;
 		}
         else if (const auto* keyPressed = ev->getIf<sf::Event::KeyPressed>()) {
@@ -45,7 +45,10 @@ void PlayState::processInput(Context& context) {
 }
 
 void PlayState::update(Context& context) {
-	// Pause
+	// Close window?
+	if (context.closeWindow)
+		m_window.close();
+	// Pause?
 	if (context.keyPressed == sf::Keyboard::Key::Escape) {
 		context.changeState(State::StateID::PAUSE);
 		context.keyPressed = sf::Keyboard::Key::Unknown; // Clear key state after handling

@@ -9,4 +9,5 @@
 struct Context {    
     sf::Keyboard::Key keyPressed = sf::Keyboard::Key::Unknown;
     std::function<void(State::StateID id)> changeState;
+    bool closeWindow = false;
 };

@@ -15,7 +15,7 @@ void GameOverState::processInput(Context& context) {
 
 	auto handleEvent = [&](const sf::Event& ev) {
 		if (ev.is<sf::Event::Closed>()) {
-			m_window.close();
+			context.closeWindow = true;
 			return;
 		}
 		if (ev.is<sf::Event::KeyPressed>()) {
@@ -55,6 +55,10 @@ void GameOverState::processInput(Context& context) {
 }
 
 void GameOverState::update(Context& context) {
+    // Close window?
+	if (context.closeWindow)
+		m_window.close();
+    // Menu actions
     std::optional<GameOverMenu::Action> action = std::nullopt;
     switch (context.keyPressed) {
     case sf::Keyboard::Key::W:

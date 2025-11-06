@@ -12,7 +12,7 @@ void PauseState::processInput(Context& context) {
 
 	auto handleEvent = [&](const sf::Event& ev) {
 		if (ev.is<sf::Event::Closed>()) {
-			m_window.close();
+			context.closeWindow = true;
 			return;
 		}
 		if (ev.is<sf::Event::KeyPressed>()) {
@@ -55,6 +55,10 @@ void PauseState::processInput(Context& context) {
 }
 
 void PauseState::update(Context& context) {
+    // Close window?
+	if (context.closeWindow)
+		m_window.close();
+    // Menu actions
     std::optional<PauseMenu::Action> action = std::nullopt;
     switch (context.keyPressed)
     {
