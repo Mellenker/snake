@@ -4,9 +4,8 @@
 #include "CenteredRect.hpp"
 
 Snake::Snake(int startTilePosX, int startTilePosY) :
-	m_startTilePosX(startTilePosX),
-	m_startTilePosY(startTilePosY),
-	m_headPos(startTilePosX * Utils::g_tileSize, startTilePosY * Utils::g_tileSize),
+	m_headStartTilePosX(startTilePosX),
+	m_headStartTilePosY(startTilePosY),
 	m_colorBody(Colors::snakeBody),
 	m_currDir(NONE),
 	m_faceTexture("assets/textures/snake_face_alive.png")
@@ -19,28 +18,25 @@ Snake::Snake(int startTilePosX, int startTilePosY) :
 void Snake::move(sf::Vector2f newPosition) {
 	CenteredRect segment = m_body.front();
 	segment.setPosFromTopLeft(newPosition);
-	m_headPos = newPosition;
 	m_body.insert(m_body.begin(), segment);
 	m_body[1].setFillColor(m_colorBody);
 	m_body[1].setTexture(nullptr);
 	m_body.pop_back();
-	m_lastSegmentPos = m_body.back().getTopLeftFromPos();
 }
 
 sf::Vector2f Snake::getHeadPos() {
-	return m_headPos;
+	return m_body[0].getTopLeftFromPos();
 }
 
 void Snake::addSegment() {
 	CenteredRect segment = m_body.back();
 	segment.setFillColor(m_colorBody);
-	segment.setPosFromTopLeft(m_lastSegmentPos); // Add on top of last segment
+	segment.setPosFromTopLeft(getLastSegmentPos()); // Add on top of last segment
 	m_body.insert(m_body.end(), segment);
-	m_lastSegmentPos = segment.getTopLeftFromPos();
 }
 
 sf::Vector2f Snake::getLastSegmentPos() {
-	return m_lastSegmentPos;
+	return m_body.back().getTopLeftFromPos();
 }
 
 void Snake::updateDir(sf::Keyboard::Key keyPressed) {
@@ -99,20 +95,23 @@ enum Snake::Direction Snake::getCurrDir() {
 void Snake::reset() {
 	m_body.clear();
 
-	// Create snake head and tail
+	// Initialize head
 	CenteredRect head(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
-	CenteredRect tail(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
-
-	m_headPos = sf::Vector2f(m_startTilePosX * Utils::g_tileSize,m_startTilePosY * Utils::g_tileSize);
-
-	head.setPosFromTopLeft(m_headPos);
-	tail.setPosFromTopLeft(sf::Vector2f(m_headPos.x - Utils::g_tileSize, m_headPos.y));
-
+	head.setPosFromTopLeft(sf::Vector2f(
+		m_headStartTilePosX * Utils::g_tileSize,
+		m_headStartTilePosY * Utils::g_tileSize
+	));
 	updateFaceTexture("assets/textures/snake_face_alive.png");
 	head.setTexture(&m_faceTexture);
-	tail.setFillColor(m_colorBody);
-
 	m_body.push_back(head);
+
+	// Initialize tail
+	CenteredRect tail(sf::Vector2f(Utils::g_tileSize, Utils::g_tileSize));
+	tail.setPosFromTopLeft(sf::Vector2f(
+		getHeadPos().x - Utils::g_tileSize, 
+		getHeadPos().y
+	));
+	tail.setFillColor(m_colorBody);
 	m_body.push_back(tail);
 }
 

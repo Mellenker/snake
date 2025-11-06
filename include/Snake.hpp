@@ -20,11 +20,9 @@ private:
 	void rotateSegment(Direction dir, sf::Transformable& segment);
 
 	std::vector<CenteredRect> m_body;
-	sf::Vector2f m_headPos;
-	sf::Vector2f m_lastSegmentPos;
 	Direction m_currDir;
-	int m_startTilePosX;
-	int m_startTilePosY;
+	int m_headStartTilePosX;
+	int m_headStartTilePosY;
 
 	sf::Texture m_faceTexture;
 	sf::Color m_colorBody;
