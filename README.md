@@ -1,14 +1,14 @@
-# Snake in C++ 🐍
+#  Snake in C++ 🐍
+
 
 Built using SFML 3.0.2
 
 <img src="misc/screenshot.png" alt="Screenshot" width="400">
 
-## Controls
-- **WASD** — Move the snake
-- **Enter** — Confirm / Select
+## Download
+👉  [**Latest binary**](https://github.com/Mellenker/snake/releases/latest)
 
-## How to build using CMake
+## Build it yourself
 #### Prerequisites
 * CMake version 3.28 or higher
 * CMake generator:
@@ -33,3 +33,6 @@ Built using SFML 3.0.2
 
 ```cmake --build build/vs2022 --config Release```
 
+## Controls
+- **WASD** — Move the snake
+- **Enter** — Confirm / Select

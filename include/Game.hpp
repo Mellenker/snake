@@ -19,7 +19,7 @@ private:
 	bool detectGameOverCollision(sf::Vector2f nextHeadPos);
 	void initBackgroundTexture(sf::RenderTexture& texture);
 	void initFreeTiles();
-	void growSnake();
+	void growSnake(int numOfSegments);
 	void occupyTile(int x, int y);
 	void freeTile(int x, int y);
 	sf::Vector2f getNextSnakeHeadPos();

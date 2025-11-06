@@ -17,7 +17,7 @@ Game::Game() :
 
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
-	//occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
+	occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize, m_initSnakeTilePosY * Utils::g_tileSize);
 
 	m_apple.setPosition(generateRandomFreeTilePos());
 }
@@ -80,7 +80,7 @@ bool Game::tryUpdateSnakeState() {
 	}
 	
 	if (detectAppleCollision(nextHeadPos)) {
-		growSnake();
+		growSnake(3);
 		m_scoreCounter.addPoint();
 
 		sf::Vector2f nextApplePos = generateRandomFreeTilePos();
@@ -100,10 +100,10 @@ bool Game::tryUpdateSnakeState() {
 	return false;
 }
 
-void Game::growSnake() {
-	m_snake.addSegment();
-	m_snake.addSegment();
-	m_snake.addSegment();
+void Game::growSnake(int numOfSegments) {
+	for (int i = 0; i < numOfSegments; i++) {
+		m_snake.addSegment();
+	}
 }
 
 sf::Vector2f Game::getNextSnakeHeadPos() {
@@ -178,8 +178,8 @@ void Game::resetGame() {
 	// Occupy initial snake tiles
 	occupyTile(m_initSnakeTilePosX * Utils::g_tileSize,
 				m_initSnakeTilePosY * Utils::g_tileSize);
-	// occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize,
-	// 		 	m_initSnakeTilePosY * Utils::g_tileSize);
+	occupyTile((m_initSnakeTilePosX * Utils::g_tileSize) - Utils::g_tileSize,
+			 	m_initSnakeTilePosY * Utils::g_tileSize);
 
 	// Make sure apple doesn't spawn in its previous position
 	sf::Vector2f nextApplePos;
