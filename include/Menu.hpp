@@ -9,8 +9,8 @@ public:
 	void moveDown();
 	void draw(sf::RenderWindow& window);
 protected:
-	void setTitle(std::string title);
-	void addItem(std::string string);
+	void setTitle(const std::string& string);
+	void addItem(const std::string& string);
 
 	sf::Font m_font;
 	sf::Text m_titleText;

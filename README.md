@@ -44,3 +44,7 @@ cmake --build build/vs2022 --config Release
 * Main menu
 * Highscores table
 * Sound effects
+* Allow user to change settings like...
+    - Movement keys
+    - Difficulty
+    - Color of snake

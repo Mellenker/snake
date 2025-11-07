@@ -13,7 +13,7 @@ public:
 	void updateDir(sf::Keyboard::Key keyPressed);
 	sf::Vector2f getHeadPos();
 	sf::Vector2f getLastSegmentPos();
-	void updateFaceTexture(std::string filePath);
+	void updateFaceTexture(std::string_view filePath);
 	void draw(sf::RenderWindow& window);
 	void reset();
 private:

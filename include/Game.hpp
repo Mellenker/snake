@@ -11,7 +11,7 @@ public:
 	Game();
 	bool tryUpdateSnakeState();
 	void updateSnakeDir(sf::Keyboard::Key keyPressed);
-	void updateSnakeFace(std::string filePath);
+	void updateSnakeFace(std::string_view filePath);
 	void drawObjects(sf::RenderWindow& window);
 	void resetGame();
 private:
@@ -20,7 +20,7 @@ private:
 	void initBackgroundTexture(sf::RenderTexture& texture);
 	void initFreeTiles();
 	void growSnake(int numOfSegments);
-	void occupyTile(int x, int y);
+	void occupyTile(int x, const int y);
 	void freeTile(int x, int y);
 	sf::Vector2f getNextSnakeHeadPos();
 	sf::Vector2f generateRandomFreeTilePos();
@@ -40,4 +40,5 @@ private:
 	sf::Sprite m_background;
 
 	ScoreCounter m_scoreCounter;
+	m_scoreCounter.draw();
 };

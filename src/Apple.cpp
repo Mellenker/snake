@@ -14,7 +14,7 @@ void Apple::setPosition(sf::Vector2f pos) {
 	m_shape.setPosition(pos);
 }
 
-sf::Vector2f Apple::getApplePos() {
+sf::Vector2f Apple::getPosition() {
 	return m_shape.getPosition();
 }
 

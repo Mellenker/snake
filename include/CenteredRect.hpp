@@ -10,10 +10,10 @@
 
 class CenteredRect : public sf::RectangleShape {
 public:
-    CenteredRect(const sf::Vector2f& size);
+    CenteredRect(sf::Vector2f size);
 
     // Set position based on top left corner of rect
-    void setPosFromTopLeft(const sf::Vector2f& topLeft);
+    void setPosFromTopLeft(sf::Vector2f topLeft);
 
     // Get top left based on position
     sf::Vector2f getTopLeftFromPos();

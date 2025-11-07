@@ -33,7 +33,7 @@ void Game::drawObjects(sf::RenderWindow& window) {
 	window.draw(m_background);
 	window.draw(m_apple);
 	window.draw(m_snake);
-	window.draw(m_scoreCounter);
+	window.draw(m_scoreCounter);	
 }
 
 void Game::updateSnakeDir(sf::Keyboard::Key keyPressed) {
@@ -130,7 +130,7 @@ sf::Vector2f Game::getNextSnakeHeadPos() {
 }
 
 bool Game::detectAppleCollision(sf::Vector2f nextHeadPos) {
-	sf::Vector2f appleTilePos = m_apple.getApplePos();
+	sf::Vector2f appleTilePos = m_apple.getPosition();
 
 	if (nextHeadPos == appleTilePos) {
 		return true;
@@ -232,6 +232,6 @@ sf::Vector2f Game::generateRandomFreeTilePos() {
 	return sf::Vector2f(x * Utils::g_tileSize, y * Utils::g_tileSize);
 }
 
-void Game::updateSnakeFace(std::string filePath) {
+void Game::updateSnakeFace(std::string_view filePath) {
 	m_snake.updateFaceTexture(filePath);
 }

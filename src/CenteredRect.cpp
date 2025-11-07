@@ -1,12 +1,12 @@
 #include "CenteredRect.hpp"
 
-CenteredRect::CenteredRect(const sf::Vector2f& size)
+CenteredRect::CenteredRect(const sf::Vector2f size)
 {
     setSize(size);
     setOrigin(size / 2.f);
 }
 
-void CenteredRect::setPosFromTopLeft(const sf::Vector2f& topLeft) {
+void CenteredRect::setPosFromTopLeft(const sf::Vector2f topLeft) {
     setPosition(topLeft + getSize() / 2.f);
 }
 

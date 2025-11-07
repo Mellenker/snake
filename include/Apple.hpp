@@ -5,7 +5,7 @@ class Apple : public sf::Drawable {
 public:
 	Apple();
 	void setPosition(sf::Vector2f tile);
-	sf::Vector2f getApplePos();
+	sf::Vector2f getPosition();
 private:
 	sf::RectangleShape m_shape;
 	sf::Texture m_texture;

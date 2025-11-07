@@ -123,7 +123,7 @@ void Snake::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	}
 };
 
-void Snake::updateFaceTexture(std::string filePath) {
+void Snake::updateFaceTexture(std::string_view filePath) {
 	if (!m_faceTexture.loadFromFile(filePath)) {
 		throw std::runtime_error("Failed to load snake face texture");
 	}
