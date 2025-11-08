@@ -215,7 +215,6 @@ void Game::freeTile(int x, int y) {
 	}
 }
 sf::Vector2f Game::generateRandomFreeTilePos() {
-	// Generate random coordinates
 	std::random_device random;
 	std::mt19937 rng(random());
 

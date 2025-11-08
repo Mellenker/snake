@@ -5,9 +5,8 @@
 #include "GameOverState.hpp"
 
 Application::Application() : 
-	m_pauseMenuAction(PauseMenu::Action::NONE),
-	m_gameOverMenuAction(GameOverMenu::Action::NONE),
-	m_currentState(createState(State::StateID::PLAY))
+	m_pauseMenu("Paused"),
+	m_gameOverMenu("Game Over")
 {
 	// Build window
 	m_window.create(sf::VideoMode({ Utils::g_mapSizeInTilesX * Utils::g_tileSize, Utils::g_mapSizeInTilesY * Utils::g_tileSize }), "Snake Game");
@@ -20,10 +19,14 @@ Application::Application() :
 		m_window.setIcon(image.getSize(), image.getPixelsPtr());
 	}
 
-	// Build context
+	// Allow those with access to context to change state
 	m_context.changeState = [this](State::StateID id) {
 		this->changeState(id);
 	};
+
+	setupMenus();
+
+	m_currentState = createState(State::StateID::PLAY);
 }
 
 void Application::runGameLoop() {
@@ -52,4 +55,30 @@ std::unique_ptr<State> Application::createState(State::StateID id) {
 
 void Application::changeState(State::StateID id) {
 	m_currentState = createState(id);
+}
+
+void Application::setupMenus() {
+    // Setup pause menu
+    m_pauseMenu.addMenuItem("Unpause", [&]() {
+        m_context.changeState(State::StateID::PLAY);
+    });
+    
+    m_pauseMenu.addMenuItem("Restart", [&]() {
+        m_game.resetGame();
+        m_context.changeState(State::StateID::PLAY);
+    });
+    
+    m_pauseMenu.addMenuItem("Exit", [&]() {
+        m_window.close();
+    });
+
+    // Setup game over menu
+    m_gameOverMenu.addMenuItem("Restart", [&]() {
+        m_game.resetGame();
+        m_context.changeState(State::StateID::PLAY);
+    });
+    
+    m_gameOverMenu.addMenuItem("Exit", [&]() {
+        m_window.close();
+    });
 }

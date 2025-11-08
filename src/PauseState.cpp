@@ -1,7 +1,7 @@
 #include "PauseState.hpp"
 #include "PlayState.hpp"
 
-PauseState::PauseState(sf::RenderWindow& window, Game& game, PauseMenu& menu) :
+PauseState::PauseState(sf::RenderWindow& window, Game& game, Menu& menu) :
     State(window),    
     m_game(game),
     m_menu(menu)
@@ -55,13 +55,10 @@ void PauseState::processInput(Context& context) {
 }
 
 void PauseState::update(Context& context) {
-    // Close window?
-	if (context.closeWindow)
-		m_window.close();
-    // Menu actions
-    std::optional<PauseMenu::Action> action = std::nullopt;
-    switch (context.keyPressed)
-    {
+    if (context.closeWindow)
+        m_window.close();
+        
+    switch (context.keyPressed) {
     case sf::Keyboard::Key::W:
         m_menu.moveUp();
         break;  
@@ -69,29 +66,13 @@ void PauseState::update(Context& context) {
         m_menu.moveDown();    
         break;  
     case sf::Keyboard::Key::Enter:
-        action = m_menu.decideAction();
+        m_menu.executeSelectedAction();
         break;  
     case sf::Keyboard::Key::Escape:
-        action = PauseMenu::Action::UNPAUSE;
+        context.changeState(State::StateID::PLAY);
         break;
     }
-    if (action) {
-        switch (action.value()) {
-        case PauseMenu::Action::UNPAUSE:
-            context.changeState(State::StateID::PLAY);
-            break;
-        case PauseMenu::Action::RESTART:
-            m_game.resetGame();
-            context.changeState(State::StateID::PLAY);
-            break;
-        case PauseMenu::Action::EXIT:
-            m_window.close();
-            break;
-        default:
-            break;  
-        }
-    }
-    context.keyPressed = sf::Keyboard::Key::Unknown; // Reset key state after handling
+    context.keyPressed = sf::Keyboard::Key::Unknown;
 }
 
 void PauseState::render(Context& context) {

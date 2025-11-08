@@ -2,8 +2,6 @@
 #include <SFML/Graphics.hpp>  
 #include "Snake.hpp"  
 #include "Apple.hpp"  
-#include "PauseMenu.hpp"
-#include "GameOverMenu.hpp"
 #include "ScoreCounter.hpp"
 
 class Game {

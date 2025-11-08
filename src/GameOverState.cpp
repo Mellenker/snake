@@ -1,7 +1,6 @@
 #include "GameOverState.hpp"
-#include "PlayState.hpp"
 
-GameOverState::GameOverState(sf::RenderWindow& window, Game& game, GameOverMenu& menu) :
+GameOverState::GameOverState(sf::RenderWindow& window, Game& game, Menu& menu) :
     State(window),    
     m_game(game),
     m_menu(menu)
@@ -58,8 +57,8 @@ void GameOverState::update(Context& context) {
     // Close window?
 	if (context.closeWindow)
 		m_window.close();
-    // Menu actions
-    std::optional<GameOverMenu::Action> action = std::nullopt;
+    
+    // Handle menu navigation and actions
     switch (context.keyPressed) {
     case sf::Keyboard::Key::W:
         m_menu.moveUp();
@@ -68,23 +67,11 @@ void GameOverState::update(Context& context) {
         m_menu.moveDown();    
         break;  
     case sf::Keyboard::Key::Enter:
-        action = m_menu.decideAction();
+        m_menu.executeSelectedAction();
         break;  
     }
-
-    if (action) {
-        switch (action.value()) {
-        case GameOverMenu::Action::RESTART:
-            m_game.resetGame();
-            context.changeState(State::StateID::PLAY);
-            break;
-        case GameOverMenu::Action::EXIT:
-            m_window.close();
-            break;
-        default:
-            break;  
-        }
-    }
+    
+    context.keyPressed = sf::Keyboard::Key::Unknown; // Reset key state after handling
 }
 
 void GameOverState::render(Context& context) {

@@ -3,14 +3,15 @@
 #include "State.hpp"
 #include "Game.hpp"
 #include "Context.hpp"
+#include "Menu.hpp"
 
 class GameOverState : public State {      
 public:
-    GameOverState(sf::RenderWindow& window, Game& game, GameOverMenu& menu);
+    GameOverState(sf::RenderWindow& window, Game& game, Menu& menu);
     void processInput(Context& context) override;
     void update(Context& context) override;
     void render(Context& context) override;
 private:
     Game& m_game;
-    GameOverMenu& m_menu;
+    Menu& m_menu;
 };

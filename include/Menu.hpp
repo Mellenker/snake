@@ -1,30 +1,34 @@
 #pragma once  
 #include <SFML/Graphics.hpp>
+#include <functional>
+#include <vector>
+#include <string>
 
-// Parent class of menus
 class Menu {
 public:
-	Menu(int titleCharSize, int itemCharSize);
-	void moveUp();
-	void moveDown();
-	void draw(sf::RenderWindow& window);
-protected:
-	void setTitle(const std::string& string);
-	void addItem(const std::string& string);
-
-	sf::Font m_font;
-	sf::Text m_titleText;
-	std::vector<sf::Text> m_items;
-	int m_highlightedIdx;
-
-	int m_windowSizeX;
-	int m_windowSizeY;
-
-	int m_titleCharSize = 42;
-	int m_itemCharSize = 30;
-
+    struct MenuItem {
+        MenuItem(const std::string& t, std::function<void()> a) : text(t), action(a) {}
+        std::string text;
+        std::function<void()> action;
+    };
+    Menu(const std::string& title, int titleCharSize = 72, int itemCharSize = 42);
+    void addMenuItem(const std::string& text, std::function<void()> action);
+    void moveUp();
+    void moveDown();
+    void executeSelectedAction();
+    void draw(sf::RenderWindow& window);
 private:
-	void updateHighlighted(int newIdx, int oldIdx);
-	void centerOrigin(sf::Text& text);
-	int getHighlightedIdx();
+    sf::Font m_font;
+    sf::Text m_titleText;
+    std::vector<sf::Text> m_displayTexts;
+    std::vector<MenuItem> m_menuItems;
+    int m_selectedIdx;
+    
+    int m_windowSizeX;
+    int m_windowSizeY;
+    int m_titleCharSize;
+    int m_itemCharSize;
+    
+    void updateHighlighted(int newIdx, int oldIdx);
+    void centerOrigin(sf::Text& text);
 };
