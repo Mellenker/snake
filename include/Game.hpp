@@ -40,5 +40,4 @@ private:
 	sf::Sprite m_background;
 
 	ScoreCounter m_scoreCounter;
-	m_scoreCounter.draw();
 };

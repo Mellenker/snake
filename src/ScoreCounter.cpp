@@ -27,6 +27,7 @@ void ScoreCounter::resetPoints() {
 	m_text.setString(std::to_string(m_score));
 }
 
+// Override
 void ScoreCounter::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	target.draw(m_text, states);
 };
