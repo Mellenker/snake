@@ -23,7 +23,7 @@ The classic game built using C++ and SFML 3.0.2.
 ### Ninja
 
 ```
-cmake -B build/ninja-multi -G "Ninja Multi-Config
+cmake -B build/ninja-multi -G "Ninja Multi-Config"
 ```
 ```
 cmake --build build/ninja-multi --config Release
