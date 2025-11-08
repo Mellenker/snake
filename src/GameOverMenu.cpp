@@ -1,7 +1,7 @@
 #include "GameOverMenu.hpp"
 
-GameOverMenu::GameOverMenu()
-	: Menu()
+GameOverMenu::GameOverMenu() :
+	Menu(72, 42)
 {
 	setTitle("Game Over");
 	addItem("Restart");

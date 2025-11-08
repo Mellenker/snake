@@ -2,7 +2,7 @@
 #include "Utils.hpp"
 
 ScoreCounter::ScoreCounter()
-	: m_font("assets/fonts/Roboto/Roboto-Regular.ttf"),
+	: m_font("assets/fonts/Chewy/Chewy-Regular.ttf"),
 	m_text(m_font)
 {
 	resetPoints();

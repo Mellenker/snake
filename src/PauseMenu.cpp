@@ -1,7 +1,7 @@
 #include "PauseMenu.hpp"
 
-PauseMenu::PauseMenu()
-	: Menu()
+PauseMenu::PauseMenu() :
+	Menu(72, 42)
 {
 	setTitle("Paused");
 	addItem("Unpause");

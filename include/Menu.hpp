@@ -4,7 +4,7 @@
 // Parent class of menus
 class Menu {
 public:
-	Menu();
+	Menu(int titleCharSize, int itemCharSize);
 	void moveUp();
 	void moveDown();
 	void draw(sf::RenderWindow& window);
@@ -19,6 +19,10 @@ protected:
 
 	int m_windowSizeX;
 	int m_windowSizeY;
+
+	int m_titleCharSize = 42;
+	int m_itemCharSize = 30;
+
 private:
 	void updateHighlighted(int newIdx, int oldIdx);
 	void centerOrigin(sf::Text& text);

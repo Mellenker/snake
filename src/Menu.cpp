@@ -2,17 +2,19 @@
 #include <string>
 #include "Utils.hpp"
 
-Menu::Menu()
-	: m_windowSizeX(Utils::g_mapSizeInTilesX* Utils::g_tileSize),
+Menu::Menu(int titleCharSize, int itemCharSize) :
+	m_titleCharSize(titleCharSize),
+	m_itemCharSize(itemCharSize),
+	m_windowSizeX(Utils::g_mapSizeInTilesX* Utils::g_tileSize),
 	m_windowSizeY(Utils::g_mapSizeInTilesY* Utils::g_tileSize),
-	m_font("assets/fonts/Roboto/Roboto-Regular.ttf"),
+	m_font("assets/fonts/Chewy/Chewy-Regular.ttf"),
 	m_titleText(m_font), 
 	m_highlightedIdx(0)
 {}
 
 void Menu::setTitle(const std::string& title) {
 	m_titleText.setString(title);
-	m_titleText.setCharacterSize(42);
+	m_titleText.setCharacterSize(m_titleCharSize);
 	m_titleText.setStyle(sf::Text::Bold);
 
 	centerOrigin(m_titleText);
@@ -20,7 +22,7 @@ void Menu::setTitle(const std::string& title) {
 }
 
 void Menu::addItem(const std::string& string) {
-	sf::Text itemText(m_font, string, 30);
+	sf::Text itemText(m_font, string, m_itemCharSize);
 	centerOrigin(itemText);
 
 	itemText.setOutlineColor(sf::Color::Blue);
@@ -30,7 +32,7 @@ void Menu::addItem(const std::string& string) {
 		itemText.setPosition(sf::Vector2f(m_windowSizeX / 2.0f, m_windowSizeY / 2.0f));
 
 		// Highlight first item by default
-		itemText.setOutlineThickness(3);
+		itemText.setOutlineThickness(4);
 	}
 	else {
 		float prevItemX = m_items.back().getPosition().x;
