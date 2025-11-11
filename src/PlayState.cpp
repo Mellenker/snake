@@ -17,7 +17,7 @@ void PlayState::processInput(Context& context) {
         else if (const auto* keyPressed = ev->getIf<sf::Event::KeyPressed>()) {
 			switch(keyPressed->scancode) {
 				case sf::Keyboard::Scancode::Escape:
-					context.keyPressed = sf::Keyboard::Scancode::Escape;
+					context.keyPressed = keyPressed->scancode;
 					break;
 				case sf::Keyboard::Scancode::W:
 				case sf::Keyboard::Scancode::A:
