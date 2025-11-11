@@ -5,7 +5,7 @@ The classic game built using C++ and SFML 3.0.2.
 [![](https://img.shields.io/github/v/release/Mellenker/snake?label=Download&color=brightgreen)](https://github.com/Mellenker/snake/releases/latest)
 [![](https://img.shields.io/github/downloads/Mellenker/snake/total?label=All%20Releases&color=blue)](https://github.com/Mellenker/snake/releases)
 
-<img src="misc/screenshot.png" alt="Screenshot" width="400">
+<img src="misc/screenshot1.png" width="450">
 
 ## Build from source
 #### Prerequisites
@@ -23,7 +23,7 @@ The classic game built using C++ and SFML 3.0.2.
 ### Ninja
 
 ```
-cmake -B build/ninja-multi -G "Ninja Multi-Config
+cmake -B build/ninja-multi -G "Ninja Multi-Config"
 ```
 ```
 cmake --build build/ninja-multi --config Release
