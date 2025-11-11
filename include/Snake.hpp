@@ -10,7 +10,7 @@ public:
 	enum Direction { NONE, UP, LEFT, RIGHT, DOWN };
 	Direction getCurrDir();
 	void setDir(Direction newDir);
-	void updateDir(sf::Keyboard::Key keyPressed);
+	void updateDir(sf::Keyboard::Scancode keyPressed);
 	sf::Vector2f getHeadPos();
 	sf::Vector2f getLastSegmentPos();
 	void updateFaceTexture(std::string_view filePath);

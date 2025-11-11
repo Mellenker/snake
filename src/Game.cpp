@@ -36,7 +36,7 @@ void Game::drawObjects(sf::RenderWindow& window) {
 	window.draw(m_scoreCounter);	
 }
 
-void Game::updateSnakeDir(sf::Keyboard::Key keyPressed) {
+void Game::updateSnakeDir(sf::Keyboard::Scancode keyPressed) {
 	m_snake.updateDir(keyPressed);
 }
 

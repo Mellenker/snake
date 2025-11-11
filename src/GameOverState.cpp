@@ -32,20 +32,20 @@ void GameOverState::processInput(Context& context) {
     }
 
 	if (!lastKeyPressedEvent) {
-		context.keyPressed = sf::Keyboard::Key::Unknown; // No key was pressed
+		context.keyPressed = sf::Keyboard::Scancode::Unknown; // No key was pressed
 	}
 	else {
 		// Process only latest keyboard input
-		sf::Keyboard::Key keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->code;
+		sf::Keyboard::Scancode keyCode = lastKeyPressedEvent->getIf<sf::Event::KeyPressed>()->scancode;
         switch (keyCode) {
-        case sf::Keyboard::Key::W:
-            context.keyPressed = sf::Keyboard::Key::W;
+        case sf::Keyboard::Scancode::W:
+            context.keyPressed = sf::Keyboard::Scancode::W;
             break;
-        case sf::Keyboard::Key::S:
-            context.keyPressed = sf::Keyboard::Key::S;
+        case sf::Keyboard::Scancode::S:
+            context.keyPressed = sf::Keyboard::Scancode::S;
             break;
-        case sf::Keyboard::Key::Enter:
-            context.keyPressed = sf::Keyboard::Key::Enter;
+        case sf::Keyboard::Scancode::Enter:
+            context.keyPressed = sf::Keyboard::Scancode::Enter;
             break;
         default:
             break;
@@ -60,18 +60,18 @@ void GameOverState::update(Context& context) {
     
     // Handle menu navigation and actions
     switch (context.keyPressed) {
-    case sf::Keyboard::Key::W:
+    case sf::Keyboard::Scancode::W:
         m_menu.moveUp();
         break;  
-    case sf::Keyboard::Key::S:
+    case sf::Keyboard::Scancode::S:
         m_menu.moveDown();    
         break;  
-    case sf::Keyboard::Key::Enter:
+    case sf::Keyboard::Scancode::Enter:
         m_menu.executeSelectedAction();
         break;  
     }
     
-    context.keyPressed = sf::Keyboard::Key::Unknown; // Reset key state after handling
+    context.keyPressed = sf::Keyboard::Scancode::Unknown; // Reset key state after handling
 }
 
 void GameOverState::render(Context& context) {

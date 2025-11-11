@@ -8,7 +8,7 @@ class Game {
 public:
 	Game();
 	bool tryUpdateSnakeState();
-	void updateSnakeDir(sf::Keyboard::Key keyPressed);
+	void updateSnakeDir(sf::Keyboard::Scancode keyPressed);
 	void updateSnakeFace(std::string_view filePath);
 	void drawObjects(sf::RenderWindow& window);
 	void resetGame();

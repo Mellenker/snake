@@ -39,22 +39,22 @@ sf::Vector2f Snake::getLastSegmentPos() {
 	return m_body.back().getTopLeftFromPos();
 }
 
-void Snake::updateDir(sf::Keyboard::Key keyPressed) {
+void Snake::updateDir(sf::Keyboard::Scancode keyPressed) {
 	// Handle ingame keyboard input
 	switch (keyPressed) {
-	case sf::Keyboard::Key::W:
+	case sf::Keyboard::Scancode::W:
 		if (m_currDir != DOWN)
 			m_currDir = UP;
 		break;
-	case sf::Keyboard::Key::A:
+	case sf::Keyboard::Scancode::A:
 		if ((m_currDir != RIGHT) && (m_currDir != NONE))
 			m_currDir = LEFT;
 		break;
-	case sf::Keyboard::Key::S:
+	case sf::Keyboard::Scancode::S:
 		if (m_currDir != UP)
 			m_currDir = DOWN;
 		break;
-	case sf::Keyboard::Key::D:
+	case sf::Keyboard::Scancode::D:
 		if (m_currDir != LEFT)
 			m_currDir = RIGHT;
 		break;
