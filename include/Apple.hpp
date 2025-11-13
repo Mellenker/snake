@@ -13,5 +13,3 @@ private:
 	static constexpr int initTileY = 0;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
-
-

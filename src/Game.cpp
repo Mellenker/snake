@@ -66,6 +66,7 @@ void Game::initBackgroundTexture(sf::RenderTexture& texture) {
 		xPos = 0; // Reset x position after each row
 		yPos += Utils::g_tileSize;
 	}
+	texture.display(); 
 }
 
 bool Game::tryUpdateSnakeState() {

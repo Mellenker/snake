@@ -4,6 +4,12 @@ project(snake LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Use static runtime library for MSVC
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+
 # For single-config generators 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -56,8 +62,8 @@ target_link_libraries(snake
 if (WIN32)
     if (MINGW)
         set_target_properties(snake PROPERTIES
-            LINK_FLAGS_DEBUG "-mconsole"
-            LINK_FLAGS_RELEASE "-mwindows"
+            LINK_FLAGS_DEBUG "-mconsole -static"
+            LINK_FLAGS_RELEASE "-mwindows -static"
         )
     elseif (MSVC)
         set_target_properties(snake PROPERTIES
@@ -66,7 +72,6 @@ if (WIN32)
         )
     endif()
 endif()
-
 # Ensure assets can be acessed by executable
 add_custom_command(TARGET snake POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
